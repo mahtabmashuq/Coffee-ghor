@@ -19,16 +19,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Young+Serif&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:oklch(96.5% .012 70); --card:oklch(98.8% .006 75); --ink:oklch(24% .03 45); --muted:oklch(50% .03 50); --line:oklch(89% .02 65);
+  --bg:oklch(96.5% .012 70); --card:oklch(98.8% .006 75); --ink:oklch(24% .03 45); --muted:oklch(48% .03 50); --line:oklch(89% .02 65);
   --brand:oklch(40% .08 45); --brand-ink:oklch(98.5% .005 75); --soft:oklch(93% .022 70);
   --ok:oklch(48% .1 150); --warn:oklch(55% .13 60); --bad:oklch(50% .16 25);
   --c-coffee:oklch(33% .06 45); --c-water:oklch(46% .07 55); --c-milk:oklch(91% .035 80); --c-foam:oklch(98% .01 85); --c-whip:oklch(68% .1 65);
   --radius:14px; --ease:cubic-bezier(.22,1,.36,1);
   --f-display:"Young Serif",Georgia,serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --nav-h:calc(68px + env(safe-area-inset-bottom));
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:oklch(18% .015 50); --card:oklch(22% .018 50); --ink:oklch(93% .015 70); --muted:oklch(70% .025 60); --line:oklch(31% .02 50);
+    --bg:oklch(18% .015 50); --card:oklch(22% .018 50); --ink:oklch(93% .015 70); --muted:oklch(72% .025 60); --line:oklch(31% .02 50);
     --brand:oklch(74% .09 60); --brand-ink:oklch(18% .015 50); --soft:oklch(27% .022 50);
     --ok:oklch(72% .12 150); --warn:oklch(76% .12 65); --bad:oklch(70% .14 25);
     --c-milk:oklch(86% .03 80); --c-foam:oklch(95% .01 85);
@@ -36,59 +37,108 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--f-body);padding-bottom:104px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font:18px/1.55 var(--f-body);padding-bottom:calc(var(--nav-h) + 24px);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body.has-cta{padding-bottom:calc(var(--nav-h) + 110px)}
+body.cooking{padding-bottom:calc(var(--nav-h) + 40px)}
+body.cooking header,body.cooking nav.tabs,body.has-cta header{display:none}
 header{padding:28px 16px 4px;max-width:720px;margin:0 auto}
 header h1{margin:0;font:400 32px/1.1 var(--f-display);letter-spacing:-.01em}
-header p{margin:6px 0 0;color:var(--muted);font-size:16px;max-width:36ch}
+header p{margin:6px 0 0;color:var(--muted);font-size:17px;max-width:36ch}
 main{max-width:720px;margin:0 auto;padding:0 16px}
-nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));z-index:10}
-nav.tabs button{flex:1;max-width:180px;background:none;border:0;color:var(--muted);font:700 15px var(--f-body);padding:12px 6px;border-radius:10px;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+button{font:inherit;color:inherit;-webkit-user-select:none;user-select:none}
+button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+/* Bottom nav */
+nav.tabs{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));z-index:10}
+nav.tabs button{flex:1;max-width:180px;background:none;border:0;color:var(--muted);font-weight:700;font-size:16px;border-radius:10px;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
 nav.tabs button.on{color:var(--brand-ink);background:var(--brand)}
-h2{font:400 22px/1.2 var(--f-display);margin:36px 0 12px;display:flex;align-items:baseline;gap:10px}
-h2 .num{font:700 13px var(--f-body);color:var(--muted);letter-spacing:.06em}
+
+h2{font:400 24px/1.2 var(--f-display);margin:32px 0 14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:10px 0}
+
+/* Pick */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(156px,1fr));gap:10px}
-.drink{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 12px 14px;text-align:left;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:border-color .2s var(--ease),background .2s var(--ease)}
-.drink:hover{border-color:var(--muted)}
-.drink.on{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.drink{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 12px 14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:border-color .2s var(--ease),transform .15s var(--ease)}
+.drink:active{transform:scale(.97)}
 .drink svg{width:40px;height:44px;margin-bottom:6px}
-.drink b{font-size:16px;line-height:1.25}
-.drink small{color:var(--muted);font-size:14px;line-height:1.4}
-.drink .state{margin-top:auto;padding-top:8px;font-size:13px;font-weight:700}
+.drink b{font-size:17px;line-height:1.25}
+.drink small{color:var(--muted);font-size:15px;line-height:1.4}
+.drink .state{margin-top:auto;padding-top:8px;font-size:14px;font-weight:700}
 .st-ok{color:var(--ok)} .st-no{color:var(--bad)}
-.field+.field{margin-top:18px}
+
+/* Setup */
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--brand);font-weight:700;font-size:16px;padding:10px 0;margin-top:12px;cursor:pointer}
+.hero{display:flex;gap:16px;align-items:center;margin:8px 0 6px}
+.hero svg{width:64px;height:70px;flex:0 0 64px}
+.hero h2{margin:0}
+.hero p{margin:4px 0 0;color:var(--muted);font-size:16px}
+.field+.field{margin-top:20px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .stepper{display:flex;align-items:center;gap:8px}
-.stepper button{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:24px;cursor:pointer}
-.stepper output{font:400 30px var(--f-display);min-width:44px;text-align:center}
+.stepper button{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:26px;cursor:pointer}
+.stepper output{font:400 32px var(--f-display);min-width:48px;text-align:center}
 .seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
-.seg button{flex:1;border:0;background:none;color:var(--ink);font:inherit;font-size:15px;padding:10px 10px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:background .2s var(--ease)}
+.seg button{flex:1;border:0;background:none;font-size:16px;padding:11px 10px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:background .2s var(--ease)}
 .seg button.on{background:var(--brand);color:var(--brand-ink);font-weight:700}
-label.lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:8px;font-weight:700}
+label.lbl{display:block;font-size:15px;color:var(--muted);margin-bottom:8px;font-weight:700}
 .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px 12px}
-.stat .v{font:400 24px/1.15 var(--f-display)}
-.stat .k{font-size:14px;color:var(--muted)}
-.note{border-radius:12px;padding:12px 14px;font-size:15px;margin:10px 0}
+.stat .v{font:400 25px/1.15 var(--f-display)}
+.stat .k{font-size:15px;color:var(--muted)}
+.note{border-radius:12px;padding:12px 14px;font-size:16px;margin:10px 0}
 .n-warn{background:color-mix(in oklch,var(--warn) 14%,var(--bg))}
 .n-bad{background:color-mix(in oklch,var(--bad) 13%,var(--bg))}
 .n-tip{background:var(--soft)}
 .note b{display:block;margin-bottom:2px}
-ol.steps{list-style:none;padding:0;margin:0}
-ol.steps li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
-ol.steps li:last-child{border-bottom:0}
-ol.steps li .n{flex:0 0 34px;height:34px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;cursor:pointer;user-select:none;transition:background .2s var(--ease)}
-ol.steps li.done .n{background:var(--ok);border-color:var(--ok);color:var(--brand-ink)}
-ol.steps li.done .t{opacity:.5}
-ol.steps li.done .t b{text-decoration:line-through}
-ol.steps li .t{flex:1}
-ol.steps li .t b{display:block;margin-bottom:2px}
-ol.steps li .t span{font-size:15px;color:var(--muted)}
-.tbtn{margin-top:8px;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;padding:6px 14px;font:700 14px var(--f-body);cursor:pointer}
-.btn{border:0;background:var(--soft);color:var(--ink);border-radius:12px;padding:14px 16px;font:700 16px var(--f-body);cursor:pointer;width:100%;margin-top:16px}
+.cta{position:fixed;left:0;right:0;bottom:var(--nav-h);padding:12px 16px;background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:9}
+.cta button{display:block;width:100%;max-width:688px;margin:0 auto;border:0;border-radius:14px;padding:17px 18px;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:19px;cursor:pointer;transition:transform .15s var(--ease)}
+.cta button:active{transform:scale(.98)}
+.cta button small{display:block;font-weight:400;font-size:14px;opacity:.85}
+.cta button:disabled{background:var(--line);color:var(--muted);cursor:not-allowed}
+
+/* Cook */
+.cook-top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.x{background:none;border:0;color:var(--muted);font-weight:700;font-size:16px;padding:10px 4px;cursor:pointer}
+.lang{display:flex;background:var(--soft);border-radius:99px;padding:3px}
+.lang button{border:0;background:none;font-weight:700;font-size:14px;letter-spacing:.04em;padding:7px 14px;border-radius:99px;cursor:pointer;color:var(--muted)}
+.lang button.on{background:var(--brand);color:var(--brand-ink)}
+.prog{display:flex;gap:4px;margin:4px 0 22px}
+.prog i{flex:1;height:6px;border-radius:99px;background:var(--line);transition:background .3s var(--ease)}
+.prog i.d{background:var(--brand)}
+.prog i.c{background:color-mix(in oklch,var(--brand) 45%,var(--line))}
+.count{font-size:15px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.drinkname{font-size:15px;color:var(--muted);margin-bottom:6px}
+.stepcard{animation:in .35s var(--ease)}
+.stepcard.back-anim{animation:inb .35s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes inb{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.stepcard,.stepcard.back-anim{animation:none}}
+.stepcard h3{font:400 30px/1.2 var(--f-display);margin:6px 0 14px;text-wrap:balance}
+.stepcard p{font-size:20px;line-height:1.6;margin:0;max-width:60ch}
+.stepcard p strong{font-weight:700}
+.tbox{margin-top:24px;display:flex;align-items:center;gap:16px;background:var(--soft);border-radius:var(--radius);padding:14px 16px}
+.tbox .tv{font:400 34px var(--f-display);font-variant-numeric:tabular-nums;min-width:90px}
+.tbox button{border:0;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:16px;border-radius:99px;padding:12px 20px;cursor:pointer}
+.tbox.run button{background:none;border:1.5px solid var(--ink);color:var(--ink)}
+.tbox.ding{background:color-mix(in oklch,var(--ok) 20%,var(--bg))}
+.cook-nav{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center;z-index:10}
+.cook-nav button{flex:1;max-width:340px;border-radius:14px;padding:17px;font-weight:700;font-size:19px;cursor:pointer;border:1.5px solid var(--line);background:var(--card);transition:transform .15s var(--ease)}
+.cook-nav button:active{transform:scale(.97)}
+.cook-nav .next{flex:2;background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.cook-nav button:disabled{opacity:.35}
+.swipe-hint{font-size:14px;color:var(--muted);text-align:center;margin-top:28px}
+.done{text-align:center;padding-top:40px}
+.done svg{width:96px;height:104px}
+.done h3{font:400 32px/1.2 var(--f-display);margin:16px 0 8px}
+.done p{color:var(--muted);margin:0 0 28px}
+.done .btn{max-width:340px;margin:10px auto 0;display:block}
+
+/* Pantry */
+.btn{border:0;background:var(--soft);border-radius:12px;padding:15px 16px;font-weight:700;font-size:17px;cursor:pointer;width:100%;margin-top:16px}
+.btn.primary{background:var(--brand);color:var(--brand-ink)}
 .toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);gap:12px}
 .toggle:last-child{border-bottom:0}
-.toggle small{display:block;color:var(--muted);font-size:14px}
-.tag{font-size:14px;font-weight:700;color:var(--ok);white-space:nowrap}
+.toggle small{display:block;color:var(--muted);font-size:15px}
+.tag{font-size:15px;font-weight:700;color:var(--ok);white-space:nowrap}
 .sw{position:relative;width:52px;height:32px;flex:0 0 52px}
 .sw input{opacity:0;width:0;height:0}
 .sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:background .2s var(--ease);cursor:pointer}
@@ -96,25 +146,28 @@ ol.steps li .t span{font-size:15px;color:var(--muted)}
 .sw input:checked+i{background:var(--ok)}
 .sw input:checked+i:before{transform:translateX(20px)}
 .sw input:focus-visible+i{outline:2px solid var(--brand);outline-offset:2px}
-input[type=number],select{font:inherit;font-size:16px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:120px}
-.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 20px;display:none;align-items:center;gap:14px;font-weight:700;font-size:19px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20}
+input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:120px}
+
+/* Floating timer (shows when you leave the timer's step) */
+.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 16px);background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 20px;display:none;align-items:center;gap:14px;font-weight:700;font-size:19px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20;font-variant-numeric:tabular-nums}
 .timer.show{display:flex}
 .timer.ding{background:var(--ok);color:var(--brand-ink)}
-.timer button{background:none;border:1.5px solid currentColor;color:inherit;border-radius:99px;padding:4px 12px;font:700 14px var(--f-body);cursor:pointer}
-.tips p,.tips li{font-size:16px}
+.timer button{background:none;border:1.5px solid currentColor;border-radius:99px;padding:4px 12px;font-weight:700;font-size:14px;cursor:pointer}
+body.has-cta .timer{bottom:calc(var(--nav-h) + 96px)}
+
+.tips p,.tips li{font-size:17px}
 .tips ul{padding-left:20px;margin:4px 0}
 .tips li+li{margin-top:6px}
 .muted{color:var(--muted)}
-.small{font-size:14px}
+.small{font-size:15px}
 .hide{display:none}
-button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-footer{text-align:center;margin:32px 0;color:var(--muted);font-size:14px}
+footer{text-align:center;margin:32px 0;color:var(--muted);font-size:15px}
 </style>
 </head>
 <body>
 <header>
   <h1>Coffee Ghor</h1>
-  <p>Pick a drink and how many people. The app works out the amounts and the steps.</p>
+  <p>Pick a drink, tell us how many people, then follow along one step at a time.</p>
 </header>
 
 <main>
@@ -141,7 +194,10 @@ const DEFAULTS = {
   mokaCoffee: 28,                 // g per brew, 6-cup basket filled level
   yieldPct: 88,                   // % of water that comes out as coffee
   pitcher: 350,
-  inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false }
+  inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false },
+  view: "pick",                   // pick | setup | cook | done
+  step: 0,
+  lang: "en"                      // steps language: en | bn
 };
 const KEY = "coffee-ghor-v1";
 function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s) return {...DEFAULTS, ...s, inv:{...DEFAULTS.inv, ...(s.inv||{})}}; }catch(e){} return structuredClone(DEFAULTS); }
@@ -166,17 +222,26 @@ const STRENGTH = { halka:0.75, normal:1, kora:1.3 };
 const STRENGTH_LBL = { halka:"Mild", normal:"Normal", kora:"Strong" };
 const SWEET = { none:0, kom:1, normal:2, beshi:3 };
 const SWEET_LBL = { none:"No sugar", kom:"Less", normal:"Normal", beshi:"More" };
-// Per roast: grind time, water temp, heat, when to take off. Dose stays the same: the basket is always filled level.
+// Per roast: grind time, water temp, heat, when to take off. Each text has en + bn (Banglish, steps only).
+// Dose stays the same: the basket is always filled level.
 const ROASTS = {
-  light:  { lbl:"Light", pulse:"about 15-18 seconds in total. Light beans are hard, so grind a little finer.", water:"Bring it to a full boil. Light roasts need more heat to bring out the flavour.", heat:"medium", pull:"Let light roasts run a little longer, but take it off as soon as it starts gurgling.",
+  light:  { lbl:"Light",
+            pulse:["about 15-18 seconds in total. Light beans are hard, so grind a little finer.", "mot 15-18 sec. Light beans shokto, tai ektu beshi mihi korte hobe."],
+            water:["Bring it to a full boil. Light roasts need more heat to bring out the flavour.", "Puro fute uthle namao. Light roast e beshi gorom lage flavor ber korte."],
+            heat:["medium","medium"],
+            pull:["Let light roasts run a little longer, but take it off as soon as it starts gurgling.", "Light roast e dhara ektu beshi cholte dao, kintu gurgle shuru holei namao."],
             black:"Light roast is best black: fruity, slightly sour.", milk:"Light roast gets lost in milk. Pick \"Strong\", or try Espresso or Americano." },
-  medium: { lbl:"Medium", pulse:"about 12-15 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"",
+  medium: { lbl:"Medium", pulse:["about 12-15 seconds in total.","mot 12-15 sec."], water:["Heat until just before it boils.","Fute uthar thik age porjonto."], heat:["medium-low","medium-low"], pull:["",""],
             black:"Medium roast: balanced, good black.", milk:"Medium roast: balanced, good with milk." },
-  mdark:  { lbl:"Medium-Dark", pulse:"about 10-12 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"Take it off as soon as the stream starts turning pale.",
+  mdark:  { lbl:"Medium-Dark", pulse:["about 10-12 seconds in total.","mot 10-12 sec."], water:["Heat until just before it boils.","Fute uthar thik age porjonto."], heat:["medium-low","medium-low"],
+            pull:["Take it off as soon as the stream starts turning pale.","Dhara halka rong hote shuru korlei namao."],
             black:"Medium-dark can taste a bit bitter black. Try \"Mild\" strength.", milk:"Medium-dark with milk is a perfect match. Chocolatey." },
-  dark:   { lbl:"Dark", pulse:"about 8-10 seconds in total. Dark beans are soft and grind fast. Too long turns them to powder and makes it bitter.", water:"Boil, then let it cool for 1 minute before pouring.", heat:"low", pull:"Take dark roasts off EARLY, as soon as the stream turns pale. Dark roasts go bitter fast.",
+  dark:   { lbl:"Dark",
+            pulse:["about 8-10 seconds in total. Dark beans are soft and grind fast. Too long turns them to powder and makes it bitter.", "mot 8-10 sec. Dark beans naram, taratari guro hoy. Beshi chalale powder hoye tita hobe."],
+            water:["Boil, then let it cool for 1 minute before pouring.","Fute uthle 1 min thanda hote dao, tarpor dhalo."], heat:["low","kom"],
+            pull:["Take dark roasts off EARLY, as soon as the stream turns pale. Dark roasts go bitter fast.","Dark roast e AGE namao: dhara halka hote shuru korlei. Dark taratari tita hoy."],
             black:"Dark roast is very bitter black. Add more water to the Americano, or pick \"Mild\".", milk:"Dark roast is best with milk and chocolate. The milk hides the bitterness." },
-  unknown:{ lbl:"Not sure", pulse:"about 12-15 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"",
+  unknown:{ lbl:"Not sure", pulse:["about 12-15 seconds in total.","mot 12-15 sec."], water:["Heat until just before it boils.","Fute uthar thik age porjonto."], heat:["medium-low","medium-low"], pull:["",""],
             black:"Roast unknown, so the app assumes medium. See \"How to tell the roast\" in Tips.", milk:"Roast unknown, so the app assumes medium. See \"How to tell the roast\" in Tips." }
 };
 const BLACK = ["moka","americano"];
@@ -194,7 +259,7 @@ const INV_LBL = {
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 /* ---------- Cup illustration: layers drawn to the recipe's real proportions ---------- */
-function cup(r){
+function cup(r, tag=""){
   const W = 40, H = 44, top = 4, bot = 40, inner = bot - top;
   const L = [];
   if (r.instant){ L.push(["--c-milk", r.milk], ["--c-whip", 60]); }
@@ -214,8 +279,9 @@ function cup(r){
   }
   if (r.ice) rects += [[8, bot - 12], [20, bot - 20], [13, bot - 27]].map(([x, yy]) => `<rect x="${x}" y="${yy}" width="9" height="9" rx="2" fill="none" stroke="var(--card)" stroke-width="1.5" opacity=".8"/>`).join("");
   const path = `M6 ${top} L34 ${top} L31 ${bot} Q30.5 ${bot + 2} 28 ${bot + 2} L12 ${bot + 2} Q9.5 ${bot + 2} 9 ${bot} Z`;
-  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><clipPath id="c-${r.id}"><path d="${path}"/></clipPath></defs>
-    <g clip-path="url(#c-${r.id})">${rects}</g><path d="${path}" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>`;
+  const id = `c-${r.id}${tag}`;
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><clipPath id="${id}"><path d="${path}"/></clipPath></defs>
+    <g clip-path="url(#${id})">${rects}</g><path d="${path}" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>`;
 }
 
 /* ---------- Logic ---------- */
@@ -266,120 +332,210 @@ function plan(r){
   return p;
 }
 
-function buildSteps(r, p){
+// Steps in the chosen language. Numbers and amounts are shared; only the words change.
+function buildSteps(r, p, lang){
+  const bn = lang === "bn", L = (en, b) => bn ? b : en, R = k => roast()[k][bn ? 1 : 0];
   const s = [];
   const src = coffeeSource();
   if (r.instant){
-    s.push({ t:"Make the coffee cream", d:`In the pitcher: ${p.instantTbsp} tbsp instant coffee, ${p.instantTbsp} tbsp sugar and ${p.instantTbsp} tbsp hot water. Equal amounts of each.` });
-    s.push({ t:"Whip it with the frother", d:"FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.", timer:180 });
-    s.push({ t:"Fill the glasses", d:`${r.ice} ice cubes and ${p.milkPer} ml cold milk in each glass. For extra sweetness, stir a little sugar into the milk first.` });
-    s.push({ t:"Spoon the cream on top", d:"Spoon the whipped coffee over the milk. Stir it in before drinking." });
+    s.push({ t:L("Make the coffee cream","Dalgona cream banao"),
+      d:L(`In the pitcher: **${p.instantTbsp} tbsp instant coffee**, **${p.instantTbsp} tbsp sugar** and **${p.instantTbsp} tbsp hot water**. Equal amounts of each.`,
+          `Pitcher e **${p.instantTbsp} tbsp instant coffee** + **${p.instantTbsp} tbsp chini** + **${p.instantTbsp} tbsp gorom pani** nao. Shob shoman shoman.`) });
+    s.push({ t:L("Whip it with the frother","Frother diye whip koro"), timer:180,
+      d:L("FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.",
+          "FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.") });
+    s.push({ t:L("Fill the glasses","Glass ready koro"),
+      d:L(`**${r.ice} ice cubes** and **${p.milkPer} ml cold milk** in each glass. For extra sweetness, stir a little sugar into the milk first.`,
+          `Proti glass e **${r.ice} ta borof**, **${p.milkPer} ml thanda dudh**. Mishti beshi chaile dudhe ektu chini aage gholao.`) });
+    s.push({ t:L("Spoon the cream on top","Upore cream dao"),
+      d:L("Spoon the whipped coffee over the milk. Stir it in before drinking.","Chamuch diye dalgona cream dudher upor rakho. Serve korar shomoy mix kore khabe.") });
     return s;
   }
   if (src === "beans"){
-    s.push({ t:`Grind the beans: ${p.grams} g (about ${p.tbsp} tbsp)`, d:`${roast().lbl} roast: short 3-4 second pulses, ${roast().pulse} Shake the grinder between pulses. Aim for the texture of table salt. Powder-fine makes moka coffee bitter and can clog the filter.` });
+    s.push({ t:L(`Grind ${p.grams} g of beans`,`${p.grams} g beans grind koro`),
+      d:L(`About **${p.tbsp} tbsp**. ${roast().lbl} roast: short 3-4 second pulses, ${R("pulse")} Shake the grinder between pulses. Aim for the texture of **table salt**. Powder-fine makes moka coffee bitter and can clog the filter.`,
+          `Mot **~${p.tbsp} tbsp**. ${roast().lbl} roast: 3-4 second er pulse, ${R("pulse")} Majhe majhe grinder jhakao. Target: **table salt er moto** mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.`) });
   } else {
-    s.push({ t:`Measure the ground coffee: ${p.grams} g (about ${p.tbsp} tbsp)`, d:"Pre-ground coffee loses flavour fast. Keep the packet sealed tight." });
+    s.push({ t:L(`Measure ${p.grams} g of ground coffee`,`${p.grams} g guro coffee mepe nao`),
+      d:L(`About **${p.tbsp} tbsp**. Pre-ground coffee loses flavour fast. Keep the packet sealed tight.`,
+          `Mot **~${p.tbsp} tbsp**. Pre-ground coffee taratari flavor haray. Packet bhalo kore bondho rakho.`) });
   }
   const hotWater = p.brews * S.mokaWater + p.hotWaterTotal;
-  s.push({ t:`Heat about ${hotWater} ml water in the kettle`, d:`${roast().water} Starting with hot water means the pot spends less time on the stove, so the coffee doesn't burn or turn bitter.` });
+  s.push({ t:L(`Heat ${hotWater} ml water in the kettle`,`Kettle e ${hotWater} ml pani gorom koro`),
+    d:L(`${R("water")} Starting with hot water means the pot spends less time on the stove, so the coffee doesn't burn or turn bitter.`,
+        `${R("water")} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.`) });
   if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
-    s.push({ t:`Heat all the milk at once: ${p.milkTotal} ml`, d: r.milkMode === "boil"
-      ? "Bring the milk to a boil once, then turn the heat down. You can add the sugar to the milk now."
-      : "Steaming, with small bubbles at the edge, but NOT boiling (about 65°C). Too hot and it won't foam, and it loses its sweetness." });
+    s.push({ t:L(`Heat all the milk: ${p.milkTotal} ml`,`Ekshathe dudh gorom koro: ${p.milkTotal} ml`), d: r.milkMode === "boil"
+      ? L("Bring the milk to a boil once, then turn the heat down. You can add the sugar to the milk now.","Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro.")
+      : L("Steaming, with small bubbles at the edge, but **NOT boiling** (about 65°C). Too hot and it won't foam, and it loses its sweetness.",
+          "Dhoa uthbe, kinar e choto bubble, kintu **futbe NA** (~65°C). Beshi gorom hole foam hoy na ar dudher mishti bhab chole jay.") });
   }
-  const multi = p.brews > 1 ? ` (brew 1 of ${p.brews})` : "";
-  s.push({ t:`Pour hot water into the moka base${multi}`, d:`Fill to just below the safety valve (about ${S.mokaWater} ml). Never cover the valve. The base is hot: hold it with a cloth.` });
-  s.push({ t:`Put ${S.mokaCoffee} g coffee in the filter basket`, d:"Fill it level. Do NOT press it down. Wipe any grounds off the rim, or it will leak." });
-  s.push({ t:`Screw the pot together, put it on ${roast().heat} heat`, d:"Hold the base with a cloth and screw it on tight. Leave the lid open so you can watch." });
-  s.push({ t:"Watch the coffee come out", d:`It should flow slowly, like honey. As soon as it turns pale yellow or starts gurgling, take it off the heat RIGHT AWAY. The last bit is bitter. ${roast().pull}`, timer:300 });
-  s.push({ t:"Cool the base under cold water for 5 seconds", d:"This stops the brewing so it doesn't turn bitter. Pour the coffee into a warm jug or flask and stir." });
+  const multi = p.brews > 1 ? ` (${L("brew","brew")} 1/${p.brews})` : "";
+  s.push({ t:L(`Pour hot water into the moka base${multi}`,`Moka bottom e gorom pani dhalo${multi}`),
+    d:L(`Fill to **just below the safety valve** (about ${S.mokaWater} ml). Never cover the valve. The base is hot: hold it with a cloth.`,
+        `**Safety valve er thik niche** porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.`) });
+  s.push({ t:L(`Put ${S.mokaCoffee} g coffee in the basket`,`Basket e ${S.mokaCoffee} g coffee dao`),
+    d:L("Fill it level. **Do NOT press it down.** Wipe any grounds off the rim, or it will leak.",
+        "Bhore level koro, **chap dio NA** (tamp korbe na). Rim er guro mucche felo, na hole leak korbe.") });
+  s.push({ t:L(`Screw it together, put it on ${R("heat")} heat`,`Pot jora lagao, ${R("heat")} anche bosao`),
+    d:L("Hold the base with a cloth and screw it on tight. Leave the lid open so you can watch.",
+        "Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro.") });
+  s.push({ t:L("Watch the coffee come out","Coffee ber hote dekho"), timer:300,
+    d:L(`It should flow slowly, like honey. As soon as it turns pale yellow or starts gurgling, **take it off the heat right away**. The last bit is bitter. ${R("pull")}`,
+        `Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, **SHATHE SHATHE namao**. Shesh er pani ta tita. ${R("pull")}`) });
+  s.push({ t:L("Cool the base under cold water","Bottom thanda panir niche 5 sec"),
+    d:L("**5 seconds.** This stops the brewing so it doesn't turn bitter. Pour the coffee into a warm jug or flask and stir.",
+        "Extraction bondho hoye jay, tita bhab ashe na. Coffee ekta gorom jug/flask e dhele nara dao.") });
   if (p.brews > 1){
-    s.push({ t:`Brew ${plural(p.brews - 1, "more time", "more times")}`, d:"Cool the pot, throw out the old grounds and rinse it, then repeat from \"Pour hot water into the moka base\". Keep the earlier coffee covered in the flask. Get the milk ready meanwhile." });
+    const k = p.brews - 1;
+    s.push({ t:L(`Brew ${plural(k, "more time", "more times")}`,`Aro ${k} bar brew koro`),
+      d:L("Cool the pot, throw out the old grounds and rinse it, then go back to \"Pour hot water into the moka base\". Keep the earlier coffee covered in the flask. Get the milk ready meanwhile.",
+          "Pot thanda koro, puraton guro fele dhuye nao, abar \"Moka bottom e gorom pani\" step theke. Ager coffee dhakna diye flask e rakho. Ei faanke dudh ready koro."), loop:true });
   }
   if (r.froth !== "none" && p.milkTotal){
-    const bt = p.frothBatches > 1 ? ` (${p.frothBatches} batches, max ${p.frothCap} ml each)` : "";
+    const bt = p.frothBatches > 1 ? L(` (${p.frothBatches} batches, max ${p.frothCap} ml each)`,` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)`) : "";
     s.push(r.froth === "thick"
-      ? { t:`Froth the milk${bt}`, d:"Hot milk in the pitcher, up to the 150 mark (no more). Frother on FAST (double-click the button to change speed). Hold it near the top of the milk for 15-20 seconds to pull in air, then lower it for 10 seconds. The foam will double. Tap the pitcher on the counter 2-3 times to pop big bubbles.", timer:30 }
-      : { t:`Froth the milk${bt}`, d:"Milk in the pitcher, between the 150 and 250 marks. Frother on MEDIUM, fully under the surface, 10-15 seconds. You want silky, tiny bubbles, not stiff foam. Swirl the pitcher to mix.", timer:15 });
+      ? { t:L(`Froth the milk${bt}`,`Dudh froth koro${bt}`), timer:30,
+          d:L("Hot milk in the pitcher, **up to the 150 mark** (no more). Frother on **FAST** (double-click the button to change speed). Hold it near the top of the milk for 15-20 seconds to pull in air, then lower it for 10 seconds. The foam will double. Tap the pitcher on the counter 2-3 times to pop big bubbles.",
+              "Pitcher e gorom dudh, **150 dag porjonto** (er beshi na). Frother **FAST** speed e (button double-click kore speed bodlao). Dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.") }
+      : { t:L(`Froth the milk${bt}`,`Dudh froth koro${bt}`), timer:15,
+          d:L("Milk in the pitcher, **between the 150 and 250 marks**. Frother on **MEDIUM**, fully under the surface, 10-15 seconds. You want silky, tiny bubbles, not stiff foam. Swirl the pitcher to mix.",
+              "Pitcher e **150 ar 250 dag er majhamajhi** porjonto dudh. Frother **MEDIUM** speed, puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.") });
   }
   const sw = SWEET[S.sweet];
-  const sugarLine = sw ? ` Stir ${plural(sw, "teaspoon", "teaspoons")} of sugar into each cup while the coffee is hot.` : "";
+  const sugarLine = sw ? L(` Stir **${plural(sw, "teaspoon", "teaspoons")} of sugar** into each cup while the coffee is hot.`,` Proti cup e **${sw} chamuch chini**, coffee gorom thaktei gholao.`) : "";
   switch (r.id){
-    case "moka": s.push({ t:`Serve ${p.coffeePer} ml per cup`, d:`Pour into small cups.${sugarLine}` }); break;
-    case "americano": s.push({ t:"Serve", d:`Pour ${p.waterPer} ml hot water into each cup first, then ${p.coffeePer} ml coffee.${sugarLine}` }); break;
-    case "cappuccino": s.push({ t:"Put it together", d:`${p.coffeePer} ml coffee in each cup.${sugarLine} Hold back the foam with a spoon and pour the milk, then spoon the foam on top. Dust with cocoa if you like.` }); break;
+    case "moka": s.push({ t:L(`Serve ${p.coffeePer} ml per cup`,`Proti cup e ${p.coffeePer} ml serve koro`), d:L(`Pour into small cups.${sugarLine}`,`Choto cup e dhalo.${sugarLine}`) }); break;
+    case "americano": s.push({ t:L("Serve","Serve koro"),
+      d:L(`Pour **${p.waterPer} ml hot water** into each cup first, then **${p.coffeePer} ml coffee**.${sugarLine}`,`Cup e age **${p.waterPer} ml gorom pani**, tarpor **${p.coffeePer} ml coffee**.${sugarLine}`) }); break;
+    case "cappuccino": s.push({ t:L("Put it together","Assemble koro"),
+      d:L(`**${p.coffeePer} ml coffee** in each cup.${sugarLine} Hold back the foam with a spoon and pour the milk, then spoon the foam on top. Dust with cocoa if you like.`,
+          `Cup e **${p.coffeePer} ml coffee**.${sugarLine} Chamuch diye foam atkiye dudh dhalo, sheshe foam upore tule dao. Upore cocoa chhitate paro.`) }); break;
     case "latte":
-    case "flatwhite": s.push({ t:"Put it together", d:`${p.coffeePer} ml coffee in each cup.${sugarLine} Then pour ${p.milkPer} ml frothed milk slowly into the middle.` }); break;
-    case "mocha": s.push({ t:"Make the chocolate paste, then put it together", d:`In each cup, mix ${r.cocoa} tbsp cocoa, the sugar and 2 spoons of hot coffee into a smooth paste (no lumps). Then add the rest of the coffee, then ${p.milkPer} ml milk.` }); break;
-    case "doodh": s.push({ t:"Mix and serve", d:`Pour the coffee into the hot milk (${p.coffeePer} ml coffee and ${p.milkPer} ml milk per cup).${sugarLine}${S.inv.condensed ? " A spoon of condensed milk makes it extra creamy." : ""} A little foam on top.` }); break;
+    case "flatwhite": s.push({ t:L("Put it together","Assemble koro"),
+      d:L(`**${p.coffeePer} ml coffee** in each cup.${sugarLine} Then pour **${p.milkPer} ml frothed milk** slowly into the middle.`,
+          `Cup e **${p.coffeePer} ml coffee**.${sugarLine} Tarpor **${p.milkPer} ml froth kora dudh** dhire dhire, majhkhane theke dhalo.`) }); break;
+    case "mocha": s.push({ t:L("Chocolate paste, then put it together","Chocolate paste + assemble"),
+      d:L(`In each cup, mix **${r.cocoa} tbsp cocoa**, the sugar and 2 spoons of hot coffee into a smooth paste (no lumps). Then add the rest of the coffee, then **${p.milkPer} ml milk**.`,
+          `Proti cup e **${r.cocoa} tbsp cocoa** + chini + 2 chamuch gorom coffee mishiye paste banao (dola thakbe na). Tarpor baki coffee, tarpor **${p.milkPer} ml dudh**.`) }); break;
+    case "doodh": s.push({ t:L("Mix and serve","Mix kore serve koro"),
+      d:L(`Pour the coffee into the hot milk: **${p.coffeePer} ml coffee** and **${p.milkPer} ml milk** per cup.${sugarLine}${S.inv.condensed ? " A spoon of condensed milk makes it extra creamy." : ""} A little foam on top.`,
+          `Gorom dudhe coffee dhalo: proti cup e **${p.coffeePer} ml coffee**, **${p.milkPer} ml dudh**.${sugarLine}${S.inv.condensed ? " Condensed milk 1 chamuch dile aro creamy hobe." : ""} Upore halka foam.`) }); break;
     case "icedlatte":
-    case "icedmocha": s.push({ t:"Build it in the glass", d:`${r.cocoa ? "Stir the cocoa and sugar into the hot coffee. " : (sw ? "Stir the sugar into the hot coffee FIRST, it won't dissolve in cold. " : "")}${r.ice} ice cubes in each glass, ${p.coffeePer} ml coffee, then ${p.milkPer} ml cold milk. Let the coffee cool a bit first so the ice melts less.` }); break;
+    case "icedmocha": s.push({ t:L("Build it in the glass","Glass e assemble koro"),
+      d:L(`${r.cocoa ? "Stir the cocoa and sugar into the hot coffee. " : (sw ? "Stir the sugar into the hot coffee FIRST, it won't dissolve in cold. " : "")}**${r.ice} ice cubes** in each glass, **${p.coffeePer} ml coffee**, then **${p.milkPer} ml cold milk**. Let the coffee cool a bit first so the ice melts less.`,
+          `${r.cocoa ? "Gorom coffee te cocoa ar chini gholao. " : (sw ? "Chini gorom coffee te AGE gholao, thanda te mishe na. " : "")}Glass e **${r.ice} ta borof**, **${p.coffeePer} ml coffee**, tarpor **${p.milkPer} ml thanda dudh**. Coffee ektu thanda kore nile borof kom gole.`) }); break;
   }
   return s;
 }
+const md = t => t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
 
-/* ---------- Render: Make ---------- */
+/* ---------- Render: Make (pick → setup → cook → done) ---------- */
 const $ = (sel, el=document) => el.querySelector(sel);
+const recipe = () => RECIPES.find(x => x.id === S.drink) || RECIPES[0];
 function seg(name, opts, cur){
   return `<div class="seg" data-seg="${name}">${Object.entries(opts).map(([k,v]) => `<button data-v="${k}" class="${k===cur?"on":""}">${v}</button>`).join("")}</div>`;
 }
-const head = (n, txt) => `<h2><span class="num">${n}</span>${txt}</h2>`;
+let animDir = "";
 function renderMake(){
-  const r = RECIPES.find(x => x.id === S.drink) || RECIPES[0];
-  const miss = missing(r), p = plan(r), src = coffeeSource();
-  const canBoth = S.inv.beans && grinderOk() && S.inv.ground;
-  let h = head("01", "Choose a drink") + `<div class="grid">` + RECIPES.map(x => {
+  ({ pick:renderPick, setup:renderSetup, cook:renderCook, done:renderDone }[S.view] || renderPick)();
+  if ($("#tab-make").classList.contains("hide")) return; // re-rendered from Pantry: leave page chrome alone
+  document.body.classList.toggle("cooking", S.view === "cook" || S.view === "done");
+  document.body.classList.toggle("has-cta", S.view === "setup");
+  if (S.view === "cook") wakeOn(); else wakeOff();
+}
+function renderPick(){
+  $("#tab-make").innerHTML = `<h2>What are we making?</h2><div class="grid">` + RECIPES.map(x => {
     const m = missing(x);
-    return `<button class="drink ${x.id===r.id?"on":""}" data-drink="${x.id}">${cup(x)}<b>${x.name}</b><small>${x.desc}</small>
+    return `<button class="drink" data-drink="${x.id}">${cup(x)}<b>${x.name}</b><small>${x.desc}</small>
       <span class="state ${m.length?"st-no":"st-ok"}">${m.length?"Missing "+plural(m.length,"item","items"):"Ready to make"}</span></button>`;
   }).join("") + `</div>`;
-
-  h += head("02", "How many, and how?") + `<div class="card">
-    <div class="field row"><label class="lbl" style="margin:0">People</label>
+}
+function renderSetup(){
+  const r = recipe(), miss = missing(r), p = plan(r), src = coffeeSource();
+  const canBoth = S.inv.beans && grinderOk() && S.inv.ground;
+  let h = `<button class="back" data-go="pick">← All drinks</button>
+    <div class="hero">${cup(r,"-h")}<div><h2>${r.name}</h2><p>${r.desc}</p></div></div>`;
+  h += `<div class="card">
+    <div class="field row"><label class="lbl" style="margin:0">How many people?</label>
       <div class="stepper"><button data-ppl="-1" aria-label="Fewer people">−</button><output>${S.people}</output><button data-ppl="1" aria-label="More people">+</button></div></div>
     ${r.instant ? "" : `<div class="field"><label class="lbl">Strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
     ${r.coffee ? `<div class="field"><label class="lbl">Bean roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
     ${r.instant ? "" : `<div class="field"><label class="lbl">Sugar</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
     ${canBoth && r.coffee ? `<div class="field"><label class="lbl">Which coffee</label>${seg("source", {auto:"Auto",beans:"Grind beans",ground:"Ground coffee"}, S.source)}</div>` : ""}
   </div>`;
-
-  h += head("03", `${r.name} for ${plural(S.people, "person", "people")}`);
-  if (miss.length){
-    h += `<div class="note n-bad"><b>Can't make this yet.</b> You need: ${miss.join(", ")}. Update the Pantry tab, or pick another drink.</div>`;
-  }
-  if (r.coffee && S.grinder !== "ok" && S.inv.beans){
-    h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Tips. Use ground coffee until then.</div>`;
-  }
-  if (p.brews >= 3){
-    h += `<div class="note n-warn"><b>${p.brews} moka brews, about ${p.minutes} minutes.</b> One pot makes at most ${p.yieldPerBrew} ml at a time. To save time, pick "Mild" strength, or give half the group an Americano.</div>`;
-  }
-  if (r.coffee){
-    const ro = roast(), txt = BLACK.includes(r.id) ? ro.black : ro.milk;
-    h += `<div class="note n-tip"><b>${ro.lbl} roast in a ${r.name}</b>${txt}</div>`;
-  }
+  if (miss.length) h += `<div class="note n-bad"><b>Can't make this yet.</b> You need: ${miss.join(", ")}. Update the Pantry tab, or pick another drink.</div>`;
+  if (r.coffee && S.grinder !== "ok" && S.inv.beans) h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Tips. Use ground coffee until then.</div>`;
+  if (p.brews >= 3) h += `<div class="note n-warn"><b>${p.brews} moka brews, about ${p.minutes} minutes.</b> One pot makes at most ${p.yieldPerBrew} ml at a time. To save time, pick "Mild" strength, or give half the group an Americano.</div>`;
+  if (r.coffee){ const ro = roast(); h += `<div class="note n-tip"><b>${ro.lbl} roast in a ${r.name}</b>${BLACK.includes(r.id) ? ro.black : ro.milk}</div>`; }
   const st = [];
   if (r.instant){
     st.push([p.instantTbsp+" tbsp","Instant coffee"],[p.instantTbsp+" tbsp","Sugar"],[p.instantTbsp+" tbsp","Hot water"]);
   } else {
-    st.push([p.brews+"×","Moka brews"],[p.grams+" g","Coffee (about "+p.tbsp+" tbsp)"],[p.coffeeTotal+" ml","Brewed coffee"]);
+    st.push([p.grams+" g","Coffee (about "+p.tbsp+" tbsp)"],[p.brews+"×","Moka brews"],[p.coffeeTotal+" ml","Brewed coffee"]);
     if (p.hotWaterTotal) st.push([p.hotWaterTotal+" ml","Extra hot water"]);
   }
   if (p.milkTotal) st.push([p.milkTotal+" ml","Milk"]);
-  if (p.frothBatches) st.push([p.frothBatches+"×","Frothing batches"]);
   if (p.sugarTsp) st.push([p.sugarTsp+" tsp","Sugar"]);
   if (p.cocoaTbsp) st.push([p.cocoaTbsp+" tbsp","Cocoa"]);
   if (p.ice) st.push([p.ice,"Ice cubes"]);
-  st.push(["~"+p.minutes+" min","Total time"]);
-  h += `<div class="card"><div class="stats">${st.map(([v,k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
-    ${r.coffee ? `<p class="small muted" style="margin:14px 0 0">Per person: ${p.coffeePer} ml coffee${p.milkPer?`, ${p.milkPer} ml milk`:""}${p.waterPer?`, ${p.waterPer} ml water`:""}. Using: ${src==="beans"?"freshly ground beans":src==="ground"?"ground coffee":"none available"}.</p>` : ""}</div>`;
-
-  const steps = buildSteps(r, p);
-  h += head("04", "Step by step") + `<div class="card"><p class="small muted" style="margin:0 0 4px">Tap a number to mark the step done.</p><ol class="steps">` +
-    steps.map((x,i) => `<li><div class="n" data-done role="button" aria-label="Mark step ${i+1} done">${i+1}</div><div class="t"><b>${x.t}</b><span>${x.d}</span>${x.timer?`<br><button class="tbtn" data-timer="${x.timer}">Start ${fmt(x.timer)} timer</button>`:""}</div></li>`).join("") +
-    `</ol></div>`;
+  h += `<h2>You'll need</h2><div class="card"><div class="stats">${st.map(([v,k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
+    ${r.coffee ? `<p class="small muted" style="margin:14px 0 0">Using ${src==="beans"?"freshly ground beans":src==="ground"?"ground coffee":"no coffee yet"}.</p>` : ""}</div>`;
+  const n = buildSteps(r, p, "en").length;
+  h += `<div class="cta"><button data-start ${miss.length?"disabled":""}>${miss.length ? "Missing "+plural(miss.length,"item","items") : "Start making"}<small>${n} steps · about ${p.minutes} min</small></button></div>`;
   $("#tab-make").innerHTML = h;
 }
+function renderCook(){
+  const r = recipe(), p = plan(r), steps = buildSteps(r, p, S.lang);
+  S.step = Math.min(Math.max(0, S.step), steps.length - 1);
+  const i = S.step, x = steps[i], last = i === steps.length - 1;
+  const tb = x.timer ? `<div class="tbox ${tStep===i ? (tDone?"ding":"run") : ""}" id="tbox"><div class="tv" id="tbv">${tStep===i ? (tDone ? "Done" : fmt(tLeft)) : fmt(x.timer)}</div>
+      <button data-timer="${x.timer}">${tStep===i && !tDone ? "Stop timer" : "Start timer"}</button></div>` : "";
+  $("#tab-make").innerHTML = `
+    <div class="cook-top"><button class="x" data-go="setup">✕ Exit</button>
+      <span class="count">Step ${i+1} of ${steps.length}</span>
+      <div class="lang" role="group" aria-label="Step language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div></div>
+    <div class="prog">${steps.map((_,k) => `<i class="${k<i?"d":k===i?"c":""}"></i>`).join("")}</div>
+    <div class="stepcard ${animDir}" id="stepcard">
+      <div class="drinkname">${r.name} for ${plural(S.people,"person","people")}</div>
+      <h3>${x.t}</h3><p>${md(x.d)}</p>${tb}
+    </div>
+    ${i === 0 ? `<p class="swipe-hint">Tap Next or swipe to move between steps</p>` : ""}
+    <div class="cook-nav"><button data-nav="-1" ${i===0?"disabled":""}>Back</button><button class="next" data-nav="1">${last?"Finish":"Next"}</button></div>`;
+  animDir = "";
+  updateFloat();
+}
+function renderDone(){
+  const r = recipe();
+  $("#tab-make").innerHTML = `<div class="done">${cup(r,"-d")}<h3>Enjoy your ${r.name}!</h3>
+    <p>Made for ${plural(S.people,"person","people")}.</p>
+    <button class="btn primary" data-again>Make another round</button>
+    <button class="btn" data-go="pick">Back to all drinks</button></div>`;
+}
+function go(view){ S.view = view; if (view !== "cook") S.step = view === "done" ? S.step : 0; save(); renderMake(); window.scrollTo(0,0); }
+function nav(d){
+  const steps = buildSteps(recipe(), plan(recipe()), S.lang);
+  if (d > 0 && S.step >= steps.length - 1){ go("done"); return; }
+  S.step = Math.min(Math.max(0, S.step + d), steps.length - 1);
+  animDir = d < 0 ? "back-anim" : ""; save(); renderMake(); window.scrollTo(0,0);
+  try{ navigator.vibrate && navigator.vibrate(8); }catch(e){}
+}
+
+/* ---------- Keep the screen awake while cooking ---------- */
+let wake = null;
+async function wakeOn(){ try{ if (!wake && "wakeLock" in navigator){ wake = await navigator.wakeLock.request("screen"); wake.addEventListener("release", () => { wake = null; }); } }catch(e){} }
+function wakeOff(){ try{ wake && wake.release(); }catch(e){} wake = null; }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && S.view === "cook" && !$("#tab-make").classList.contains("hide")) wakeOn(); });
+
+/* ---------- Swipe between steps ---------- */
+let tx = null, ty = null;
+document.addEventListener("touchstart", e => { if (S.view !== "cook") return; tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive:true});
+document.addEventListener("touchend", e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; tx = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) nav(dx < 0 ? 1 : -1);
+}, {passive:true});
+document.addEventListener("keydown", e => { if (S.view !== "cook") return; if (e.key === "ArrowRight") nav(1); if (e.key === "ArrowLeft") nav(-1); });
 
 /* ---------- Render: Pantry ---------- */
 function renderInv(){
@@ -462,39 +618,63 @@ function renderTips(){
   <footer>Coffee Ghor · made for home</footer>`;
 }
 
-/* ---------- Timer ---------- */
-let tInt = null, tLeft = 0;
-const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+/* ---------- Timer: lives on its step, floats as a pill when you move away ---------- */
+let tInt = null, tLeft = 0, tStep = -1, tDone = false;
+const fmt = s => `${Math.floor(s/60)}:${String(Math.max(0,s)%60).padStart(2,"0")}`;
 function startTimer(sec){
-  clearInterval(tInt); tLeft = sec;
-  const el = $("#timer"); el.classList.add("show"); el.classList.remove("ding"); $("#tval").textContent = fmt(tLeft);
+  clearInterval(tInt); tLeft = sec; tStep = S.view === "cook" ? S.step : -1; tDone = false;
   tInt = setInterval(() => {
-    tLeft--; $("#tval").textContent = fmt(Math.max(0,tLeft));
-    if (tLeft <= 0){ clearInterval(tInt); el.classList.add("ding"); $("#tval").textContent = "Time's up! Check it"; beep(); try{ navigator.vibrate && navigator.vibrate([300,150,300]); }catch(e){} }
+    tLeft--;
+    if (tLeft <= 0){ clearInterval(tInt); tInt = null; tDone = true; beep(); try{ navigator.vibrate && navigator.vibrate([300,150,300]); }catch(e){} }
+    paintTimer();
   }, 1000);
+  paintTimer();
+}
+function stopTimer(){ clearInterval(tInt); tInt = null; tStep = -1; tDone = false; paintTimer(); }
+function paintTimer(){
+  const box = $("#tbox");
+  if (box && S.view === "cook" && tStep === S.step){
+    box.className = "tbox " + (tDone ? "ding" : "run");
+    $("#tbv").textContent = tDone ? "Done" : fmt(tLeft);
+    box.querySelector("button").textContent = tDone ? "Start timer" : "Stop timer";
+  }
+  updateFloat();
+}
+function updateFloat(){
+  const el = $("#timer"), onItsStep = S.view === "cook" && tStep === S.step && !$("#tab-make").classList.contains("hide");
+  const active = tInt !== null || tDone;
+  el.classList.toggle("show", active && !onItsStep);
+  el.classList.toggle("ding", tDone);
+  $("#tval").textContent = tDone ? "Time's up! Check it" : fmt(tLeft);
 }
 function beep(){
   try{ const a = new (window.AudioContext||window.webkitAudioContext)(); [0,0.35,0.7].forEach(t => { const o=a.createOscillator(), g=a.createGain(); o.frequency.value=880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.2,a.currentTime+t); o.start(a.currentTime+t); o.stop(a.currentTime+t+.2); }); }catch(e){}
 }
-$("#tstop").onclick = () => { clearInterval(tInt); $("#timer").classList.remove("show","ding"); };
+$("#tstop").onclick = stopTimer;
 
 /* ---------- Events ---------- */
 function renderAll(){ renderMake(); renderInv(); }
+function showTab(tab){
+  document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  ["make","inv","tips"].forEach(x => $("#tab-"+x).classList.toggle("hide", x !== tab));
+  if (tab === "make") renderMake();
+  else { document.body.classList.remove("cooking","has-cta"); wakeOff(); updateFloat(); }
+  window.scrollTo(0,0);
+}
 document.addEventListener("click", e => {
-  const t = e.target.closest("button,[data-done]");
+  const t = e.target.closest("button");
   if (!t) return;
-  if (t.dataset.tab){
-    document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b === t));
-    ["make","inv","tips"].forEach(x => $("#tab-"+x).classList.toggle("hide", x !== t.dataset.tab));
-    if (t.dataset.tab === "make") renderMake();
-    window.scrollTo(0,0); return;
-  }
-  if (t.dataset.drink){ S.drink = t.dataset.drink; save(); renderMake(); return; }
+  if (t.dataset.tab){ if (t.dataset.tab === "make" && !$("#tab-make").classList.contains("hide") && S.view === "setup") go("pick"); else showTab(t.dataset.tab); return; }
+  if (t.dataset.drink){ S.drink = t.dataset.drink; go("setup"); return; }
+  if (t.dataset.go){ go(t.dataset.go); return; }
+  if (t.hasAttribute("data-start")){ S.step = 0; go("cook"); return; }
+  if (t.hasAttribute("data-again")){ S.step = 0; go("setup"); return; }
+  if (t.dataset.nav){ nav(+t.dataset.nav); return; }
+  if (t.dataset.lang){ S.lang = t.dataset.lang; save(); renderMake(); return; }
   if (t.dataset.ppl){ S.people = Math.min(20, Math.max(1, S.people + +t.dataset.ppl)); save(); renderMake(); return; }
   const sg = t.closest("[data-seg]");
   if (sg && t.dataset.v){ S[sg.dataset.seg] = t.dataset.v; save(); renderMake(); return; }
-  if (t.dataset.timer){ startTimer(+t.dataset.timer); return; }
-  if (t.hasAttribute("data-done")){ t.closest("li").classList.toggle("done"); return; }
+  if (t.dataset.timer){ if (tStep === S.step && tInt !== null) stopTimer(); else startTimer(+t.dataset.timer); return; }
   if (t.id === "reset" && confirm("This resets all settings to the defaults. Continue?")){ S = structuredClone(DEFAULTS); save(); renderAll(); }
 });
 document.addEventListener("change", e => {
@@ -504,6 +684,8 @@ document.addEventListener("change", e => {
   if (t.dataset.set){ const v = +t.value; if (v > 0){ S[t.dataset.set] = v; save(); renderMake(); } }
 });
 
+// A saved "done" screen is stale on reopen; resume cooking mid-recipe, otherwise start fresh.
+if (S.view === "done") S.view = "pick";
 renderAll(); renderTips();
 </script>
 </body>
