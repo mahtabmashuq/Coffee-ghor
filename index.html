@@ -643,20 +643,33 @@ const ISSUES = {
   sweet:["Too sweet", () => true],
   plain:["Not sweet enough", () => true]
 };
+// Advice follows the EN | BN switch, like the steps. Drink names stay English.
 function advice(issue, r){
-  const ro = S.roast;
+  const bn = S.lang === "bn", L = (en, b) => bn ? b : en, ro = S.roast;
   switch (issue){
-    case "bitter": return { t:"Take it off the heat earlier.", d:`Bitterness comes from the last part of the brew. Remove the pot the moment it starts gurgling, and cool the base straight away. Also try shorter grinder pulses for a slightly coarser grind.${ro === "dark" || ro === "mdark" ? " With a darker roast, \"Mild\" strength helps too." : ""}`, fix: S.strength === "kora" ? ["strength","normal","Switch to Normal strength"] : null };
-    case "sour": return { t:"Grind a little finer and use hotter water.", d:`Sour, thin coffee hasn't extracted enough. Pulse the grinder a few seconds longer and make sure the water is properly hot.${ro === "light" ? " Light roasts need a full boil." : ""}` };
+    case "bitter": return { t:L("Take it off the heat earlier.","Aro age chula theke namao."),
+      d:L(`Bitterness comes from the last part of the brew. Remove the pot the moment it starts gurgling, and cool the base straight away. Also try shorter grinder pulses for a slightly coarser grind.${ro === "dark" || ro === "mdark" ? " With a darker roast, \"Mild\" strength helps too." : ""}`,
+          `Brew er shesh er ongsho theke tita ashe. Gurgle shuru hotei namao, ar shathe shathe bottom thanda koro. Grinder er pulse ektu choto koro, guro ektu mota hobe.${ro === "dark" || ro === "mdark" ? " Dark roast hole \"Mild\" strength o kaje dibe." : ""}`),
+      fix: S.strength === "kora" ? ["strength","normal",L("Switch to Normal strength","Normal strength e bodlao")] : null };
+    case "sour": return { t:L("Grind a little finer and use hotter water.","Ektu mihi grind koro, pani aro gorom koro."),
+      d:L(`Sour, thin coffee hasn't extracted enough. Pulse the grinder a few seconds longer and make sure the water is properly hot.${ro === "light" ? " Light roasts need a full boil." : ""}`,
+          `Tok, patla coffee mane coffee theke flavor kom ber hoyeche. Grinder koyek second beshi chalao, ar pani bhalo kore gorom koro.${ro === "light" ? " Light roast e puro futano pani lage." : ""}`) };
     case "weak": return r.instant
-      ? { t:"Use more instant coffee.", d:"Add an extra spoon of instant coffee to the cream, and whip it until it's really thick." }
-      : { t:"Make it stronger.", d:"Fill the basket right to the top (level, not pressed). If it's still weak, choose Strong.", fix: S.strength !== "kora" ? ["strength", S.strength === "halka" ? "normal" : "kora", `Switch to ${S.strength === "halka" ? "Normal" : "Strong"} strength`] : null };
-    case "burnt": return { t:"Lower the heat.", d:"A burnt taste means the pot sat on high heat too long. Start with hot water from the kettle, use low to medium-low heat, and leave the lid open so you can catch it early." };
+      ? { t:L("Use more instant coffee.","Instant coffee beshi dao."), d:L("Add an extra spoon of instant coffee to the cream, and whip it until it's really thick.","Cream e ar ek chamuch instant coffee dao, ar ekdom ghono na howa porjonto whip koro.") }
+      : { t:L("Make it stronger.","Aro kora koro."), d:L("Fill the basket right to the top (level, not pressed). If it's still weak, choose Strong.","Basket ekdom upor porjonto bhoro (level, chap dio na). Tao halka hole Strong bachai koro."),
+          fix: S.strength !== "kora" ? ["strength", S.strength === "halka" ? "normal" : "kora", S.strength === "halka" ? L("Switch to Normal strength","Normal strength e bodlao") : L("Switch to Strong strength","Strong strength e bodlao")] : null };
+    case "burnt": return { t:L("Lower the heat.","Anch komao."),
+      d:L("A burnt taste means the pot sat on high heat too long. Start with hot water from the kettle, use low to medium-low heat, and leave the lid open so you can catch it early.",
+          "Pora swad mane pot beshi khon beshi anche chhilo. Gorom pani diye shuru koro, low ba medium-low anch dao, ar dhakna khola rakho jate age dhorte paro.") };
     case "foam": return r.instant
-      ? { t:"Whip longer.", d:"Keep whipping on FAST until it holds its shape on an upside-down spoon. Equal parts coffee, sugar and hot water matter." }
-      : { t:"Better foam: right milk, right heat.", d:"Use full-cream milk, heat it to about 65°C (not boiling), and don't fill the pitcher past the mark. Hold the frother near the surface at first to pull in air." };
-    case "sweet": return { t:"Use less sugar next time.", d:"You can always add sugar at the table.", fix: SWEET[S.sweet] > 0 ? ["sweet", Object.keys(SWEET)[SWEET[S.sweet] - 1], "Use less sugar next time"] : null };
-    case "plain": return { t:"Add a little more sugar.", d:"Stir it in while the coffee is hot, so it dissolves.", fix: SWEET[S.sweet] < 3 ? ["sweet", Object.keys(SWEET)[SWEET[S.sweet] + 1], "Use more sugar next time"] : null };
+      ? { t:L("Whip longer.","Aro beshi whip koro."), d:L("Keep whipping on FAST until it holds its shape on an upside-down spoon. Equal parts coffee, sugar and hot water matter.","FAST speed e whip koro, jotokkhon na chamuch ulte dhorleo pore na jay. Coffee, chini ar gorom pani shoman shoman howa dorkar.") }
+      : { t:L("Better foam: right milk, right heat.","Bhalo foam: thik dudh, thik gorom."),
+          d:L("Use full-cream milk, heat it to about 65°C (not boiling), and don't fill the pitcher past the mark. Hold the frother near the surface at first to pull in air.",
+              "Full cream dudh nao, ~65°C porjonto gorom koro (futabe na), ar pitcher er dag er beshi bhorbe na. Prothome frother dudher uporer dike rakho jate bataash dhoke.") };
+    case "sweet": return { t:L("Use less sugar next time.","Porer bar chini kom dao."), d:L("You can always add sugar at the table.","Lagle table e boshe chini mishano jay."),
+      fix: SWEET[S.sweet] > 0 ? ["sweet", Object.keys(SWEET)[SWEET[S.sweet] - 1], L("Use less sugar next time","Porer bar chini kom")] : null };
+    case "plain": return { t:L("Add a little more sugar.","Ektu beshi chini dao."), d:L("Stir it in while the coffee is hot, so it dissolves.","Coffee gorom thaktei gholao, tahole mishe jabe."),
+      fix: SWEET[S.sweet] < 3 ? ["sweet", Object.keys(SWEET)[SWEET[S.sweet] + 1], L("Use more sugar next time","Porer bar chini beshi")] : null };
   }
 }
 
@@ -756,7 +769,7 @@ function renderSetup(){
   const last = [...S.log].reverse().find(x => x.d === r.id && x.rating);
   if (last){
     const a = (last.issues || []).map(i => advice(i, r)).filter(Boolean)[0];
-    h += `<div class="note n-last"><b>Last time: ${"★".repeat(last.rating)}${"☆".repeat(5-last.rating)}</b>${a ? a.t + " " + a.d : "You loved it. Same again!"}</div>`;
+    h += `<div class="note n-last"><b>Last time: ${"★".repeat(last.rating)}${"☆".repeat(5-last.rating)}</b>${a ? a.t + " " + a.d : (S.lang === "bn" ? "Darun hoyechilo. Abar same!" : "You loved it. Same again!")}</div>`;
   }
   h += `<div class="card">
     <div class="field row"><label class="lbl" style="margin:0">${ic("users")}How many people?</label>
@@ -810,18 +823,19 @@ function renderCook(){
 let rateDraft = null; // {rating, issues:Set, saved}
 function renderDone(){
   const r = recipe(), entry = S.log[S.log.length - 1];
-  if (!rateDraft) rateDraft = { rating: entry && entry.rating || 0, issues: new Set(entry && entry.issues || []), saved: !!(entry && entry.rating) };
+  if (!rateDraft) rateDraft = { rating: entry && entry.rating || 0, issues: new Set(entry && entry.issues || []), saved: !!(entry && entry.rating), applied: new Set() };
   const R = rateDraft;
   const chips = Object.entries(ISSUES).filter(([, [, ok]]) => ok(r)).map(([k, [l]]) => `<button data-issue="${k}" class="${R.issues.has(k)?"on":""}" ${R.saved?"disabled":""}>${l}</button>`).join("");
   let adv = "";
   if (R.saved){
-    const list = [...R.issues].map(k => advice(k, r)).filter(Boolean);
-    adv = `<div class="advice">${list.length ? list.map(a => `<div class="note n-tip"><b>${a.t}</b>${a.d}${a.fix ? `<br><button class="apply" data-fix="${a.fix[0]}:${a.fix[1]}">${ic("refresh")}${a.fix[2]}</button>` : ""}</div>`).join("")
-      : `<div class="note n-tip"><b>${R.rating >= 4 ? "Great cup!" : "Thanks for rating."}</b>${R.rating >= 4 ? "Keep the same settings next time." : "Pick what was off next time, and the app will suggest a fix."}</div>`}</div>`;
+    const list = [...R.issues].map(k => ({ k, ...advice(k, r) })).filter(a => a.t);
+    const saved = `<span class="small" style="color:var(--ok);font-weight:700">${ic("check")} ${S.lang === "bn" ? "Porer barer jonno save hoyeche" : "Saved for next time"}</span>`;
+    adv = `<div class="advice">${list.length ? list.map(a => `<div class="note n-tip"><b>${a.t}</b>${a.d}${R.applied.has(a.k) ? "<br>" + saved : a.fix ? `<br><button class="apply" data-fix="${a.k}:${a.fix[0]}:${a.fix[1]}">${ic("refresh")}${a.fix[2]}</button>` : ""}</div>`).join("")
+      : (bn => `<div class="note n-tip"><b>${R.rating >= 4 ? (bn ? "Darun cup!" : "Great cup!") : (bn ? "Rating er jonno dhonnobad." : "Thanks for rating.")}</b>${R.rating >= 4 ? (bn ? "Porer bar o same setting rakho." : "Keep the same settings next time.") : (bn ? "Porer bar ki gondogol chhilo bachai koro, app fix bole dibe." : "Pick what was off next time, and the app will suggest a fix.")}</div>`)(S.lang === "bn")}</div>`;
   }
   $("#tab-make").innerHTML = `<div class="done">${cup(r,"-d")}<h3>Enjoy your ${r.name}!</h3>
     <p>Made for ${plural(S.people,"person","people")}.</p>
-    <div class="rate"><h4>How did it turn out?</h4>
+    <div class="rate"><div class="row" style="margin-bottom:10px"><h4 style="margin:0">How did it turn out?</h4>${R.saved ? `<div class="lang" role="group" aria-label="Advice language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div>` : ""}</div>
       <div class="stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-star="${n}" class="${n<=R.rating?"on":""}" aria-label="${n} stars" ${R.saved?"disabled":""}>${ic("star")}</button>`).join("")}</div>
       ${R.rating && R.rating < 5 ? `<h4 style="margin-top:4px">Anything off?</h4><div class="chips">${chips}</div>` : ""}
       ${R.saved ? adv : `<button class="btn primary" data-rate ${R.rating?"":"disabled"}>${ic("check")}Save rating</button>`}
@@ -1003,7 +1017,7 @@ document.addEventListener("click", e => {
   if (D.star){ rateDraft.rating = +D.star; if (rateDraft.rating === 5) rateDraft.issues.clear(); renderDone(); return; }
   if (D.issue){ rateDraft.issues.has(D.issue) ? rateDraft.issues.delete(D.issue) : rateDraft.issues.add(D.issue); renderDone(); return; }
   if ("rate" in D){ reward(() => { const x = S.log[S.log.length - 1]; if (x){ x.rating = rateDraft.rating; x.issues = [...rateDraft.issues]; } save(); }); rateDraft.saved = true; renderDone(); return; }
-  if (D.fix){ const [k, v] = D.fix.split(":"); S[k] = v; save(); t.outerHTML = `<span class="small" style="color:var(--ok);font-weight:700">${ic("check")} Saved for next time</span>`; return; }
+  if (D.fix){ const [issue, k, v] = D.fix.split(":"); S[k] = v; save(); rateDraft.applied.add(issue); renderDone(); return; }
   // Learn
   if (D.cat !== undefined){ learnCat = D.cat || null; openLesson = null; quiz = null; renderLearn(); window.scrollTo(0,0); return; }
   if (D.lesson){ openLesson = openLesson === D.lesson ? null : D.lesson; renderCat(); return; }
