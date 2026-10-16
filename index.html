@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffee Ghor</title>
+<meta name="description" content="Amader barir coffee guide: koto jon, kon coffee, ki ki lagbe, step by step.">
+<meta name="theme-color" content="#3b2418">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<style>
+:root{
+  --bg:#f7f1ea; --card:#fffaf5; --ink:#2a1a12; --muted:#7a6457; --line:#e6d8cb;
+  --brand:#6b3f26; --brand-ink:#fff; --accent:#c8873a; --ok:#2f7d4f; --warn:#b5651d; --bad:#b23a3a;
+  --soft:#f0e3d6; --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1a120d; --card:#251a13; --ink:#f3e8dd; --muted:#b39c8c; --line:#3a2b21;
+    --brand:#d39a62; --brand-ink:#1a120d; --accent:#e0a75e; --ok:#5fbf86; --warn:#e39a52; --bad:#e06b6b;
+    --soft:#2f2219;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
+header{padding:20px 16px 8px;max-width:720px;margin:0 auto}
+header h1{margin:0;font-size:26px;letter-spacing:-.3px}
+header p{margin:2px 0 0;color:var(--muted);font-size:14px}
+main{max-width:720px;margin:0 auto;padding:0 16px}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:10}
+nav.tabs button{flex:1;max-width:180px;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;padding:6px;border-radius:12px;cursor:pointer}
+nav.tabs button span{display:block;font-size:22px;line-height:1.2}
+nav.tabs button.on{color:var(--brand);background:var(--soft);font-weight:600}
+h2{font-size:18px;margin:22px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.drink{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:12px;text-align:left;font:inherit;color:inherit;cursor:pointer;position:relative}
+.drink.on{border-color:var(--brand);background:var(--soft)}
+.drink .e{font-size:28px}
+.drink b{display:block;font-size:15px;margin-top:2px}
+.drink small{color:var(--muted);font-size:12px;display:block;line-height:1.35;margin-top:2px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:6px}
+.b-ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.b-no{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:22px;cursor:pointer}
+.stepper output{font-size:28px;font-weight:700;min-width:44px;text-align:center}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:8px 10px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.seg button.on{background:var(--brand);color:var(--brand-ink);font-weight:600}
+label.lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.stat{background:var(--soft);border-radius:12px;padding:10px 12px}
+.stat .v{font-size:20px;font-weight:700}
+.stat .k{font-size:12px;color:var(--muted)}
+.alert{border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0}
+.a-warn{background:color-mix(in srgb,var(--warn) 14%,transparent);border-left:4px solid var(--warn)}
+.a-bad{background:color-mix(in srgb,var(--bad) 13%,transparent);border-left:4px solid var(--bad)}
+.a-ok{background:color-mix(in srgb,var(--ok) 13%,transparent);border-left:4px solid var(--ok)}
+ol.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;cursor:pointer;user-select:none}
+ol.steps li.done .n{background:var(--ok);color:#fff}
+ol.steps li.done .t{opacity:.5;text-decoration:line-through}
+ol.steps li .t{flex:1}
+ol.steps li .t b{display:block}
+.tbtn{margin-top:6px;border:1px solid var(--brand);background:none;color:var(--brand);border-radius:99px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
+.btn{border:0;background:var(--brand);color:var(--brand-ink);border-radius:12px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer;width:100%}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.toggle:last-child{border-bottom:0}
+.toggle small{display:block;color:var(--muted);font-size:12px}
+.sw{position:relative;width:50px;height:30px;flex:0 0 50px}
+.sw input{opacity:0;width:0;height:0}
+.sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.2s;cursor:pointer}
+.sw i:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+i{background:var(--ok)}
+.sw input:checked+i:before{transform:translateX(20px)}
+input[type=number],select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:110px}
+.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 18px;display:none;align-items:center;gap:12px;font-weight:700;font-size:18px;box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:20}
+.timer.show{display:flex}
+.timer.ding{background:var(--ok);color:#fff}
+.timer button{background:none;border:1px solid currentColor;color:inherit;border-radius:99px;padding:2px 10px;font:inherit;font-size:13px;cursor:pointer}
+.tips h3{margin:0 0 6px;font-size:16px}
+.tips p,.tips li{font-size:15px}
+.tips ul{padding-left:20px;margin:6px 0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>☕ Coffee Ghor</h1>
+  <p>Amader barir coffee guide. Koto jon, kon coffee, baki ta app bole dibe.</p>
+</header>
+
+<main>
+  <section id="tab-make"></section>
+  <section id="tab-inv" class="hide"></section>
+  <section id="tab-tips" class="hide"></section>
+</main>
+
+<div class="timer" id="timer"><span id="tval">0:00</span><button id="tstop">Bondho</button></div>
+
+<nav class="tabs">
+  <button data-tab="make" class="on"><span>☕</span>Banao</button>
+  <button data-tab="inv"><span>🧺</span>Ki Ache</button>
+  <button data-tab="tips"><span>💡</span>Tips</button>
+</nav>
+
+<script>
+/* ---------- State ---------- */
+const DEFAULTS = {
+  drink: "cappuccino", people: 2, strength: "normal", sweet: "normal", source: "auto",
+  grinder: "check",               // ok | check | broken
+  mokaWater: 270,                 // ml, valve er thik niche
+  mokaCoffee: 25,                 // g per brew, basket level kore
+  yieldPct: 85,                   // pani theke koto % coffee ashe
+  pitcher: 350,
+  inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false }
+};
+const KEY = "coffee-ghor-v1";
+function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s) return {...DEFAULTS, ...s, inv:{...DEFAULTS.inv, ...(s.inv||{})}}; }catch(e){} return structuredClone(DEFAULTS); }
+let S = load();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ---------- Recipes (per jon) ---------- */
+// coffee: moka coffee ml, water: gorom pani ml, milk: ml, milkMode: hot|cold|boil, froth: thick|light|none
+const RECIPES = [
+  { id:"moka", e:"☕", name:"Moka Coffee", desc:"Kora, kalo, Italian style. Choto cup e.", coffee:50, water:0, milk:0, froth:"none" },
+  { id:"americano", e:"🫖", name:"Americano", desc:"Moka coffee + gorom pani. Halka kalo coffee.", coffee:60, water:120, milk:0, froth:"none" },
+  { id:"cappuccino", e:"🥛", name:"Cappuccino", desc:"Coffee, gorom dudh, upore ghono foam.", coffee:60, water:0, milk:100, milkMode:"hot", froth:"thick" },
+  { id:"latte", e:"🍼", name:"Caffè Latte", desc:"Dudh beshi, halka foam. Shobar priyo.", coffee:60, water:0, milk:180, milkMode:"hot", froth:"light" },
+  { id:"flatwhite", e:"🤍", name:"Flat White", desc:"Coffee beshi, kom dudh, silky foam.", coffee:70, water:0, milk:110, milkMode:"hot", froth:"light" },
+  { id:"mocha", e:"🍫", name:"Mocha", desc:"Latte + chocolate. Mishti premi der jonno.", coffee:60, water:0, milk:150, milkMode:"hot", froth:"light", cocoa:1 },
+  { id:"doodh", e:"🏠", name:"Deshi Doodh Coffee", desc:"Dudh e fotano, mishti, halka coffee. Barir style.", coffee:45, water:0, milk:160, milkMode:"boil", froth:"light", condensedOpt:true },
+  { id:"icedlatte", e:"🧊", name:"Iced Latte", desc:"Borof, thanda dudh, coffee. Gorom din er jonno.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5 },
+  { id:"icedmocha", e:"🥤", name:"Iced Mocha", desc:"Iced latte + chocolate.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5, cocoa:1 },
+  { id:"dalgona", e:"🌪️", name:"Dalgona", desc:"Instant coffee whip kore thanda dudher upor. Moka lagbe na.", coffee:0, instant:1, water:0, milk:200, milkMode:"cold", froth:"none", ice:4 }
+];
+const STRENGTH = { halka:0.75, normal:1, kora:1.3 };
+const STRENGTH_LBL = { halka:"Halka", normal:"Normal", kora:"Kora" };
+const SWEET = { none:0, kom:1, normal:2, beshi:3 };
+const SWEET_LBL = { none:"Chini chara", kom:"Kom", normal:"Normal", beshi:"Beshi" };
+const INV_LBL = {
+  beans:["Coffee beans (gota)","Grinder diye guro korte hobe"],
+  ground:["Guro coffee (pre-ground)","Grinder kharap thakleo cholbe"],
+  instant:["Instant coffee","Dalgona er jonno"],
+  milk:["Dudh","Full cream hole foam bhalo hoy"],
+  sugar:["Chini",""],
+  cocoa:["Cocoa powder / chocolate","Mocha er jonno"],
+  ice:["Borof","Iced drinks er jonno"],
+  condensed:["Condensed milk","Optional, deshi coffee te"]
+};
+
+/* ---------- Logic ---------- */
+const grinderOk = () => S.grinder === "ok";
+function coffeeSource(){
+  const beansOk = S.inv.beans && grinderOk();
+  if (S.source === "beans" && beansOk) return "beans";
+  if (S.source === "ground" && S.inv.ground) return "ground";
+  if (beansOk) return "beans";
+  if (S.inv.ground) return "ground";
+  return null;
+}
+function missing(r){
+  const m = [];
+  if (r.coffee > 0 && !coffeeSource()){
+    if (S.inv.beans && !grinderOk()) m.push("grinder thik nai (guro coffee lagbe)");
+    else m.push("coffee (beans ba guro)");
+  }
+  if (r.instant && !S.inv.instant) m.push("instant coffee");
+  if (r.instant && !S.inv.sugar) m.push("chini (whip er jonno)");
+  if (r.milk > 0 && !S.inv.milk) m.push("dudh");
+  if (r.cocoa && !S.inv.cocoa) m.push("cocoa/chocolate");
+  if (r.ice && !S.inv.ice) m.push("borof");
+  return m;
+}
+function plan(r){
+  const n = S.people, f = STRENGTH[S.strength];
+  const p = { n };
+  p.coffeePer = Math.round(r.coffee * f);
+  // Halka americano: coffee kom, pani beshi, cup size same thake
+  p.waterPer = r.water ? Math.round(r.water + r.coffee - p.coffeePer) : 0;
+  p.coffeeTotal = p.coffeePer * n;
+  p.yieldPerBrew = Math.round(S.mokaWater * S.yieldPct / 100);
+  p.brews = p.coffeeTotal > 0 ? Math.ceil(p.coffeeTotal / p.yieldPerBrew) : 0;
+  p.grams = p.brews * S.mokaCoffee;
+  p.tbsp = Math.round(p.grams / 5.5);
+  p.milkPer = r.milk; p.milkTotal = r.milk * n;
+  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.4) : Math.round(S.pitcher * 0.57);
+  p.frothCap = cap;
+  p.frothBatches = r.froth !== "none" && p.milkTotal ? Math.ceil(p.milkTotal / cap) : 0;
+  p.sugarTsp = r.instant ? 0 : SWEET[S.sweet] * n;
+  p.cocoaTbsp = (r.cocoa || 0) * n;
+  p.ice = (r.ice || 0) * n;
+  p.instantTbsp = r.instant ? Math.max(2, r.instant * n) : 0;
+  p.hotWaterTotal = p.waterPer * n;
+  // Time: proti brew ~8 min + majhe 3 min thanda/refill, + 4 min prep
+  p.minutes = r.instant ? 6 + Math.ceil(n/2) : p.brews * 8 + Math.max(0, p.brews - 1) * 3 + 4 + (p.frothBatches > 1 ? p.frothBatches - 1 : 0);
+  return p;
+}
+
+function buildSteps(r, p){
+  const s = [];
+  const src = coffeeSource();
+  if (r.instant){
+    s.push({ t:"Dalgona cream banao", d:`Pitcher e ${p.instantTbsp} tbsp instant coffee + ${p.instantTbsp} tbsp chini + ${p.instantTbsp} tbsp gorom pani nao. Shob shoman shoman.` });
+    s.push({ t:"Frother diye whip koro", d:"2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.", timer:180 });
+    s.push({ t:"Glass ready koro", d:`Proti glass e ${r.ice} ta borof, ${p.milkPer} ml thanda dudh. Mishti beshi chaile dudhe ektu chini aage gholao.` });
+    s.push({ t:"Upore cream dao", d:"Chamuch diye dalgona cream dudher upor rakho. Serve korar shomoy mix kore khabe." });
+    return s;
+  }
+  if (src === "beans"){
+    s.push({ t:`Beans grind koro: ${p.grams} g (~${p.tbsp} tbsp)`, d:"3-4 second er pulse, mot 10-15 sec. Majhe majhe grinder jhakao. Target: table salt er moto mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe." });
+  } else {
+    s.push({ t:`Guro coffee mepe nao: ${p.grams} g (~${p.tbsp} tbsp)`, d:"Pre-ground coffee taratari flavor haray. Packet bhalo kore bondho rakho." });
+  }
+  const hotWater = p.brews * S.mokaWater + p.hotWaterTotal;
+  s.push({ t:`Kettle e ~${hotWater} ml pani gorom koro`, d:"Fute uthar thik age porjonto. Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake." });
+  if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
+    s.push({ t:`Ekshathe dudh gorom koro: ${p.milkTotal} ml`, d: r.milkMode === "boil"
+      ? "Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro."
+      : "Dhoa uthbe, kinar e choto bubble, kintu futbe NA (~65°C). Beshi gorom hole foam hoy na ar dudher mishti bhab chole jay." });
+  }
+  const multi = p.brews > 1 ? ` (Brew 1 of ${p.brews})` : "";
+  s.push({ t:`Moka bottom e gorom pani dhalo${multi}`, d:`Safety valve er thik niche porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.` });
+  s.push({ t:`Basket e ${S.mokaCoffee} g coffee`, d:"Bhore level koro, chap dio NA (tamp korbe na). Rim er guro mucche felo, na hole leak korbe." });
+  s.push({ t:"Pot jora lagao, medium-low anche bosao", d:"Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro." });
+  s.push({ t:"Coffee ber hote dekho", d:"Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, SHATHE SHATHE namao. Shesh er pani ta tita.", timer:300 });
+  s.push({ t:"Bottom thanda panir niche 5 sec", d:"Extraction bondho hoye jay, tita bhab ashe na. Coffee ekta gorom jug/flask e dhele nara dao." });
+  if (p.brews > 1){
+    s.push({ t:`Aro ${p.brews - 1} bar brew koro`, d:"Pot thanda koro, puraton guro fele dhuye nao, abar 'Moka bottom e gorom pani' step theke. Ager coffee dhakna diye flask e rakho. Ei faanke dudh ready koro." });
+  }
+  if (r.froth !== "none" && p.milkTotal){
+    const bt = p.frothBatches > 1 ? ` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)` : "";
+    s.push(r.froth === "thick"
+      ? { t:`Dudh froth koro${bt}`, d:"Pitcher e gorom dudh. Frother dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.", timer:30 }
+      : { t:`Dudh froth koro${bt}`, d:"Frother puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.", timer:15 });
+  }
+  const sw = SWEET[S.sweet];
+  const sugarLine = sw ? ` ${sw} chamuch chini proti cup e, coffee gorom thaktei gholao.` : "";
+  switch (r.id){
+    case "moka": s.push({ t:`Serve: proti cup e ${p.coffeePer} ml`, d:`Choto cup e dhalo.${sugarLine}` }); break;
+    case "americano": s.push({ t:"Serve", d:`Cup e age ${p.waterPer} ml gorom pani, tarpor ${p.coffeePer} ml coffee.${sugarLine}` }); break;
+    case "cappuccino": s.push({ t:"Assemble", d:`Cup e ${p.coffeePer} ml coffee.${sugarLine} Chamuch diye foam atkiye dudh dhalo, sheshe foam upore tule dao. Upore cocoa chhitate paro.` }); break;
+    case "latte":
+    case "flatwhite": s.push({ t:"Assemble", d:`Cup e ${p.coffeePer} ml coffee.${sugarLine} Tarpor ${p.milkPer} ml froth kora dudh dhire dhire, majhkhane theke dhalo.` }); break;
+    case "mocha": s.push({ t:"Chocolate paste + assemble", d:`Proti cup e ${r.cocoa} tbsp cocoa + chini + 2 chamuch gorom coffee mishiye paste banao (dola thakbe na). Tarpor baki coffee, tarpor ${p.milkPer} ml dudh.` }); break;
+    case "doodh": s.push({ t:"Mix kore serve", d:`Gorom dudhe coffee dhalo (proti cup e ${p.coffeePer} ml coffee, ${p.milkPer} ml dudh).${sugarLine}${S.inv.condensed ? " Condensed milk 1 chamuch dile ar o creamy hobe." : ""} Upore halka foam.` }); break;
+    case "icedlatte":
+    case "icedmocha": s.push({ t:"Glass e assemble", d:`${r.cocoa ? "Gorom coffee te cocoa ar chini gholao. " : (sw ? "Chini gorom coffee te AGE gholao, thanda te mishe na. " : "")}Glass e ${r.ice} ta borof, ${p.coffeePer} ml coffee, tarpor ${p.milkPer} ml thanda dudh. Coffee ektu thanda kore nile borof kom gole.` }); break;
+  }
+  return s;
+}
+
+/* ---------- Render: Banao ---------- */
+const $ = (sel, el=document) => el.querySelector(sel);
+function seg(name, opts, cur){
+  return `<div class="seg" data-seg="${name}">${Object.entries(opts).map(([k,v]) => `<button data-v="${k}" class="${k===cur?"on":""}">${v}</button>`).join("")}</div>`;
+}
+function renderMake(){
+  const r = RECIPES.find(x => x.id === S.drink) || RECIPES[0];
+  const miss = missing(r), p = plan(r), src = coffeeSource();
+  const canBoth = S.inv.beans && grinderOk() && S.inv.ground;
+  let h = `<h2>1. Ki khabo?</h2><div class="grid">` + RECIPES.map(x => {
+    const m = missing(x);
+    return `<button class="drink ${x.id===r.id?"on":""}" data-drink="${x.id}"><div class="e">${x.e}</div><b>${x.name}</b><small>${x.desc}</small>
+      <span class="badge ${m.length?"b-no":"b-ok"}">${m.length?"Lagbe: "+m.length+" jinish":"Ekhon banano jabe"}</span></button>`;
+  }).join("") + `</div>`;
+
+  h += `<h2>2. Koto jon, kemon?</h2><div class="card">
+    <div class="row"><label class="lbl" style="margin:0">Koto jon</label>
+      <div class="stepper"><button data-ppl="-1" aria-label="kom">−</button><output>${S.people}</output><button data-ppl="1" aria-label="beshi">+</button></div></div>
+    ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Coffee er strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
+    ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Mishti</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
+    ${canBoth && r.coffee ? `<div style="margin-top:14px"><label class="lbl">Coffee source</label>${seg("source", {auto:"Auto",beans:"Fresh grind",ground:"Guro coffee"}, S.source)}</div>` : ""}
+  </div>`;
+
+  h += `<h2>3. ${r.e} ${r.name} × ${S.people} jon</h2>`;
+  if (miss.length){
+    h += `<div class="alert a-bad"><b>Ekhon banano jabe na.</b> Lagbe: ${miss.join(", ")}.<br><span class="small">"Ki Ache" tab e giye update koro, ba onno drink bachai koro.</span></div>`;
+  }
+  if (r.coffee && S.grinder !== "ok" && S.inv.beans){
+    h += `<div class="alert a-warn"><b>Grinder check hoy nai.</b> Lobon-pani lagar por grinder chalano risky (short circuit, mortcha). "Tips" tab e check list ache. Totokkhon guro coffee use koro.</div>`;
+  }
+  if (p.brews >= 3){
+    h += `<div class="alert a-warn"><b>${p.brews} ta moka brew = ~${p.minutes} min.</b> Ekta pot ekbar e ${p.yieldPerBrew} ml er beshi dey na. Shomoy bachate: strength "Halka" koro, ba ordhek jon ke Americano dao.</div>`;
+  }
+  const st = [];
+  if (r.instant){
+    st.push([p.instantTbsp+" tbsp","Instant coffee"],[p.instantTbsp+" tbsp","Chini"],[p.instantTbsp+" tbsp","Gorom pani"]);
+  } else {
+    st.push([p.brews+" bar","Moka brew"],[p.grams+" g","Coffee (~"+p.tbsp+" tbsp)"],[p.coffeeTotal+" ml","Mot coffee"]);
+    if (p.hotWaterTotal) st.push([p.hotWaterTotal+" ml","Extra gorom pani"]);
+  }
+  if (p.milkTotal) st.push([p.milkTotal+" ml","Dudh"]);
+  if (p.frothBatches) st.push([p.frothBatches+" batch","Froth (350ml pitcher)"]);
+  if (p.sugarTsp) st.push([p.sugarTsp+" chamuch","Chini"]);
+  if (p.cocoaTbsp) st.push([p.cocoaTbsp+" tbsp","Cocoa"]);
+  if (p.ice) st.push([p.ice+" ta","Borof"]);
+  st.push(["~"+p.minutes+" min","Mot shomoy"]);
+  h += `<div class="card"><div class="stats">${st.map(([v,k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
+    ${r.coffee ? `<p class="small muted" style="margin:10px 0 0">Proti jon: ${p.coffeePer} ml coffee${p.milkPer?`, ${p.milkPer} ml dudh`:""}${p.waterPer?`, ${p.waterPer} ml pani`:""}. Source: ${src==="beans"?"fresh grind":src==="ground"?"guro coffee":"nai"}.</p>` : ""}</div>`;
+
+  const steps = buildSteps(r, p);
+  h += `<h2>4. Step by step</h2><div class="card"><p class="small muted" style="margin:0 0 4px">Number e tap korle step "done" hobe.</p><ol class="steps">` +
+    steps.map((x,i) => `<li><div class="n" data-done>${i+1}</div><div class="t"><b>${x.t}</b><span class="small">${x.d}</span>${x.timer?`<br><button class="tbtn" data-timer="${x.timer}">⏱ ${fmt(x.timer)} timer</button>`:""}</div></li>`).join("") +
+    `</ol></div>`;
+  $("#tab-make").innerHTML = h;
+}
+
+/* ---------- Render: Ki Ache ---------- */
+function renderInv(){
+  const g = {ok:"Thik ache ✅", check:"Check lagbe ⚠️", broken:"Noshto ❌"};
+  let h = `<h2>Equipment</h2><div class="card">
+    <div class="toggle"><div>☕ <b>Moka pot</b><small>Stovetop, "300 ml"</small></div><span class="badge b-ok">Ache</span></div>
+    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Lobon-pani legechilo. Check na kore chalio na.</small></div>
+      <select id="grinder">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
+    <div class="toggle"><div>🥛 <b>Milk pitcher</b><small>Stainless steel</small></div><span class="badge b-ok">${S.pitcher} ml</span></div>
+    <div class="toggle"><div>🌀 <b>Enjoy milk frother</b><small>Rechargeable. Charge ache to?</small></div><span class="badge b-ok">Ache</span></div>
+  </div>
+  <h2>Ghore ki ache?</h2><div class="card">` +
+  Object.entries(INV_LBL).map(([k,[l,d]]) => `<div class="toggle"><div><b>${l}</b>${d?`<small>${d}</small>`:""}</div>
+    <label class="sw"><input type="checkbox" data-inv="${k}" ${S.inv[k]?"checked":""}><i></i></label></div>`).join("") +
+  `</div>
+  <h2>Moka calibration</h2><div class="card">
+    <p class="small muted" style="margin-top:0">Prothom bar ekta measuring cup diye mepe nao, tarpor ekhane boshao. App er shob hishab eta theke.</p>
+    <div class="toggle"><div><b>Bottom e koto pani</b><small>Valve er thik niche porjonto, ml</small></div><input type="number" min="50" max="600" data-set="mokaWater" value="${S.mokaWater}"></div>
+    <div class="toggle"><div><b>Basket e koto coffee</b><small>Level kore bhorle, gram</small></div><input type="number" min="5" max="60" data-set="mokaCoffee" value="${S.mokaCoffee}"></div>
+    <div class="toggle"><div><b>Koto % coffee ber hoy</b><small>Shadharonoto 80-90%</small></div><input type="number" min="50" max="100" data-set="yieldPct" value="${S.yieldPct}"></div>
+    <div class="toggle"><div><b>Pitcher size</b><small>ml</small></div><input type="number" min="150" max="1000" data-set="pitcher" value="${S.pitcher}"></div>
+  </div>
+  <button class="btn" id="reset" style="background:var(--soft);color:var(--ink)">Shob default e ferot nao</button>`;
+  $("#tab-inv").innerHTML = h;
+}
+
+/* ---------- Render: Tips ---------- */
+function renderTips(){
+  $("#tab-tips").innerHTML = `
+  <h2>Best coffee er 5 ta niyom</h2>
+  <div class="card tips"><ul>
+    <li><b>Fresh beans, fresh grind.</b> Grind korar 15 min er moddhe brew koro. Beans air-tight jar e, rodd theke dure, fridge e na.</li>
+    <li><b>Moka te gorom pani.</b> Thanda pani dile pot onek kkhon chula te thake, coffee pure tita hoy.</li>
+    <li><b>Tamp korbe na.</b> Basket shudhu level kore bhoro. Chap dile pressure beshi, tita ar safety risk.</li>
+    <li><b>Shesh e namao.</b> Gurgle shobdo ba halka rong dekhlei namao. Shesh er dhara tai shob theke tita.</li>
+    <li><b>Dudh futabe na</b> (latte/cappuccino te). 60-65°C: hath diye pitcher 3 sec er beshi dhora jay na, emon.</li>
+  </ul></div>
+
+  <h2>⚠️ Grinder safety check</h2>
+  <div class="card tips">
+    <p style="margin-top:0">Lobon-pani lagle electric jinish e short circuit ar mortcha hote pare. Ei check na kore plug e lagabe na:</p>
+    <ul>
+      <li>Plug khule, blade/chamber tissue diye mucho. Lobon er shada daag thakle ektu bheja kapor diye mucho, tarpor shukano kapor.</li>
+      <li>Kom koreo 48 ghonta shukno, batash ache emon jaygay rakho. Motor er vent e pani dhukle aro beshi shomoy.</li>
+      <li>Cord, plug er pin e kalo/sobuj daag (mortcha) ache kina dekho. Thakle chalabe na.</li>
+      <li>Prothom bar khali chalao 3 sec. Pora gondho, spark, ajob shobdo hole shathe shathe bondho, ar use korbe na.</li>
+      <li>Tarpor alpo beans (10 g) grind kore fele dao. Er por normal use.</li>
+    </ul>
+    <p class="small muted">Sob thik thakle "Ki Ache" tab e grinder "Thik ache" koro.</p>
+  </div>
+
+  <h2>Grind size</h2>
+  <div class="card tips"><p style="margin:0">Moka er jonno: <b>table salt er moto</b>. Espresso er cheye mota, filter er cheye mihi. Blade grinder ekdom shoman guro korte pare na, tai choto choto pulse dao ar majhe jhakao. Beshi powder hole coffee tita ar ghola hobe.</p></div>
+
+  <h2>Frother tips</h2>
+  <div class="card tips"><ul>
+    <li>Frother dudh <b>gorom kore na</b>, shudhu foam banay. Age dudh gorom koro.</li>
+    <li>Pitcher er 40% er beshi dudh nio na cappuccino te, foam double hoye upche porbe.</li>
+    <li>Full cream dudh = shobcheye bhalo foam. Low fat e foam beshi kintu pani pani.</li>
+    <li>Frother dudhe dubiye tarpor on koro, on kore dubale chhitbe.</li>
+    <li>Dalgona whip: frother diye 2-4 min, hath diye 10 min er kaj.</li>
+  </ul></div>
+
+  <h2>Moka porishkar</h2>
+  <div class="card tips"><p style="margin:0">Shudhu gorom pani diye dhuo, <b>saban dio na</b> (aluminium hole swad noshto hoy). Puro shukiye tarpor jora lagao. Rubber gasket mashe ekbar check koro.</p></div>
+  <p class="small muted" style="text-align:center;margin:24px 0">Coffee Ghor · barir jonno banano 🤎</p>`;
+}
+
+/* ---------- Timer ---------- */
+let tInt = null, tLeft = 0;
+const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+function startTimer(sec){
+  clearInterval(tInt); tLeft = sec;
+  const el = $("#timer"); el.classList.add("show"); el.classList.remove("ding"); $("#tval").textContent = fmt(tLeft);
+  tInt = setInterval(() => {
+    tLeft--; $("#tval").textContent = fmt(Math.max(0,tLeft));
+    if (tLeft <= 0){ clearInterval(tInt); el.classList.add("ding"); $("#tval").textContent = "Shomoy shesh! Dekho ☕"; beep(); try{ navigator.vibrate && navigator.vibrate([300,150,300]); }catch(e){} }
+  }, 1000);
+}
+function beep(){
+  try{ const a = new (window.AudioContext||window.webkitAudioContext)(); [0,0.35,0.7].forEach(t => { const o=a.createOscillator(), g=a.createGain(); o.frequency.value=880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.2,a.currentTime+t); o.start(a.currentTime+t); o.stop(a.currentTime+t+.2); }); }catch(e){}
+}
+$("#tstop").onclick = () => { clearInterval(tInt); $("#timer").classList.remove("show","ding"); };
+
+/* ---------- Events ---------- */
+function renderAll(){ renderMake(); renderInv(); }
+document.addEventListener("click", e => {
+  const t = e.target.closest("button,[data-done]");
+  if (!t) return;
+  if (t.dataset.tab){
+    document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b === t));
+    ["make","inv","tips"].forEach(x => $("#tab-"+x).classList.toggle("hide", x !== t.dataset.tab));
+    if (t.dataset.tab === "make") renderMake();
+    window.scrollTo(0,0); return;
+  }
+  if (t.dataset.drink){ S.drink = t.dataset.drink; save(); renderMake(); return; }
+  if (t.dataset.ppl){ S.people = Math.min(20, Math.max(1, S.people + +t.dataset.ppl)); save(); renderMake(); return; }
+  const sg = t.closest("[data-seg]");
+  if (sg && t.dataset.v){ S[sg.dataset.seg] = t.dataset.v; save(); renderMake(); return; }
+  if (t.dataset.timer){ startTimer(+t.dataset.timer); return; }
+  if (t.hasAttribute("data-done")){ t.closest("li").classList.toggle("done"); return; }
+  if (t.id === "reset" && confirm("Shob setting default e ferot jabe. Thik ache?")){ S = structuredClone(DEFAULTS); save(); renderAll(); }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.inv){ S.inv[t.dataset.inv] = t.checked; save(); renderMake(); }
+  if (t.id === "grinder"){ S.grinder = t.value; save(); renderMake(); }
+  if (t.dataset.set){ const v = +t.value; if (v > 0){ S[t.dataset.set] = v; save(); renderMake(); } }
+});
+
+renderAll(); renderTips();
+</script>
+</body>
+</html>
