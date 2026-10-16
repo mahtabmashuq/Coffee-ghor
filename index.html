@@ -430,14 +430,14 @@ function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} 
 // coffee: moka coffee ml, water: hot water ml, milk: ml, milkMode: hot|cold|boil, froth: thick|light|none
 const RECIPES = [
   { id:"moka", name:"Espresso", desc:"Strong and black, in a small cup. Made in the moka pot.", coffee:50, water:0, milk:0, froth:"none" },
-  { id:"americano", name:"Americano", desc:"Espresso topped up with hot water. Lighter black coffee.", coffee:60, water:120, milk:0, froth:"none" },
-  { id:"cappuccino", name:"Cappuccino", desc:"Espresso, hot milk and a thick layer of foam.", coffee:60, water:0, milk:100, milkMode:"hot", froth:"thick" },
-  { id:"latte", name:"Latte", desc:"Lots of milk, a thin layer of foam. Mild and creamy.", coffee:60, water:0, milk:180, milkMode:"hot", froth:"light" },
-  { id:"flatwhite", name:"Flat White", desc:"More coffee, less milk, smooth silky foam.", coffee:70, water:0, milk:110, milkMode:"hot", froth:"light" },
-  { id:"mocha", name:"Mocha", desc:"A latte with chocolate. For a sweet tooth.", coffee:60, water:0, milk:150, milkMode:"hot", froth:"light", cocoa:1 },
-  { id:"doodh", name:"Café au Lait", desc:"Coffee stirred into boiled, sweetened milk. Home style.", coffee:45, water:0, milk:160, milkMode:"boil", froth:"light", condensedOpt:true },
-  { id:"icedlatte", name:"Iced Latte", desc:"Espresso, cold milk and ice. For hot days.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5 },
-  { id:"icedmocha", name:"Iced Mocha", desc:"An iced latte with chocolate.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5, cocoa:1 },
+  { id:"americano", name:"Americano", desc:"Espresso topped up with hot water. Lighter black coffee.", coffee:60, water:120, milk:0, ratio:[1.5,3], froth:"none" },
+  { id:"cappuccino", name:"Cappuccino", desc:"Espresso, hot milk and a thick layer of foam.", coffee:60, water:0, milk:100, ratio:[1.3,2.2], milkMode:"hot", froth:"thick" },
+  { id:"latte", name:"Latte", desc:"Lots of milk, a thin layer of foam. Mild and creamy.", coffee:60, water:0, milk:180, ratio:[2.5,4], milkMode:"hot", froth:"light" },
+  { id:"flatwhite", name:"Flat White", desc:"More coffee, less milk, smooth silky foam.", coffee:70, water:0, milk:110, ratio:[1.3,2], milkMode:"hot", froth:"light" },
+  { id:"mocha", name:"Mocha", desc:"A latte with chocolate. For a sweet tooth.", coffee:60, water:0, milk:150, ratio:[2,3.5], milkMode:"hot", froth:"light", cocoa:1 },
+  { id:"doodh", name:"Café au Lait", desc:"Coffee stirred into boiled, sweetened milk. Home style.", coffee:45, water:0, milk:160, ratio:[2.5,4], milkMode:"boil", froth:"light", condensedOpt:true },
+  { id:"icedlatte", name:"Iced Latte", desc:"Espresso, cold milk and ice. For hot days.", coffee:60, water:0, milk:150, ratio:[2,3.5], milkMode:"cold", froth:"none", ice:5 },
+  { id:"icedmocha", name:"Iced Mocha", desc:"An iced latte with chocolate.", coffee:60, water:0, milk:150, ratio:[2,3.5], milkMode:"cold", froth:"none", ice:5, cocoa:1 },
   { id:"dalgona", name:"Whipped Coffee", desc:"Whipped instant coffee on cold milk. No moka pot needed.", coffee:0, instant:1, water:0, milk:200, milkMode:"cold", froth:"none", ice:4 }
 ];
 const STRENGTH = { halka:0.75, normal:1, kora:1.3 };
@@ -537,24 +537,37 @@ function missing(r){
   return m;
 }
 function plan(r){
-  const n = S.people, f = STRENGTH[S.strength];
+  const n = S.people, f = r.id === "moka" ? 1 : STRENGTH[S.strength]; // Espresso: the basket dose is fixed, so strength can't change it
   const p = { n };
   p.coffeePer = Math.round(r.coffee * f);
-  // Mild americano: less coffee, more water, same cup size
+  // Strength moves within the drink's café ratio, so a Strong Americano or a Mild Cappuccino is still that drink.
+  // ratio = [min, max] of milk (or water) per part coffee. Americano keeps its cup size: more coffee, less water.
+  if (r.ratio){
+    const cupOrMilk = r.water ? r.water + r.coffee : r.milk, k = r.water ? 1 : 0;
+    const lo = Math.ceil(cupOrMilk / (r.ratio[1] + k)), hi = Math.floor(cupOrMilk / (r.ratio[0] + k));
+    p.coffeePer = Math.min(Math.max(p.coffeePer, lo), hi);
+  }
   p.waterPer = r.water ? Math.round(r.water + r.coffee - p.coffeePer) : 0;
   p.coffeeTotal = p.coffeePer * n;
   p.yieldPerBrew = Math.round(S.mokaWater * S.yieldPct / 100);
   p.brews = p.coffeeTotal > 0 ? Math.ceil(p.coffeeTotal / p.yieldPerBrew) : 0;
   p.grams = p.brews * S.mokaCoffee;
   p.tbsp = Math.round(p.grams / 5.5);
+  p.grindBatches = Math.max(1, Math.ceil(p.grams / 30)); // blade grinder: 30 g at most per go
+  p.leftover = p.brews * p.yieldPerBrew - p.coffeeTotal;
+  p.warmWater = r.coffee && r.milkMode !== "cold" ? 100 * n : 0; // to warm the cups
   p.milkPer = r.milk; p.milkTotal = r.milk * n;
-  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.43) : Math.round(S.pitcher * 0.57); // 350 pitcher: 150 / 200 mark
+  const mark = x => Math.round(x / 10) * 10; // round to the pitcher's marks
+  const cap = r.froth === "thick" ? mark(S.pitcher * 0.43) : mark(S.pitcher * 0.57); // 350 pitcher: 150 / 200 mark
   p.frothCap = cap;
   p.frothBatches = r.froth !== "none" && p.milkTotal ? Math.ceil(p.milkTotal / cap) : 0;
   p.sugarTsp = r.instant ? 0 : SWEET[S.sweet] * n;
   p.cocoaTbsp = (r.cocoa || 0) * n;
   p.ice = (r.ice || 0) * n;
-  p.instantTbsp = r.instant ? Math.max(2, r.instant * n) : 0;
+  // Whipped coffee: 2 tbsp each of coffee, sugar and water per batch (about 90 ml), which triples in a 350 ml pitcher
+  p.whipBatches = r.instant ? Math.ceil(Math.max(2, r.instant * n) / 2) : 0;
+  p.whipPer = r.instant ? Math.ceil(Math.max(2, r.instant * n) / p.whipBatches) : 0;
+  p.instantTbsp = p.whipBatches * p.whipPer;
   p.hotWaterTotal = p.waterPer * n;
   // Time: ~8 min per brew + 3 min cool/refill between brews, + 4 min prep
   p.minutes = r.instant ? 6 + Math.ceil(n/2) : p.brews * 8 + Math.max(0, p.brews - 1) * 3 + 4 + (p.frothBatches > 1 ? p.frothBatches - 1 : 0);
@@ -568,12 +581,13 @@ function buildSteps(r, p, lang){
   const src = coffeeSource();
   const jug = I.flask ? L("flask","flask") : L("warm jug with a lid","dhakna-wala gorom jug");
   if (r.instant){
-    s.push({ t:L("Make the coffee cream","Coffee cream banao"),
-      d:L(`In the pitcher: **${p.instantTbsp} tbsp instant coffee**, **${p.instantTbsp} tbsp sugar** and **${p.instantTbsp} tbsp hot water**. Equal amounts of each.`,
-          `Pitcher e **${p.instantTbsp} tbsp instant coffee** + **${p.instantTbsp} tbsp chini** + **${p.instantTbsp} tbsp gorom pani** nao. Shob shoman shoman.`) });
+    const wb = p.whipBatches > 1;
+    s.push({ t:L(`Make the coffee cream${wb ? ` (${p.whipBatches} batches)` : ""}`,`Coffee cream banao${wb ? ` (${p.whipBatches} batch)` : ""}`),
+      d:L(`${wb ? "For each batch, in" : "In"} the pitcher: **${p.whipPer} tbsp instant coffee**, **${p.whipPer} tbsp sugar** and **${p.whipPer} tbsp hot water**. Equal amounts of each. It grows to about 3 times the size, so don't add more to one batch.`,
+          `${wb ? "Proti batch e, p" : "P"}itcher e **${p.whipPer} tbsp instant coffee** + **${p.whipPer} tbsp chini** + **${p.whipPer} tbsp gorom pani** nao. Shob shoman shoman. Foam 3 gun hoy, tai ek batch e beshi dio na.`) });
     s.push({ t:L("Whip it with the frother","Frother diye whip koro"), timer:180,
-      d:L("FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.",
-          "FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.") });
+      d:L(`FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.${wb ? " Scoop it into a bowl, then whip the next batch." : ""}`,
+          `FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.${wb ? " Ekta bati te tule rakho, tarpor porer batch." : ""}`) });
     s.push({ t:L("Fill the glasses","Glass ready koro"),
       d:L(`**${r.ice} ice cubes** and **${p.milkPer} ml cold milk** in each glass. For extra sweetness, stir a little sugar into the milk first.`,
           `Proti glass e **${r.ice} ta borof**, **${p.milkPer} ml thanda dudh**. Mishti beshi chaile dudhe ektu chini aage gholao.`) });
@@ -583,30 +597,28 @@ function buildSteps(r, p, lang){
   }
   const amt = I.scale ? `${p.grams} g` : L(`about ${p.tbsp} tbsp`, `~${p.tbsp} tbsp`);
   const amtNote = I.scale ? L(`About **${p.tbsp} tbsp**.`, `Mot **~${p.tbsp} tbsp**.`) : L(`That's about **${p.grams} g**.`, `Mot **~${p.grams} g**.`);
+  const hot = r.milkMode !== "cold";
+  const hotWater = p.brews * S.mokaWater + p.hotWaterTotal + p.warmWater;
+  // 1. Kettle first: grinding happens while it heats.
+  s.push({ t: I.kettle ? L(`Heat ${hotWater} ml water in the kettle`,`Kettle e ${hotWater} ml pani gorom koro`) : L(`Heat ${hotWater} ml water in a pot`,`Patil e ${hotWater} ml pani gorom koro`),
+    d:L(`Start this first, then grind while it heats. ${R("water")} Starting the moka pot with hot water means it spends less time on the stove, so the coffee doesn't burn or turn bitter.${hot ? " This includes about **100 ml per cup** to warm the cups." : ""}`,
+        `Eta age shuru koro, gorom hote hote grind koro. ${R("water")} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.${hot ? " Er moddhe **proti cup e ~100 ml** cup gorom korar jonno." : ""}`) });
+  // 2. Grind (in batches the blade grinder can handle) or measure.
+  const gb = p.grindBatches > 1;
   if (src === "beans"){
     s.push({ t:L(`Grind ${amt} of beans`,`${amt} beans grind koro`),
-      d:L(`${amtNote} ${roast().lbl} roast: short 3-4 second pulses, ${R("pulse")} Shake the grinder between pulses. Aim for the texture of **table salt**. Powder-fine makes moka coffee bitter and can clog the filter.`,
-          `${amtNote} ${roast().lbl} roast: 3-4 second er pulse, ${R("pulse")} Majhe majhe grinder jhakao. Target: **table salt er moto** mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.`) });
+      d:L(`${amtNote}${gb ? ` Grind it **in ${p.grindBatches} batches**: the grinder takes 30 g at most.` : ""} ${roast().lbl} roast: short 3-4 second pulses, ${R("pulse")} Shake the grinder between pulses. Aim for the texture of **table salt**. Powder-fine makes moka coffee bitter and can clog the filter.`,
+          `${amtNote}${gb ? ` **${p.grindBatches} bhage** grind koro: grinder e ekbare 30 g er beshi na.` : ""} ${roast().lbl} roast: 3-4 second er pulse, ${R("pulse")} Majhe majhe grinder jhakao. Target: **table salt er moto** mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.`) });
   } else {
     s.push({ t:L(`Measure ${amt} of ground coffee`,`${amt} guro coffee mepe nao`),
       d:L(`${amtNote} Pre-ground coffee loses flavour fast. Keep the packet sealed tight.`,
           `${amtNote} Pre-ground coffee taratari flavor haray. Packet bhalo kore bondho rakho.`) });
   }
-  const hotWater = p.brews * S.mokaWater + p.hotWaterTotal;
-  s.push({ t: I.kettle ? L(`Heat ${hotWater} ml water in the kettle`,`Kettle e ${hotWater} ml pani gorom koro`) : L(`Heat ${hotWater} ml water in a pot`,`Patil e ${hotWater} ml pani gorom koro`),
-    d:L(`${R("water")} Starting with hot water means the pot spends less time on the stove, so the coffee doesn't burn or turn bitter.`,
-        `${R("water")} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.`) });
-  if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
-    const th = I.thermo && r.milkMode === "hot" ? L(" Use the thermometer and stop at **65°C**."," Thermometer diye **65°C** e thamao.") : "";
-    s.push({ t:L(`Heat all the milk: ${p.milkTotal} ml`,`Ekshathe dudh gorom koro: ${p.milkTotal} ml`), d: r.milkMode === "boil"
-      ? L("Bring the milk to a boil once, then turn the heat down. You can add the sugar to the milk now.","Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro.")
-      : L(`Steaming, with small bubbles at the edge, but **NOT boiling** (about 65°C). Too hot and it won't foam, and it loses its sweetness.${th}`,
-          `Dhoa uthbe, kinar e choto bubble, kintu **futbe NA** (~65°C). Beshi gorom hole foam hoy na ar dudher mishti bhab chole jay.${th}`) });
-  }
+  // 3. Brew.
   const multi = p.brews > 1 ? ` (1/${p.brews})` : "";
   s.push({ t:L(`Pour hot water into the moka base${multi}`,`Moka bottom e gorom pani dhalo${multi}`),
-    d:L(`Fill to **just below the safety valve** (about ${S.mokaWater} ml). Never cover the valve. The base is hot: hold it with a cloth.`,
-        `**Safety valve er thik niche** porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.`) });
+    d:L(`Fill to **just below the safety valve** (about ${S.mokaWater} ml). Never cover the valve. The base is hot: hold it with a cloth.${hot ? ` Pour a little hot water into the cups${p.brews > 1 || I.flask ? ` and the ${jug}` : ""} to warm them.` : ""}`,
+        `**Safety valve er thik niche** porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.${hot ? ` Cup${p.brews > 1 || I.flask ? ` ar ${jug}` : ""} e ektu gorom pani dhele gorom kore nao.` : ""}`) });
   s.push({ t: I.scale ? L(`Put ${S.mokaCoffee} g coffee in the basket`,`Basket e ${S.mokaCoffee} g coffee dao`) : L("Fill the basket with coffee","Basket e coffee bhoro"),
     d:L("Fill it level. **Do NOT press it down.** Wipe any grounds off the rim, or it will leak.",
         "Bhore level koro, **chap dio NA** (tamp korbe na). Rim er guro mucche felo, na hole leak korbe.") });
@@ -614,16 +626,24 @@ function buildSteps(r, p, lang){
     d:L("Hold the base with a cloth and screw it on tight. Leave the lid open so you can watch.",
         "Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro.") });
   s.push({ t:L("Watch the coffee come out","Coffee ber hote dekho"), timer:300,
-    d:L(`It should flow slowly, like honey. As soon as it turns pale yellow or starts gurgling, **take it off the heat right away**. The last bit is bitter. ${R("pull")}`,
-        `Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, **SHATHE SHATHE namao**. Shesh er pani ta tita. ${R("pull")}`) });
+    d:L(`**Stay with the pot: never leave it unattended.** It should flow slowly, like honey. As soon as it turns pale yellow or starts gurgling, **take it off the heat right away**. The last bit is bitter. ${R("pull")}`,
+        `**Pot er pashe thako, kokhono rekhe chole jabe na.** Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, **SHATHE SHATHE namao**. Shesh er pani ta tita. ${R("pull")}`) });
   s.push({ t:L("Cool the base under cold water","Bottom thanda panir niche 5 sec"),
     d:L(`**5 seconds.** This stops the brewing so it doesn't turn bitter. Pour the coffee into a ${jug} and stir.`,
         `Extraction bondho hoye jay, tita bhab ashe na. Coffee ${jug} e dhele nara dao.`) });
   if (p.brews > 1){
     const k = p.brews - 1;
     s.push({ t:L(`Brew ${plural(k, "more time", "more times")}`,`Aro ${k} bar brew koro`),
-      d:L(`Cool the pot, throw out the old grounds and rinse it, then go back to "Pour hot water into the moka base". Keep the earlier coffee covered in the ${jug}. Get the milk ready meanwhile.`,
-          `Pot thanda koro, puraton guro fele dhuye nao, abar "Moka bottom e gorom pani" step theke. Ager coffee ${jug} e dhaka diye rakho. Ei faanke dudh ready koro.`) });
+      d:L(`Cool the pot, throw out the old grounds and rinse it, then go back to "Pour hot water into the moka base". Keep the earlier coffee covered in the ${jug}.`,
+          `Pot thanda koro, puraton guro fele dhuye nao, abar "Moka bottom e gorom pani" step theke. Ager coffee ${jug} e dhaka diye rakho.`) });
+  }
+  // 4. Milk last, so it's hot when it meets the coffee. The coffee holds its heat in the jug.
+  if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
+    const th = I.thermo && r.milkMode === "hot" ? L(" Use the thermometer and stop at **65°C**."," Thermometer diye **65°C** e thamao.") : "";
+    s.push({ t:L(`Heat all the milk: ${p.milkTotal} ml`,`Ekshathe dudh gorom koro: ${p.milkTotal} ml`), d: r.milkMode === "boil"
+      ? L("Now, while the coffee waits covered. Bring the milk to a boil once, then turn the heat down. You can add the sugar to the milk now.","Ekhon, coffee dhaka thakuk. Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro.")
+      : L(`Now, while the coffee waits covered. Steaming, with small bubbles at the edge, but **NOT boiling** (about 65°C). Too hot and it won't foam, and it loses its sweetness.${th}`,
+          `Ekhon, coffee dhaka thakuk. Dhoa uthbe, kinar e choto bubble, kintu **futbe NA** (~65°C). Beshi gorom hole foam hoy na ar dudher mishti bhab chole jay.${th}`) });
   }
   if (r.froth !== "none" && p.milkTotal){
     const bt = p.frothBatches > 1 ? L(` (${p.frothBatches} batches, max ${p.frothCap} ml each)`,` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)`) : "";
@@ -661,6 +681,12 @@ function buildSteps(r, p, lang){
       d:L(`${r.cocoa ? "Stir the cocoa and sugar into the hot coffee. " : (sw ? "Stir the sugar into the hot coffee FIRST, it won't dissolve in cold. " : "")}${van ? van.trim() + " " : ""}**${r.ice} ice cubes** in each glass, **${p.coffeePer} ml coffee**, then **${p.milkPer} ml cold milk**. Let the coffee cool a bit first so the ice melts less.`,
           `${r.cocoa ? "Gorom coffee te cocoa ar chini gholao. " : (sw ? "Chini gorom coffee te AGE gholao, thanda te mishe na. " : "")}${van ? van.trim() + " " : ""}Glass e **${r.ice} ta borof**, **${p.coffeePer} ml coffee**, tarpor **${p.milkPer} ml thanda dudh**. Coffee ektu thanda kore nile borof kom gole.`) }); break;
   }
+  if (r.cocoa && !sw) s[s.length - 1].d += L(" Using unsweetened cocoa? Add at least **1 tsp sugar** per cup, or it tastes harsh.", " Unsweetened cocoa hole proti cup e kom koreo **1 chamuch chini** dao, na hole kora lagbe.");
+  const fin = s[s.length - 1];
+  if (r.milkMode !== "cold") fin.d = L("Tip the warming water out of the cups first. ", "Age cup er gorom pani fele dao. ") + fin.d;
+  if (p.leftover > p.yieldPerBrew * 0.5) fin.d += L(` You'll have about **${p.leftover} ml** extra coffee: keep it in the fridge (up to 2 days) for an iced latte.`,
+                                                  ` Prai **${p.leftover} ml** coffee beshi thakbe: fridge e rakho (2 din porjonto), iced latte banate parbe.`);
+  s.forEach(x => { x.t = x.t.trim(); x.d = x.d.replace(/\s+$/, "").replace(/\s{2,}/g, " "); });
   return s;
 }
 const starRow = n => `<span class="srow" role="img" aria-label="${n} of 5 stars">${[1,2,3,4,5].map(k => ic("star", k <= n ? "f" : "")).join("")}</span>`;
@@ -857,7 +883,7 @@ function renderSetup(){
   h += `<div class="card">
     <div class="field row"><label class="lbl" style="margin:0">${ic("users")}People</label>
       <div class="stepper"><button data-ppl="-1" aria-label="Fewer people">${ic("minus")}</button><output>${S.people}</output><button data-ppl="1" aria-label="More people">${ic("plus")}</button></div></div>
-    ${r.instant ? "" : `<div class="field"><label class="lbl">${ic("bolt")}Strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
+    ${r.instant || r.id === "moka" ? "" : `<div class="field"><label class="lbl">${ic("bolt")}Strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
     ${r.coffee ? `<div class="field"><label class="lbl">${ic("bean")}Bean roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
     ${r.instant ? "" : `<div class="field"><label class="lbl">${ic("sugar")}Sugar</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
     ${canBoth && r.coffee ? `<div class="field"><label class="lbl">${ic("grinder")}Which coffee</label>${seg("source", {auto:"Auto",beans:"Grind beans",ground:"Ground coffee"}, S.source)}</div>` : ""}
