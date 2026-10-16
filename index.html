@@ -313,6 +313,18 @@ input[type=number],select{font:inherit;font-size:16px;min-height:44px;padding:0 
 .rowbtn{flex:0 0 auto;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;min-height:36px;padding:0 14px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .rowbtn .ic{width:18px;height:18px}
 
+/* Rate later */
+.nudge{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:0 0 12px;padding:12px 14px;border-radius:var(--radius);border:1px solid color-mix(in oklch,var(--gold) 45%,var(--line));background:color-mix(in oklch,var(--gold) 12%,var(--card));cursor:pointer}
+.nudge>.ic:first-child{color:var(--gold);fill:var(--gold);width:22px;height:22px}
+.nudge span{flex:1;min-width:0}
+.nudge b{display:block;font-size:15px}
+.nudge small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.nudge>.ic:last-child{color:var(--muted)}
+.log li{align-items:center}
+.ihead svg.cupsvg{width:40px;height:44px;flex:0 0 40px}
+.ihead p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.rate.rate-flat{border:0;padding:0;margin:0 0 4px;background:none}
+
 /* Floating timer + toast */
 .timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 16px);background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 16px;display:none;align-items:center;gap:10px;font-weight:700;font-size:17px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20;font-variant-numeric:tabular-nums}
 .timer.show{display:flex}
@@ -869,7 +881,8 @@ function renderMake(){
 }
 function renderPick(){
   const made = {}; S.log.forEach(x => made[x.d] = (made[x.d] || 0) + 1);
-  $("#tab-make").innerHTML = `<h2>What are we making?</h2><div class="grid">` + RECIPES.map(x => {
+  const todo = unrated();
+  $("#tab-make").innerHTML = `<h2>What are we making?</h2>${todo.length ? `<button class="nudge" data-rate-log="${todo[0].t}">${ic("star")}<span><b>${plural(todo.length, "drink", "drinks")} to rate</b><small>Rate your ${(RECIPES.find(r => r.id === todo[0].d) || {}).name || "drink"} from ${whenText(todo[0].t).toLowerCase()} and get a tip for next time</small></span>${ic("next")}</button>` : ""}<div class="grid">` + RECIPES.map(x => {
     const m = missing(x);
     return `<button class="drink" data-drink="${x.id}">${made[x.id] ? `<span class="made" title="Made ${made[x.id]} times">${ic("star")}${made[x.id]}</span>` : ""}${cup(x)}<b>${x.name}</b><small>${x.desc}</small>
       <span class="state ${m.length?"st-no":"st-ok"}">${m.length ? ic("x")+"Missing "+plural(m.length,"item","items") : ic("check")+"Ready to make"}</span></button>`;
@@ -933,11 +946,12 @@ function renderCook(){
   animDir = "";
   updateFloat();
 }
-let rateDraft = null; // {rating, issues:Set, saved}
-function renderDone(){
-  const r = recipe(), entry = S.log[S.log.length - 1];
-  if (!rateDraft) rateDraft = { rating: entry && entry.rating || 0, issues: new Set(entry && entry.issues || []), saved: !!(entry && entry.rating), applied: new Set() };
-  const R = rateDraft;
+// Rating draft for one logged drink, keyed by its timestamp. `where` says who redraws it.
+let rateDraft = null; // {t, rating, issues:Set, saved, applied:Set, where:"done"|"sheet"}
+const logEntry = t => S.log.find(x => x.t === t);
+const unrated = () => S.log.filter(x => !x.rating).reverse(); // newest first
+function newDraft(entry, where){ return { t: entry.t, rating: entry.rating || 0, issues: new Set(entry.issues || []), saved: !!entry.rating, applied: new Set(), where }; }
+function rateBlock(r, R){
   const chips = Object.entries(ISSUES).filter(([, [, ok]]) => ok(r)).map(([k, [l]]) => `<button data-issue="${k}" class="${R.issues.has(k)?"on":""}" ${R.saved?"disabled":""}>${l}</button>`).join("");
   let adv = "";
   if (R.saved){
@@ -946,16 +960,32 @@ function renderDone(){
     adv = `<div class="advice">${list.length ? list.map(a => `<div class="note n-tip"><b>${a.t}</b>${a.d}${R.applied.has(a.k) ? "<br>" + saved : a.fix ? `<br><button class="apply" data-fix="${a.k}:${a.fix[0]}:${a.fix[1]}">${ic("refresh")}${a.fix[2]}</button>` : ""}</div>`).join("")
       : (bn => `<div class="note n-tip"><b>${R.rating >= 4 ? (bn ? "Darun cup!" : "Great cup!") : (bn ? "Rating er jonno dhonnobad." : "Thanks for rating.")}</b>${R.rating >= 4 ? (bn ? "Porer bar o same setting rakho." : "Keep the same settings next time.") : (bn ? "Porer bar ki gondogol chhilo bachai koro, app fix bole dibe." : "Pick what was off next time, and the app will suggest a fix.")}</div>`)(S.lang === "bn")}</div>`;
   }
-  $("#tab-make").innerHTML = `<div class="done">${cup(r,"-d")}<h3>Enjoy your ${r.name}!</h3>
-    <p>Made for ${plural(S.people,"person","people")}.</p>
-    <div class="rate"><div class="row" style="margin-bottom:10px"><h4 style="margin:0">How did it turn out?</h4>${R.saved ? `<div class="lang" role="group" aria-label="Advice language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div>` : ""}</div>
+  return `<div class="row" style="margin-bottom:10px"><h4 style="margin:0">How did it turn out?</h4>${R.saved ? `<div class="lang" role="group" aria-label="Advice language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div>` : ""}</div>
       <div class="stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-star="${n}" class="${n<=R.rating?"on":""}" aria-label="${n} stars" ${R.saved?"disabled":""}>${ic("star")}</button>`).join("")}</div>
       ${R.rating && R.rating < 5 ? `<h4 style="margin-top:4px">Anything off?</h4><div class="chips">${chips}</div>` : ""}
-      ${R.saved ? adv : `<button class="btn primary" data-rate ${R.rating?"":"disabled"}>${ic("check")}Save rating</button>`}
-    </div>
+      ${R.saved ? adv : `<button class="btn primary" data-rate ${R.rating?"":"disabled"}>${ic("check")}Save rating</button>`}`;
+}
+function renderDone(){
+  const r = recipe(), entry = S.log[S.log.length - 1];
+  if (!rateDraft && entry) rateDraft = newDraft(entry, "done");
+  $("#tab-make").innerHTML = `<div class="done">${cup(r,"-d")}<h3>Enjoy your ${r.name}!</h3>
+    <p>Made for ${plural(S.people,"person","people")}.</p>
+    ${rateDraft ? `<div class="rate">${rateBlock(r, rateDraft)}</div>` : ""}
     <button class="btn primary" data-again>${ic("refresh")}Make another round</button>
     <button class="btn" data-go="pick">${ic("back")}Back to all drinks</button></div>`;
 }
+// Rate a drink later, from Learn or the drink list.
+const whenText = t => { const d = new Date(t), today = new Date(), y = new Date(); y.setDate(y.getDate() - 1);
+  return dayKey(t) === dayKey(today) ? "Today" : dayKey(t) === dayKey(y) ? "Yesterday" : d.toLocaleDateString(undefined, { weekday:"short", day:"numeric", month:"short" }); };
+function openRate(t){ const e = logEntry(t); if (!e) return; rateDraft = newDraft(e, "sheet"); sheetOpen("rate", paintRateSheet); }
+function paintRateSheet(sh){
+  const e = logEntry(rateDraft.t), r = RECIPES.find(x => x.id === e.d) || RECIPES[0];
+  sh.innerHTML = `<button class="sclose" data-sheet-close aria-label="Close">${ic("x")}</button><div class="grab"></div>
+    <div class="ihead">${cup(r, "-r")}<div><h2 id="sh-h">Rate your ${r.name}</h2><p>${whenText(e.t)} · ${plural(e.n, "person", "people")}</p></div></div>
+    <div class="rate rate-flat">${rateBlock(r, rateDraft)}</div>
+    ${rateDraft.saved ? `<button class="btn" data-sheet-close>Done</button>` : ""}`;
+}
+const repaintRate = () => rateDraft && (rateDraft.where === "sheet" ? sheetRepaint() : renderDone());
 function go(view){
   if (view === "done" && S.view === "cook") reward(() => { S.log.push({ d:S.drink, n:S.people, t:Date.now(), rating:0, issues:[] }); if (S.log.length > 200) S.log.shift(); });
   if (view !== "done") rateDraft = null;
@@ -1025,20 +1055,22 @@ function renderLearn(){
   document.body.classList.toggle("sub", !!learnCat && tabVisible("tips"));
   if (learnCat) return renderCat();
   const s = stats(), pct = s.to ? Math.round((s.xp - s.from) / (s.to - s.from) * 100) : 100, got = earned(s);
-  const recent = [...S.log].reverse().slice(0, 5);
+  const recent = [...S.log].reverse().slice(0, 5), todo = unrated().slice(0, 10);
+  const drinkRow = (x, btn) => { const r = RECIPES.find(y => y.id === x.d); return `<li><div>${r ? r.name : x.d}<small>${whenText(x.t)} · ${plural(x.n,"person","people")}</small></div>${btn}</li>`; };
   $("#tab-tips").innerHTML = `
   <div class="level"><div class="top"><div class="badge-ic">${ic(s.li >= 4 ? "trophy" : s.li >= 2 ? "medal" : "cup")}</div>
     <div><h2>${s.level}</h2><p>Level ${s.li + 1} of ${LEVELS.length}</p></div></div>
     <div class="xpbar"><i style="width:${pct}%"></i></div>
     <div class="xpt"><span>${s.xp} XP</span><span>${s.to ? `${s.to - s.xp} XP to ${s.nextName}` : "Top level!"}</span></div></div>
   <p class="summary">${s.cups ? `<b>${plural(s.cups,"drink","drinks")}</b> made${s.avg ? ` · <b>${s.avg.toFixed(1)}</b> average rating` : ""}${s.streak ? ` · <b>${s.streak}-day</b> streak` : ""}.` : "Finish your first drink to start earning XP."}</p>
+  ${todo.length ? `<h2 class="sm">Waiting for your rating</h2><div class="card log"><ul>${todo.map(x => drinkRow(x, `<button class="rowbtn" data-rate-log="${x.t}">${ic("star")}Rate</button>`)).join("")}</ul></div>` : ""}
   <div class="lhead"><h2 class="sm">Lessons</h2><button class="help" data-intro>${ic("compass")}How it works</button></div>
   <div class="cats">${CATS.map(c => { const [d, t] = catProgress(c); return `<button class="cat" data-cat="${c.id}"><span class="ci">${ic(c.icon)}</span>
     <span class="cm"><b>${c.name}</b><small>${c.sub}</small><span class="pbr"><span class="pb"><i style="width:${Math.round(d/t*100)}%"></i></span><span class="pn">${d}/${t}</span></span></span>${ic("next")}</button>`; }).join("")}</div>
   <h2 class="sm">Badges <span class="muted small">${got.length}/${BADGES.length}</span></h2>
   <div class="badges">${BADGES.map(b => { const on = got.includes(b[0]); return `<div class="bdg ${on?"":"locked"}"><div class="bi">${ic(on ? b[1] : "lock")}</div><b>${b[2]}</b><span>${b[3]}</span></div>`; }).join("")}</div>
   <h2 class="sm">Recent drinks</h2>
-  <div class="card log">${recent.length ? `<ul>${recent.map(x => { const r = RECIPES.find(y => y.id === x.d); return `<li><div>${r ? r.name : x.d}<small>${new Date(x.t).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})} · ${plural(x.n,"person","people")}</small></div><span class="s">${x.rating ? starRow(x.rating) : "Not rated"}</span></li>`; }).join("")}</ul>`
+  <div class="card log">${recent.length ? `<ul>${recent.map(x => drinkRow(x, x.rating ? `<span class="s">${starRow(x.rating)}</span>` : `<button class="rowbtn" data-rate-log="${x.t}">${ic("star")}Rate</button>`)).join("")}</ul>`
     : `<p class="muted" style="margin:0">Make your first drink and it will show up here.</p>`}</div>
   <h2 class="sm">How to earn XP</h2>
   <div class="card small"><p style="margin:0">Finish a drink <b>+20</b> · rate it <b>+10</b> · 5 stars <b>+10</b> · first time making a drink <b>+30</b> · lesson <b>+5</b> · each quiz answer right <b>+15</b></p></div>
@@ -1223,6 +1255,7 @@ function sheetClose(){
   const { el, kind } = sheet; sheet = null;
   if (kind === "install") S.installSeen = true;
   if (kind === "welcome") S.appWelcomed = true;
+  if (kind === "rate"){ rateDraft = null; if (tabVisible("tips")) renderLearn(); else if (tabVisible("make") && S.view === "pick") renderPick(); }
   save();
   el.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.remove("show"));
   setTimeout(() => el.remove(), 400);
@@ -1302,16 +1335,17 @@ document.addEventListener("click", e => {
   if ("start" in D){ S.step = 0; go("cook"); return; }
   if ("again" in D){ S.step = 0; go("setup"); return; }
   if (D.nav){ nav(+D.nav); return; }
-  if (D.lang){ S.lang = D.lang; save(); renderMake(); return; }
+  if (D.lang){ S.lang = D.lang; save(); if (sheet && sheet.kind === "rate") sheetRepaint(); else renderMake(); return; }
   if (D.ppl){ S.people = Math.min(20, Math.max(1, S.people + +D.ppl)); save(); renderMake(); return; }
   const sg = t.closest("[data-seg]");
   if (sg && D.v){ S[sg.dataset.seg] = D.v; save(); renderMake(); return; }
   if (D.timer){ if (tStep === S.step && tInt !== null) stopTimer(); else startTimer(+D.timer); return; }
   // Rating
-  if (D.star){ rateDraft.rating = +D.star; if (rateDraft.rating === 5) rateDraft.issues.clear(); renderDone(); return; }
-  if (D.issue){ rateDraft.issues.has(D.issue) ? rateDraft.issues.delete(D.issue) : rateDraft.issues.add(D.issue); renderDone(); return; }
-  if ("rate" in D){ reward(() => { const x = S.log[S.log.length - 1]; if (x){ x.rating = rateDraft.rating; x.issues = [...rateDraft.issues]; } save(); }); rateDraft.saved = true; renderDone(); return; }
-  if (D.fix){ const [issue, k, v] = D.fix.split(":"); S[k] = v; save(); rateDraft.applied.add(issue); renderDone(); return; }
+  if (D.rateLog){ openRate(+D.rateLog); return; }
+  if (D.star && rateDraft){ rateDraft.rating = +D.star; if (rateDraft.rating === 5) rateDraft.issues.clear(); repaintRate(); return; }
+  if (D.issue && rateDraft){ rateDraft.issues.has(D.issue) ? rateDraft.issues.delete(D.issue) : rateDraft.issues.add(D.issue); repaintRate(); return; }
+  if ("rate" in D && rateDraft){ reward(() => { const x = logEntry(rateDraft.t); if (x){ x.rating = rateDraft.rating; x.issues = [...rateDraft.issues]; } save(); }); rateDraft.saved = true; repaintRate(); return; }
+  if (D.fix && rateDraft){ const [issue, k, v] = D.fix.split(":"); S[k] = v; save(); rateDraft.applied.add(issue); repaintRate(); return; }
   // Learn
   if (D.cat !== undefined){ learnCat = D.cat || null; openLesson = null; quiz = null; renderLearn(); window.scrollTo(0,0); return; }
   if (D.lesson){ openLesson = openLesson === D.lesson ? null : D.lesson; renderCat(); return; }
