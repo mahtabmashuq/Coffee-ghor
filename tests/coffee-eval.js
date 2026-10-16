@@ -3,7 +3,7 @@ const { chromium } = require(process.env.PW || "playwright");
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage();
   await p.route(/fonts\./, r => r.abort());
-  await p.addInitScript(() => addEventListener("load", () => { S.installSeen = true; }));
+  await p.addInitScript(() => { localStorage.setItem("coffee-ghor-v1", JSON.stringify({ setupDone:true, installSeen:true })); });
   await p.goto("file://" + require("path").resolve(process.argv[2] || "index.html")); await p.waitForTimeout(300);
   const res = await p.evaluate(() => {
     const RULES = {}; const fail = (rule, ctx, msg) => { (RULES[rule] ??= { n:0, fails:[] }).n++; RULES[rule].fails.push(ctx + ": " + (msg || "missing")); };
@@ -14,10 +14,10 @@ const { chromium } = require(process.env.PW || "playwright");
     const nums = t => (t.match(/\d+(?:\.\d+)?/g) || []).sort().join(",");
     const base = JSON.parse(JSON.stringify(S));
     let cases = 0;
-    for (const r of RECIPES) for (const people of [1,2,3,4,6,8]) for (const strength of ["halka","normal","kora"]) for (const roast of ["light","medium","dark"]) for (const kit of [{scale:false,kettle:true,thermo:false,flask:true},{scale:true,kettle:false,thermo:true,flask:false}]) for (const sweet of ["none","normal"]) {
-      Object.assign(S, JSON.parse(JSON.stringify(base)), { drink:r.id, people, strength, roast, sweet });
+    for (const r of RECIPES) for (const people of [1,2,3,4,6,8]) for (const strength of ["halka","normal","kora"]) for (const roast of ["light","medium","dark"]) for (const kit of [{scale:false,kettle:true,thermo:false,flask:true},{scale:true,kettle:false,thermo:true,flask:false}]) for (const eq of [{moka:6,pitcher:350,g:"electric"},{moka:3,pitcher:350,g:"manual"},{moka:12,pitcher:600,g:"electric"},{moka:1,pitcher:1000,g:"manual"}]) for (const sweet of ["none","normal"]) {
+      Object.assign(S, JSON.parse(JSON.stringify(base)), { drink:r.id, people, strength, roast, sweet, grinderType:eq.g, grinder:"ok", pitcher:eq.pitcher }); setMoka(eq.moka);
       Object.assign(S.inv, { beans:true, ground:false, instant:true, milk:true, sugar:true, cocoa:true, ice:true }, kit);
-      const ctx = `${r.id} n=${people} ${strength}/${roast}/${sweet}${kit.scale?" +scale":""}`;
+      const ctx = `${r.id} n=${people} ${strength}/${roast}/${sweet}${kit.scale?" +scale":""} ${eq.moka}cup/${eq.pitcher}ml/${eq.g}`;
       const pl = plan(r), en = buildSteps(r, pl, "en"), bn = buildSteps(r, pl, "bn"); cases++;
       const all = en.map(x => x.t + " " + x.d).join(" | ");
       const txt = all + bn.map(x => x.t + x.d).join(""); check("no broken text", !/undefined|NaN|null/.test(txt) && en.concat(bn).every(x => ((x.t + x.d).match(/\*\*/g) || []).length % 2 === 0), ctx, all.slice(0, 80));
@@ -38,8 +38,10 @@ const { chromium } = require(process.env.PW || "playwright");
       if (iFroth >= 0 && iMilk >= 0) check("froth right after heating", iFroth === iMilk + 1, ctx, `heat #${iMilk+1}, froth #${iFroth+1}`);
       // equipment limits
       if (coffeeSource() === "beans"){ const batches = +((all.match(/in (\d+) batches/) || [])[1] || 1); check("grinder ≤ 30 g per batch", pl.grams / batches <= 30, ctx, `${pl.grams} g in ${batches} batch`); }
-      if (pl.frothBatches){ const per = pl.milkTotal / pl.frothBatches, lim = r.froth === "thick" ? 150 : 250; check("froth batch within pitcher mark", per <= lim + 1, ctx, `${Math.round(per)} ml per batch, mark ${lim}`); }
+      if (pl.frothBatches){ const mk = x => Math.round(x / 10) * 10, per = pl.milkTotal / pl.frothBatches, lim = r.froth === "thick" ? mk(S.pitcher * 0.43) : mk(S.pitcher * 0.71); check("froth batch within pitcher mark", per <= lim + 1, ctx, `${Math.round(per)} ml per batch, mark ${lim}`); }
       // heat, quality and safety cues
+      if (pl.frothBatches) check("froth step names this pitcher's mark", new RegExp(`${pl.thickMark} ml`).test(all), ctx, `want ${pl.thickMark} ml`);
+      if (S.grinderType === "manual" && coffeeSource() === "beans") check("manual grinder gets hand-grinding steps", /steady pace/.test(all) && !/pulse/i.test(all), ctx);
       if (r.milkMode !== "cold") check("warm the cups for hot drinks", /warm (the )?cups|cups? (with|in) hot water/i.test(all), ctx);
       if (r.milkMode === "hot") check("milk 60-65°C, not boiled", /65°C/.test(all) && /not boiling/i.test(all), ctx);
       check("safety: valve + cloth + no pressing", /valve/i.test(all) && /cloth/i.test(all) && /not press/i.test(all), ctx);

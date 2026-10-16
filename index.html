@@ -313,6 +313,83 @@ input[type=number],select{font:inherit;font-size:16px;min-height:44px;padding:0 
 .rowbtn{flex:0 0 auto;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;min-height:36px;padding:0 14px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .rowbtn .ic{width:18px;height:18px}
 
+/* First-run setup */
+.onb{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;padding:var(--sat) 16px env(safe-area-inset-bottom);animation:fadein .25s var(--ease)}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.onb-in{max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-bottom:16px}
+.onb-top{display:flex;align-items:center;justify-content:space-between;min-height:52px}
+.onb-top .back{margin:0}
+.onb .dots{display:flex;gap:6px}
+.onb .dots i{width:7px;height:7px;border-radius:99px;background:var(--line);transition:width .3s var(--ease),background .3s var(--ease)}
+.onb .dots i.on{width:20px;background:var(--brand)}
+.onb-body{flex:1;padding-top:8px}
+.onb h1{font:400 26px/1.2 var(--f-display);margin:0 0 6px;text-wrap:balance}
+.onb .lead{color:var(--muted);font-size:15px;margin:0 0 4px}
+.onb .art{width:56px;height:56px;border-radius:50%;background:var(--soft);color:var(--brand);display:flex;align-items:center;justify-content:center;margin:8px 0 14px}
+.onb .art .ic{width:30px;height:30px}
+.onb .art.ok{background:color-mix(in oklch,var(--ok) 16%,var(--bg));color:var(--ok)}
+.onb .art.ok .ic{stroke-width:2.6}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.tile{border:1px solid var(--line);background:var(--card);border-radius:12px;min-height:60px;padding:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.tile b{font-size:16px}
+.tile small{font-size:13px;color:var(--muted)}
+.tile.on{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.hint{font-size:14px;color:var(--muted);margin:12px 0 0}
+.opts-list{display:grid;gap:8px;margin-top:14px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;min-height:60px}
+.opt>.ic{width:26px;height:26px;color:var(--brand)}
+.opt span:not(.radio){flex:1}
+.opt b{display:block;font-size:16px}
+.opt small{display:block;font-size:13.5px;color:var(--muted)}
+.opt .radio{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex:0 0 24px}
+.opt .radio .ic{width:14px;height:14px;stroke-width:3}
+.opt.on{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.opt.on .radio{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.onb .need{margin-top:16px}
+.onb-go{margin-top:20px}
+.seg.pad{margin:2px 0 10px}
+.toggle.eq{border-bottom:0;padding-bottom:6px}
+
+/* Level up */
+.nextmove{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:10px 12px;border-radius:12px;border:0;background:color-mix(in oklch,var(--brand-ink) 14%,transparent);color:inherit;text-align:left;cursor:pointer;min-height:48px}
+.nextmove span:first-child{flex:1;font-weight:700;font-size:15px}
+.nextmove small{display:block;font-weight:400;font-size:12px;opacity:.8}
+.nextmove .xp{font-weight:700;font-size:13px;background:var(--gold);color:oklch(22% .03 45);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.path{list-style:none;margin:0;padding:0;position:relative}
+.path li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;position:relative}
+.path li:not(:last-child)::after{content:"";position:absolute;left:17px;top:46px;bottom:-6px;width:2px;background:var(--line)}
+.path .pi{width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:var(--soft);color:var(--brand);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.path .pi .ic{width:20px;height:20px}
+.path li>div{flex:1;padding-top:1px}
+.path b{display:block;font-size:16px}
+.path small{display:block;font-size:13.5px;color:var(--muted);line-height:1.35}
+.path small.bonus{color:var(--ink);margin-top:3px}
+.path .xp{font-weight:700;font-size:14px;color:var(--brand);background:var(--soft);border-radius:99px;padding:3px 10px;white-space:nowrap;margin-top:6px;text-align:center}
+.path .xp small{display:inline;font-size:11px;color:var(--muted);margin-left:2px}
+.ladder{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.ladder li{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.ladder li:last-child{border-bottom:0}
+.ladder .dot{width:26px;height:26px;flex:0 0 26px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted)}
+.ladder .dot .ic{width:14px;height:14px;stroke-width:3}
+.ladder b{flex:1;font-size:15px}
+.ladder li>span:last-child{font-size:13px;color:var(--muted)}
+.ladder li.past .dot{background:var(--ok);border-color:var(--ok);color:var(--brand-ink)}
+.ladder li.now{background:var(--soft)}
+.ladder li.now .dot{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.ladder li.now>span:last-child{color:var(--brand);font-weight:700}
+
+/* Multi-cup rating */
+.raters{display:flex;gap:6px;justify-content:center;margin:2px 0 4px}
+.raters span{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted)}
+.raters span.did{background:var(--ok);border-color:var(--ok);color:var(--brand-ink)}
+.raters span.did .ic{width:14px;height:14px;stroke-width:3}
+.raters span.now{border-color:var(--brand);color:var(--brand)}
+.cups{list-style:none;margin:0 0 8px;padding:0}
+.cups li{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:15px}
+.cups li:last-child{border-bottom:0}
+.said{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.log .s small{font-size:12px;color:var(--muted);margin-left:4px}
+
 /* Rate later */
 .nudge{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:0 0 12px;padding:12px 14px;border-radius:var(--radius);border:1px solid color-mix(in oklch,var(--gold) 45%,var(--line));background:color-mix(in oklch,var(--gold) 12%,var(--card));cursor:pointer}
 .nudge>.ic:first-child{color:var(--gold);fill:var(--gold);width:22px;height:22px}
@@ -413,6 +490,7 @@ const ICONS = {
   copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
   paste:'<rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9.5 4.5v-1h5v1"/><path d="M9 10h6M9 14h6"/>',
   phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>',
+  crank:'<path d="M7 11h10l-1.2 9.5H8.2z"/><path d="M9 11V8h6v3"/><path d="M12 8V4.5h5"/><circle cx="18" cy="4.5" r="1.6"/>',
   book:'<path d="M4 4.5h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4.5h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>'
 };
 const ic = (n, cls="") => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||""}</svg>`;
@@ -426,6 +504,9 @@ const DEFAULTS = {
   mokaCoffee: 28,                 // g per brew, 6-cup basket filled level
   yieldPct: 88,                   // % of water that comes out as coffee
   pitcher: 350,
+  mokaSize: 6,                    // cups printed on the pot: sets mokaWater + mokaCoffee
+  grinderType: "electric",        // electric | manual | none
+  setupDone: false,               // first-run equipment setup finished (or skipped)
   inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false, cinnamon:false, vanilla:false,
          kettle:true, scale:false, thermo:false, flask:true },
   view: "pick",                   // pick | setup | cook | done
@@ -439,7 +520,20 @@ const DEFAULTS = {
   quiz: {}                        // categoryId: best score
 };
 const KEY = "coffee-ghor-v1";
-function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s) return {...DEFAULTS, ...s, inv:{...DEFAULTS.inv, ...(s.inv||{})}}; }catch(e){} return structuredClone(DEFAULTS); }
+// Standard stovetop moka pots: cups -> [water to just below the valve (ml), coffee in a level basket (g)]
+const MOKA = { 1:[60,7], 2:[100,12], 3:[150,16], 4:[200,20], 6:[300,28], 9:[450,40], 12:[600,55] };
+const PITCHERS = [350, 500, 600, 1000];
+const GRINDERS = { electric:["grinder","Electric grinder","Blade grinder with a button"], manual:["crank","Manual grinder","Hand crank with a grind setting"], none:["can","No grinder","I buy ground coffee"] };
+function setMoka(n){ S.mokaSize = n; [S.mokaWater, S.mokaCoffee] = MOKA[n]; }
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(KEY)); if (s){
+    const st = {...DEFAULTS, ...s, inv:{...DEFAULTS.inv, ...(s.inv||{})}};
+    // People who used the app before equipment setup existed keep their settings and skip the first-run screen.
+    if (s.setupDone === undefined) st.setupDone = true;
+    if (s.mokaSize === undefined) st.mokaSize = +Object.keys(MOKA).reduce((a, b) => Math.abs(MOKA[b][0] - st.mokaWater) < Math.abs(MOKA[a][0] - st.mokaWater) ? b : a);
+    return st; } }catch(e){}
+  return structuredClone(DEFAULTS);
+}
 let S = load();
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
@@ -531,7 +625,7 @@ function cup(r, tag=""){
 }
 
 /* ---------- Logic ---------- */
-const grinderOk = () => S.grinder === "ok";
+const grinderOk = () => S.grinderType !== "none" && S.grinder === "ok";
 function coffeeSource(){
   const beansOk = S.inv.beans && grinderOk();
   if (S.source === "beans" && beansOk) return "beans";
@@ -543,7 +637,7 @@ function coffeeSource(){
 function missing(r){
   const m = [];
   if (r.coffee > 0 && !coffeeSource()){
-    if (S.inv.beans && !grinderOk()) m.push("a working grinder (or ground coffee)");
+    if (S.inv.beans && !grinderOk()) m.push(S.grinderType === "none" ? "a grinder (or ground coffee)" : "a working grinder (or ground coffee)");
     else m.push("coffee (beans or ground)");
   }
   if (r.instant && !S.inv.instant) m.push("instant coffee");
@@ -575,19 +669,22 @@ function plan(r){
   p.warmWater = r.coffee && r.milkMode !== "cold" ? 100 * n : 0; // to warm the cups
   p.milkPer = r.milk; p.milkTotal = r.milk * n;
   const mark = x => Math.round(x / 10) * 10; // round to the pitcher's marks
-  const cap = r.froth === "thick" ? mark(S.pitcher * 0.43) : mark(S.pitcher * 0.57); // 350 pitcher: 150 / 200 mark
+  p.thickMark = mark(S.pitcher * 0.43); p.lightMark = mark(S.pitcher * 0.71); // 350 pitcher: 150 / 250 marks
+  const cap = r.froth === "thick" ? p.thickMark : mark(S.pitcher * 0.57); // foam roughly doubles thick, +25% silky
   p.frothCap = cap;
   p.frothBatches = r.froth !== "none" && p.milkTotal ? Math.ceil(p.milkTotal / cap) : 0;
   p.sugarTsp = r.instant ? 0 : SWEET[S.sweet] * n;
   p.cocoaTbsp = (r.cocoa || 0) * n;
   p.ice = (r.ice || 0) * n;
-  // Whipped coffee: 2 tbsp each of coffee, sugar and water per batch (about 90 ml), which triples in a 350 ml pitcher
-  p.whipBatches = r.instant ? Math.ceil(Math.max(2, r.instant * n) / 2) : 0;
+  // Whipped coffee triples in volume: keep each batch's liquid (3 x 15 ml per spoon each) under a third of the pitcher
+  const whipMax = Math.max(2, Math.floor(S.pitcher / 135));
+  p.whipBatches = r.instant ? Math.ceil(Math.max(2, r.instant * n) / whipMax) : 0;
   p.whipPer = r.instant ? Math.ceil(Math.max(2, r.instant * n) / p.whipBatches) : 0;
   p.instantTbsp = p.whipBatches * p.whipPer;
   p.hotWaterTotal = p.waterPer * n;
   // Time: ~8 min per brew + 3 min cool/refill between brews, + 4 min prep
-  p.minutes = r.instant ? 6 + Math.ceil(n/2) : p.brews * 8 + Math.max(0, p.brews - 1) * 3 + 4 + (p.frothBatches > 1 ? p.frothBatches - 1 : 0);
+  p.minutes = r.instant ? 6 + Math.ceil(n/2) : p.brews * 8 + Math.max(0, p.brews - 1) * 3 + 4 + (p.frothBatches > 1 ? p.frothBatches - 1 : 0)
+    + (S.grinderType === "manual" && coffeeSource() === "beans" ? Math.ceil(p.grams / 10) : 0); // hand grinding: ~1 min per 10 g
   return p;
 }
 
@@ -622,7 +719,12 @@ function buildSteps(r, p, lang){
         `Eta age shuru koro, gorom hote hote grind koro. ${R("water")} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.${hot ? " Er moddhe **proti cup e ~100 ml** cup gorom korar jonno." : ""}`) });
   // 2. Grind (in batches the blade grinder can handle) or measure.
   const gb = p.grindBatches > 1;
-  if (src === "beans"){
+  if (src === "beans" && S.grinderType === "manual"){
+    const adj = { light:[" Light roast: 1-2 clicks finer."," Light roast: 1-2 click mihi."], dark:[" Dark roast: 1-2 clicks coarser."," Dark roast: 1-2 click mota."] }[S.roast];
+    s.push({ t:L(`Grind ${amt} of beans`,`${amt} beans grind koro`),
+      d:L(`${amtNote}${gb ? ` Grind it **in ${p.grindBatches} batches**: the hopper holds about 30 g.` : ""} Set the grinder a little finer than the middle: **like table salt**.${adj ? adj[0] : ""} Turn at a steady pace, about **1 minute per 10 g**. Powder-fine makes moka coffee bitter and can clog the filter.`,
+          `${amtNote}${gb ? ` **${p.grindBatches} bhage** grind koro: hopper e ~30 g dhore.` : ""} Majhamajhir cheye ektu mihi set koro: **table salt er moto**.${adj ? adj[1] : ""} Shoman gotite ghurao, **10 g e ~1 min**. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.`) });
+  } else if (src === "beans"){
     s.push({ t:L(`Grind ${amt} of beans`,`${amt} beans grind koro`),
       d:L(`${amtNote}${gb ? ` Grind it **in ${p.grindBatches} batches**: the grinder takes 30 g at most.` : ""} ${roast().lbl} roast: short 3-4 second pulses, ${R("pulse")} Shake the grinder between pulses. Aim for the texture of **table salt**. Powder-fine makes moka coffee bitter and can clog the filter.`,
           `${amtNote}${gb ? ` **${p.grindBatches} bhage** grind koro: grinder e ekbare 30 g er beshi na.` : ""} ${roast().lbl} roast: 3-4 second er pulse, ${R("pulse")} Majhe majhe grinder jhakao. Target: **table salt er moto** mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.`) });
@@ -666,11 +768,11 @@ function buildSteps(r, p, lang){
     const bt = p.frothBatches > 1 ? L(` (${p.frothBatches} batches, max ${p.frothCap} ml each)`,` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)`) : "";
     s.push(r.froth === "thick"
       ? { t:L(`Froth the milk${bt}`,`Dudh froth koro${bt}`), timer:30,
-          d:L("Hot milk in the pitcher, **up to the 150 mark** (no more). Frother on **FAST** (double-click the button to change speed). Hold it near the top of the milk for 15-20 seconds to pull in air, then lower it for 10 seconds. The foam will double. Tap the pitcher on the counter 2-3 times to pop big bubbles.",
-              "Pitcher e gorom dudh, **150 dag porjonto** (er beshi na). Frother **FAST** speed e (button double-click kore speed bodlao). Dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.") }
+          d:L(`Hot milk in the pitcher, **up to the ${p.thickMark} ml mark** (no more). Frother on **FAST** (double-click the button to change speed). Hold it near the top of the milk for 15-20 seconds to pull in air, then lower it for 10 seconds. The foam will double. Tap the pitcher on the counter 2-3 times to pop big bubbles.`,
+              `Pitcher e gorom dudh, **${p.thickMark} ml dag porjonto** (er beshi na). Frother **FAST** speed e (button double-click kore speed bodlao). Dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.`) }
       : { t:L(`Froth the milk${bt}`,`Dudh froth koro${bt}`), timer:15,
-          d:L("Milk in the pitcher, **between the 150 and 250 marks**. Frother on **MEDIUM**, fully under the surface, 10-15 seconds. You want silky, tiny bubbles, not stiff foam. Swirl the pitcher to mix.",
-              "Pitcher e **150 ar 250 dag er majhamajhi** porjonto dudh. Frother **MEDIUM** speed, puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.") });
+          d:L(`Milk in the pitcher, **between the ${p.thickMark} ml and ${p.lightMark} ml marks**. Frother on **MEDIUM**, fully under the surface, 10-15 seconds. You want silky, tiny bubbles, not stiff foam. Swirl the pitcher to mix.`,
+              `Pitcher e **${p.thickMark} ml ar ${p.lightMark} ml dag er majhamajhi** porjonto dudh. Frother **MEDIUM** speed, puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.`) });
   }
   const sw = SWEET[S.sweet];
   const sugarLine = sw ? L(` Stir **${plural(sw, "teaspoon", "teaspoons")} of sugar** into each cup while the coffee is hot.`,` Proti cup e **${sw} chamuch chini**, coffee gorom thaktei gholao.`) : "";
@@ -706,17 +808,18 @@ function buildSteps(r, p, lang){
   s.forEach(x => { x.t = x.t.trim(); x.d = x.d.replace(/\s+$/, "").replace(/\s{2,}/g, " "); });
   return s;
 }
-const starRow = n => `<span class="srow" role="img" aria-label="${n} of 5 stars">${[1,2,3,4,5].map(k => ic("star", k <= n ? "f" : "")).join("")}</span>`;
+const starRow = n => { const r = Math.round(n); return `<span class="srow" role="img" aria-label="${n} of 5 stars">${[1,2,3,4,5].map(k => ic("star", k <= r ? "f" : "")).join("")}</span>`; };
 const md = t => t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
 
 /* ---------- Progress: XP, levels, badges (all derived from the log, so nothing double-counts) ---------- */
 const LEVELS = [[0,"Beginner"],[100,"Apprentice"],[250,"Home Barista"],[500,"Skilled Barista"],[900,"Coffee Master"]];
 const dayKey = t => new Date(t).toLocaleDateString("en-CA");
+const has5 = x => x.rating === 5 || (x.ratings || []).some(c => c.rating === 5);
 function stats(){
   const log = S.log || [], drinks = new Set(log.map(x => x.d));
   const rated = log.filter(x => x.rating);
   let xp = drinks.size * 30 + Object.keys(S.learned).length * 5;
-  for (const x of log) xp += 20 + (x.rating ? 10 : 0) + (x.rating === 5 ? 10 : 0);
+  for (const x of log) xp += 20 + (x.rating ? 10 : 0) + 5 * Math.max(0, (x.ratings || []).length - 1) + (has5(x) ? 10 : 0);
   for (const c in S.quiz) xp += (S.quiz[c] || 0) * 15;
   const days = new Set(log.map(x => dayKey(x.t)));
   let streak = 0, d = new Date();
@@ -734,7 +837,7 @@ const BADGES = [
   ["explorer","compass","Explorer","Try 5 different drinks", s => s.drinks.size >= 5],
   ["menu","trophy","Full Menu","Make all 10 drinks", s => s.drinks.size >= RECIPES.length],
   ["milk","milk","Milk Master","Make 5 milk drinks", s => s.milkCups >= 5],
-  ["perfect","star","Perfect Cup","Rate a drink 5 stars", () => S.log.some(x => x.rating === 5)],
+  ["perfect","star","Perfect Cup","Rate a drink 5 stars", () => S.log.some(has5)],
   ["crowd","crowd","Crowd Pleaser","Make a round for 6 or more", () => S.log.some(x => x.n >= 6)],
   ["streak","flame","On a Roll","Make coffee 3 days in a row", s => s.streak >= 3],
   ["safety","shield","Safety First","Finish every Safety lesson", () => CATS.find(c => c.id === "safety").lessons.every(l => S.learned[l.id])],
@@ -771,14 +874,17 @@ const ISSUES = {
 // Advice follows the EN | BN switch, like the steps. Drink names stay English.
 function advice(issue, r){
   const bn = S.lang === "bn", L = (en, b) => bn ? b : en, ro = S.roast;
+  // Grind fixes depend on the grinder: pulses for electric, clicks for manual, nothing for pre-ground
+  const G = { electric:["try shorter grinder pulses","Grinder er pulse ektu choto koro"], manual:["set the grinder one click coarser","Grinder 1 click mota koro"], none:["",""] }[S.grinderType];
+  const F = { electric:["Pulse the grinder a few seconds longer","Grinder koyek second beshi chalao"], manual:["Set the grinder one click finer","Grinder 1 click mihi koro"], none:["",""] }[S.grinderType];
   switch (issue){
     case "bitter": return { t:L("Take it off the heat earlier.","Aro age chula theke namao."),
-      d:L(`Bitterness comes from the last part of the brew. Remove the pot the moment it starts gurgling, and cool the base straight away. Also try shorter grinder pulses for a slightly coarser grind.${ro === "dark" || ro === "mdark" ? " With a darker roast, \"Mild\" strength helps too." : ""}`,
-          `Brew er shesh er ongsho theke tita ashe. Gurgle shuru hotei namao, ar shathe shathe bottom thanda koro. Grinder er pulse ektu choto koro, guro ektu mota hobe.${ro === "dark" || ro === "mdark" ? " Dark roast hole \"Mild\" strength o kaje dibe." : ""}`),
+      d:L(`Bitterness comes from the last part of the brew. Remove the pot the moment it starts gurgling, and cool the base straight away.${G[0] ? " Also " + G[0] + " for a slightly coarser grind." : ""}${ro === "dark" || ro === "mdark" ? " With a darker roast, \"Mild\" strength helps too." : ""}`,
+          `Brew er shesh er ongsho theke tita ashe. Gurgle shuru hotei namao, ar shathe shathe bottom thanda koro.${G[1] ? " " + G[1] + ", guro ektu mota hobe." : ""}${ro === "dark" || ro === "mdark" ? " Dark roast hole \"Mild\" strength o kaje dibe." : ""}`),
       fix: S.strength === "kora" ? ["strength","normal",L("Switch to Normal strength","Normal strength e bodlao")] : null };
     case "sour": return { t:L("Grind a little finer and use hotter water.","Ektu mihi grind koro, pani aro gorom koro."),
-      d:L(`Sour, thin coffee hasn't extracted enough. Pulse the grinder a few seconds longer and make sure the water is properly hot.${ro === "light" ? " Light roasts need a full boil." : ""}`,
-          `Tok, patla coffee mane coffee theke flavor kom ber hoyeche. Grinder koyek second beshi chalao, ar pani bhalo kore gorom koro.${ro === "light" ? " Light roast e puro futano pani lage." : ""}`) };
+      d:L(`Sour, thin coffee hasn't extracted enough. ${F[0] ? F[0] + " and make" : "Make"} sure the water is properly hot.${ro === "light" ? " Light roasts need a full boil." : ""}`,
+          `Tok, patla coffee mane coffee theke flavor kom ber hoyeche. ${F[1] ? F[1] + ", ar p" : "P"}ani bhalo kore gorom koro.${ro === "light" ? " Light roast e puro futano pani lage." : ""}`) };
     case "weak": return r.instant
       ? { t:L("Use more instant coffee.","Instant coffee beshi dao."), d:L("Add an extra spoon of instant coffee to the cream, and whip it until it's really thick.","Cream e ar ek chamuch instant coffee dao, ar ekdom ghono na howa porjonto whip koro.") }
       : { t:L("Make it stronger.","Aro kora koro."), d:L("Fill the basket right to the top (level, not pressed). If it's still weak, choose Strong.","Basket ekdom upor porjonto bhoro (level, chap dio na). Tao halka hole Strong bachai koro."),
@@ -896,7 +1002,7 @@ function renderSetup(){
   const last = [...S.log].reverse().find(x => x.d === r.id && x.rating);
   if (last){
     const a = (last.issues || []).map(i => advice(i, r)).filter(Boolean)[0];
-    h += `<div class="note n-last"><b>Last time ${starRow(last.rating)}</b>${a ? a.t + " " + a.d : (S.lang === "bn" ? "Darun hoyechilo. Abar same!" : "You loved it. Same again!")}</div>`;
+    h += `<div class="note n-last"><b>Last time ${starRow(last.rating)}${(last.ratings || []).length > 1 ? ` ${last.rating.toFixed(1)} from ${last.ratings.length} people` : ""}</b>${a ? a.t + " " + a.d : (S.lang === "bn" ? "Darun hoyechilo. Abar same!" : "You loved it. Same again!")}</div>`;
   }
   h += `<div class="card">
     <div class="field row"><label class="lbl" style="margin:0">${ic("users")}People</label>
@@ -907,7 +1013,7 @@ function renderSetup(){
     ${canBoth && r.coffee ? `<div class="field"><label class="lbl">${ic("grinder")}Which coffee</label>${seg("source", {auto:"Auto",beans:"Grind beans",ground:"Ground coffee"}, S.source)}</div>` : ""}
   </div>`;
   if (miss.length) h += `<div class="note n-bad"><b>Can't make this yet.</b> You need: ${miss.join(", ")}. Update the Pantry tab, or pick another drink.</div>`;
-  if (r.coffee && S.grinder !== "ok" && S.inv.beans) h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Learn → Safety. Use ground coffee until then.</div>`;
+  if (r.coffee && S.grinderType === "electric" && S.grinder !== "ok" && S.inv.beans) h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Learn → Safety. Use ground coffee until then.</div>`;
   if (p.brews >= 3) h += `<div class="note n-warn"><b>${p.brews} moka brews, about ${p.minutes} minutes.</b> One pot makes at most ${p.yieldPerBrew} ml at a time. To save time, pick "Mild" strength, or give half the group an Americano.</div>`;
   if (r.coffee){ const ro = roast(); h += `<div class="note n-tip"><b>${ro.lbl} roast in a ${r.name}</b>${BLACK.includes(r.id) ? ro.black : ro.milk}</div>`; }
   const st = [];
@@ -950,20 +1056,41 @@ function renderCook(){
 let rateDraft = null; // {t, rating, issues:Set, saved, applied:Set, where:"done"|"sheet"}
 const logEntry = t => S.log.find(x => x.t === t);
 const unrated = () => S.log.filter(x => !x.rating).reverse(); // newest first
-function newDraft(entry, where){ return { t: entry.t, rating: entry.rating || 0, issues: new Set(entry.issues || []), saved: !!entry.rating, applied: new Set(), where }; }
+function newDraft(entry, where){
+  const done = entry.ratings ? entry.ratings.map(c => ({ rating:c.rating, issues:new Set(c.issues) })) : entry.rating ? [{ rating:entry.rating, issues:new Set(entry.issues || []) }] : [];
+  return { t: entry.t, n: Math.max(1, entry.n || 1), cur: { rating:0, issues:new Set() }, done, saved: !!entry.rating, applied: new Set(), where };
+}
 function rateBlock(r, R){
-  const chips = Object.entries(ISSUES).filter(([, [, ok]]) => ok(r)).map(([k, [l]]) => `<button data-issue="${k}" class="${R.issues.has(k)?"on":""}" ${R.saved?"disabled":""}>${l}</button>`).join("");
-  let adv = "";
-  if (R.saved){
-    const list = [...R.issues].map(k => ({ k, ...advice(k, r) })).filter(a => a.t);
-    const saved = `<span class="small" style="color:var(--ok);font-weight:700">${ic("check")} ${S.lang === "bn" ? "Porer barer jonno save hoyeche" : "Saved for next time"}</span>`;
-    adv = `<div class="advice">${list.length ? list.map(a => `<div class="note n-tip"><b>${a.t}</b>${a.d}${R.applied.has(a.k) ? "<br>" + saved : a.fix ? `<br><button class="apply" data-fix="${a.k}:${a.fix[0]}:${a.fix[1]}">${ic("refresh")}${a.fix[2]}</button>` : ""}</div>`).join("")
-      : (bn => `<div class="note n-tip"><b>${R.rating >= 4 ? (bn ? "Darun cup!" : "Great cup!") : (bn ? "Rating er jonno dhonnobad." : "Thanks for rating.")}</b>${R.rating >= 4 ? (bn ? "Porer bar o same setting rakho." : "Keep the same settings next time.") : (bn ? "Porer bar ki gondogol chhilo bachai koro, app fix bole dibe." : "Pick what was off next time, and the app will suggest a fix.")}</div>`)(S.lang === "bn")}</div>`;
+  const bn = S.lang === "bn", multi = R.n > 1, C = R.cur;
+  if (!R.saved){
+    const k = R.done.length + 1, last = k >= R.n;
+    const chips = Object.entries(ISSUES).filter(([, [, ok]]) => ok(r)).map(([key, [l]]) => `<button data-issue="${key}" class="${C.issues.has(key)?"on":""}">${l}</button>`).join("");
+    return `<div class="row" style="margin-bottom:6px"><h4 style="margin:0">${multi ? `Person ${k} of ${R.n}: how was your cup?` : "How did it turn out?"}</h4></div>
+      ${multi ? `<div class="raters">${Array.from({ length:R.n }, (_, i) => `<span class="${i < R.done.length ? "did" : i === R.done.length ? "now" : ""}">${i < R.done.length ? ic("check") : i + 1}</span>`).join("")}</div>` : ""}
+      <div class="stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-star="${n}" class="${n<=C.rating?"on":""}" aria-label="${n} stars">${ic("star")}</button>`).join("")}</div>
+      ${C.rating && C.rating < 5 ? `<h4 style="margin-top:4px">Anything off?</h4><div class="chips">${chips}</div>` : ""}
+      <button class="btn primary" data-rate ${C.rating?"":"disabled"}>${ic("check")}${!multi ? "Save rating" : last ? "Save and finish" : `Save, then pass to person ${k + 1}`}</button>
+      ${multi && R.done.length ? `<button class="btn" data-rate-finish>Finish with ${plural(R.done.length, "rating", "ratings")}</button>` : ""}`;
   }
-  return `<div class="row" style="margin-bottom:10px"><h4 style="margin:0">How did it turn out?</h4>${R.saved ? `<div class="lang" role="group" aria-label="Advice language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div>` : ""}</div>
-      <div class="stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-star="${n}" class="${n<=R.rating?"on":""}" aria-label="${n} stars" ${R.saved?"disabled":""}>${ic("star")}</button>`).join("")}</div>
-      ${R.rating && R.rating < 5 ? `<h4 style="margin-top:4px">Anything off?</h4><div class="chips">${chips}</div>` : ""}
-      ${R.saved ? adv : `<button class="btn primary" data-rate ${R.rating?"":"disabled"}>${ic("check")}Save rating</button>`}`;
+  // Saved: everyone's cups together, then what to change
+  const cups = R.done, many = cups.length > 1, avg = cups.reduce((a, c) => a + c.rating, 0) / cups.length;
+  const count = {}; cups.forEach(c => c.issues.forEach(i => count[i] = (count[i] || 0) + 1));
+  const list = Object.keys(count).sort((a, b) => count[b] - count[a]).map(k => ({ k, n:count[k], ...advice(k, r) })).filter(a => a.t);
+  const saved = `<span class="small" style="color:var(--ok);font-weight:700">${ic("check")} ${bn ? "Porer barer jonno save hoyeche" : "Saved for next time"}</span>`;
+  const said = a => many ? `<span class="said">${bn ? `${a.n}/${cups.length} jon: ${ISSUES[a.k][0]}` : `${a.n} of ${cups.length} said ${ISSUES[a.k][0].toLowerCase()}`}</span>` : "";
+  return `<div class="row" style="margin-bottom:10px"><h4 style="margin:0">${many ? `${cups.length} ratings · ${avg.toFixed(1)} average` : "How did it turn out?"}</h4><div class="lang" role="group" aria-label="Advice language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div></div>
+    ${many ? `<ul class="cups">${cups.map((c, i) => `<li><span>Person ${i + 1}</span>${starRow(c.rating)}</li>`).join("")}</ul>` : `<div class="stars">${[1,2,3,4,5].map(n => `<button class="${n<=cups[0].rating?"on":""}" disabled aria-label="${n} stars">${ic("star")}</button>`).join("")}</div>`}
+    <div class="advice">${list.length ? list.map(a => `<div class="note n-tip">${said(a)}<b>${a.t}</b>${a.d}${R.applied.has(a.k) ? "<br>" + saved : a.fix ? `<br><button class="apply" data-fix="${a.k}:${a.fix[0]}:${a.fix[1]}">${ic("refresh")}${a.fix[2]}</button>` : ""}</div>`).join("")
+      : `<div class="note n-tip"><b>${avg >= 4 ? (bn ? "Darun cup!" : "Great cup!") : (bn ? "Rating er jonno dhonnobad." : "Thanks for rating.")}</b>${avg >= 4 ? (bn ? "Porer bar o same setting rakho." : "Keep the same settings next time.") : (bn ? "Porer bar ki gondogol chhilo bachai koro, app fix bole dibe." : "Pick what was off next time, and the app will suggest a fix.")}</div>`}</div>`;
+}
+function finishRating(){
+  const R = rateDraft;
+  reward(() => { const x = logEntry(R.t); if (x){
+    x.ratings = R.done.map(c => ({ rating:c.rating, issues:[...c.issues] }));
+    x.rating = Math.round(R.done.reduce((a, c) => a + c.rating, 0) / R.done.length * 10) / 10;
+    x.issues = [...new Set(R.done.flatMap(c => [...c.issues]))];
+  } save(); });
+  R.saved = true; repaintRate();
 }
 function renderDone(){
   const r = recipe(), entry = S.log[S.log.length - 1];
@@ -987,6 +1114,7 @@ function paintRateSheet(sh){
 }
 const repaintRate = () => rateDraft && (rateDraft.where === "sheet" ? sheetRepaint() : renderDone());
 function go(view){
+  if (view === "done" && S.view === "cook") stopTimer(); // a finished drink needs no timer, and it would cover the finish screen
   if (view === "done" && S.view === "cook") reward(() => { S.log.push({ d:S.drink, n:S.people, t:Date.now(), rating:0, issues:[] }); if (S.log.length > 200) S.log.shift(); });
   if (view !== "done") rateDraft = null;
   S.view = view; if (view !== "cook" && view !== "done") S.step = 0; save(); renderMake(); window.scrollTo(0,0);
@@ -1020,21 +1148,26 @@ function renderInv(){
   const g = {ok:"Working", check:"Needs checking", broken:"Broken"};
   const sw = (k, [icon, l, d]) => `<div class="toggle"><div>${ic(icon)}<div><b>${l}</b>${d?`<small>${d}</small>`:""}</div></div>
     <label class="sw"><input type="checkbox" data-inv="${k}" ${S.inv[k]?"checked":""} aria-label="${l}"><i></i></label></div>`;
+  const pitchers = PITCHERS.includes(S.pitcher) ? PITCHERS : [...PITCHERS, S.pitcher].sort((a, b) => a - b);
+  const mk = x => Math.round(x / 10) * 10;
   let h = `<h2>Our equipment</h2><div class="card">
-    <div class="toggle"><div>${ic("moka")}<div><b>Moka pot</b><small>6-cup stovetop, about 300 ml. The rubber ring has a front and back.</small></div></div><span class="tag">Have it</span></div>
-    <div class="toggle"><div>${ic("grinder")}<div><b>Electric grinder</b><small>Blade grinder (NS-2026, 220V). If anything seems wrong, set it to "Needs checking".</small></div></div>
-      <select id="grinder" aria-label="Grinder status">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
-    <div class="toggle"><div>${ic("pitcher")}<div><b>Milk pitcher</b><small>Stainless steel, with 150 / 250 / 350 ml marks</small></div></div><span class="tag">${S.pitcher} ml</span></div>
-    <div class="toggle"><div>${ic("frother")}<div><b>Enjoy milk frother</b><small>3 speeds (double-click to change), USB-C</small></div></div><span class="tag">Have it</span></div>
+    <div class="toggle"><div>${ic("moka")}<div><b>Moka pot</b><small>${S.mokaWater} ml water · ${S.mokaCoffee} g coffee per brew</small></div></div>
+      <select data-moka aria-label="Moka pot size">${Object.keys(MOKA).map(k => `<option value="${k}" ${+k === S.mokaSize ? "selected" : ""}>${k}-cup</option>`).join("")}</select></div>
+    <div class="toggle eq"><div>${ic(GRINDERS[S.grinderType][0])}<div><b>Grinder</b><small>${GRINDERS[S.grinderType][2]}</small></div></div></div>
+    <div class="seg pad" style="--n:3" role="group" aria-label="Grinder type">${Object.entries(GRINDERS).map(([k, [, l]]) => `<button data-gtype="${k}" class="${S.grinderType === k ? "on" : ""}">${{ electric:"Electric", manual:"Manual", none:"None" }[k]}</button>`).join("")}</div>
+    ${S.grinderType !== "none" ? `<div class="toggle"><div><div><b>Grinder status</b><small>${S.grinderType === "electric" ? "If it got wet or anything seems wrong, set it to Needs checking" : "Set it to Needs checking if it's stiff or slipping"}</small></div></div>
+      <select id="grinder" aria-label="Grinder status">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>` : ""}
+    <div class="toggle"><div>${ic("pitcher")}<div><b>Milk pitcher</b><small>Foam marks: thick up to ${mk(S.pitcher * 0.43)} ml, silky up to ${mk(S.pitcher * 0.71)} ml</small></div></div>
+      <select data-pitcher aria-label="Milk pitcher size">${pitchers.map(v => `<option value="${v}" ${v === S.pitcher ? "selected" : ""}>${v} ml</option>`).join("")}</select></div>
+    <div class="toggle"><div>${ic("frother")}<div><b>Milk frother</b><small>Handheld, with fast and medium speeds</small></div></div><span class="tag">Have it</span></div>
   </div>
   <h2 class="sm">Other tools</h2><div class="card">${Object.entries(TOOLS).map(([k,v]) => sw(k,v)).join("")}</div>
   <h2 class="sm">What's in the kitchen?</h2><div class="card">${Object.entries(INGREDIENTS).map(([k,v]) => sw(k,v)).join("")}</div>
-  <h2 class="sm">Moka pot settings</h2><div class="card">
-    <p class="small muted" style="margin-top:0">Measure once with a measuring cup and enter the numbers here. Every amount in the app is based on these.</p>
+  <h2 class="sm">Fine-tune your moka pot</h2><div class="card">
+    <p class="small muted" style="margin-top:0">Optional. Picking a pot size fills these in. If your pot is different, measure once and adjust.</p>
     <div class="toggle"><div><div><b>Water in the base</b><small>Up to just below the valve, ml</small></div></div><input type="number" min="50" max="600" data-set="mokaWater" value="${S.mokaWater}"></div>
     <div class="toggle"><div><div><b>Coffee in the basket</b><small>Filled level, grams</small></div></div><input type="number" min="5" max="60" data-set="mokaCoffee" value="${S.mokaCoffee}"></div>
     <div class="toggle"><div><div><b>Coffee yield</b><small>% of the water that comes out as coffee, usually 80-90</small></div></div><input type="number" min="50" max="100" data-set="yieldPct" value="${S.yieldPct}"></div>
-    <div class="toggle"><div><div><b>Pitcher size</b><small>ml</small></div></div><input type="number" min="150" max="1000" data-set="pitcher" value="${S.pitcher}"></div>
   </div>
   <h2 class="sm">App & progress</h2><div class="card">
     ${isStandalone()
@@ -1043,6 +1176,7 @@ function renderInv(){
     <div class="toggle"><div>${ic("copy")}<div><b>Copy progress code</b><small>Move your level, ratings and settings to another phone or browser</small></div></div><button class="rowbtn" data-copy-code>Copy</button></div>
     <div class="toggle"><div>${ic("paste")}<div><b>Paste progress code</b><small>Restore progress you copied</small></div></div><button class="rowbtn" data-open-restore>Paste</button></div>
   </div>
+  <button class="btn" data-onboard>${ic("moka")}Run equipment setup again</button>
   <button class="btn" id="reset">${ic("refresh")}Reset settings to defaults</button>
   <p class="small muted" style="text-align:center">Your progress and ratings are kept.</p>`;
   $("#tab-inv").innerHTML = h;
@@ -1061,7 +1195,8 @@ function renderLearn(){
   <div class="level"><div class="top"><div class="badge-ic">${ic(s.li >= 4 ? "trophy" : s.li >= 2 ? "medal" : "cup")}</div>
     <div><h2>${s.level}</h2><p>Level ${s.li + 1} of ${LEVELS.length}</p></div></div>
     <div class="xpbar"><i style="width:${pct}%"></i></div>
-    <div class="xpt"><span>${s.xp} XP</span><span>${s.to ? `${s.to - s.xp} XP to ${s.nextName}` : "Top level!"}</span></div></div>
+    <div class="xpt"><span>${s.xp} XP</span><span>${s.to ? `${s.to - s.xp} XP to ${s.nextName}` : "Top level!"}</span></div>
+    ${(m => `<button class="nextmove" ${m.attr}><span><small>Your next move</small>${m.txt}</span><span class="xp">+${m.xp} XP</span>${ic("next")}</button>`)(nextMove())}</div>
   <p class="summary">${s.cups ? `<b>${plural(s.cups,"drink","drinks")}</b> made${s.avg ? ` · <b>${s.avg.toFixed(1)}</b> average rating` : ""}${s.streak ? ` · <b>${s.streak}-day</b> streak` : ""}.` : "Finish your first drink to start earning XP."}</p>
   ${todo.length ? `<h2 class="sm">Waiting for your rating</h2><div class="card log"><ul>${todo.map(x => drinkRow(x, `<button class="rowbtn" data-rate-log="${x.t}">${ic("star")}Rate</button>`)).join("")}</ul></div>` : ""}
   <div class="lhead"><h2 class="sm">Lessons</h2><button class="help" data-intro>${ic("compass")}How it works</button></div>
@@ -1070,11 +1205,31 @@ function renderLearn(){
   <h2 class="sm">Badges <span class="muted small">${got.length}/${BADGES.length}</span></h2>
   <div class="badges">${BADGES.map(b => { const on = got.includes(b[0]); return `<div class="bdg ${on?"":"locked"}"><div class="bi">${ic(on ? b[1] : "lock")}</div><b>${b[2]}</b><span>${b[3]}</span></div>`; }).join("")}</div>
   <h2 class="sm">Recent drinks</h2>
-  <div class="card log">${recent.length ? `<ul>${recent.map(x => drinkRow(x, x.rating ? `<span class="s">${starRow(x.rating)}</span>` : `<button class="rowbtn" data-rate-log="${x.t}">${ic("star")}Rate</button>`)).join("")}</ul>`
+  <div class="card log">${recent.length ? `<ul>${recent.map(x => drinkRow(x, x.rating ? `<span class="s">${starRow(x.rating)}${(x.ratings || []).length > 1 ? ` <small>${x.rating.toFixed(1)} · ${x.ratings.length}</small>` : ""}</span>` : `<button class="rowbtn" data-rate-log="${x.t}">${ic("star")}Rate</button>`)).join("")}</ul>`
     : `<p class="muted" style="margin:0">Make your first drink and it will show up here.</p>`}</div>
-  <h2 class="sm">How to earn XP</h2>
-  <div class="card small"><p style="margin:0">Finish a drink <b>+20</b> · rate it <b>+10</b> · 5 stars <b>+10</b> · first time making a drink <b>+30</b> · lesson <b>+5</b> · each quiz answer right <b>+15</b></p></div>
+  <h2 class="sm">How to level up</h2>
+  <ol class="path">
+    <li><span class="pi">${ic("cup")}</span><div><b>Make a drink</b><small>Follow the steps to the end</small><small class="bonus">First time making a new drink: +30 more</small></div><span class="xp">+20</span></li>
+    <li><span class="pi">${ic("star")}</span><div><b>Rate it</b><small>Everyone who drank one can rate their own cup</small><small class="bonus">+5 for each extra person · +10 for a 5-star cup</small></div><span class="xp">+10</span></li>
+    <li><span class="pi">${ic("book")}</span><div><b>Read a lesson</b><small>Open a lesson and tap Got it</small></div><span class="xp">+5</span></li>
+    <li><span class="pi">${ic("learn")}</span><div><b>Take a quiz</b><small>3 questions per topic. Your best score counts, so retry any time</small></div><span class="xp">+15<small>each</small></span></li>
+  </ol>
+  <h2 class="sm">Levels</h2>
+  <ol class="ladder">${LEVELS.map(([min, name], i) => `<li class="${i < s.li ? "past" : i === s.li ? "now" : ""}"><span class="dot">${i < s.li ? ic("check") : i + 1}</span><b>${name}</b><span>${i === s.li ? "You are here · " : ""}${min} XP</span></li>`).join("")}</ol>
   <footer>Coffee Ghor · made for home</footer>`;
+}
+// The single most useful thing to do now, and what it's worth.
+function nextMove(){
+  const todo = unrated();
+  if (todo.length){ const r = RECIPES.find(x => x.id === todo[0].d) || {}; return { txt:`Rate your ${r.name || "drink"}`, xp:10, attr:`data-rate-log="${todo[0].t}"` }; }
+  const made = new Set(S.log.map(x => x.d));
+  if (!S.log.length) return { txt:"Make your first drink", xp:50, attr:`data-goto-drink="${S.drink}"` };
+  for (const c of CATS){ const l = c.lessons.find(l => !S.learned[l.id]); if (l) return { txt:`Read "${l.t}"`, xp:5, attr:`data-cat="${c.id}" data-open="${l.id}"` }; }
+  const fresh = RECIPES.find(r => !made.has(r.id) && !missing(r).length);
+  if (fresh) return { txt:`Try a ${fresh.name} for the first time`, xp:50, attr:`data-goto-drink="${fresh.id}"` };
+  const q = CATS.find(c => (S.quiz[c.id] || 0) < c.quiz.length);
+  if (q) return { txt:`Ace the ${q.name} quiz`, xp:15 * (q.quiz.length - (S.quiz[q.id] || 0)), attr:`data-cat="${q.id}"` };
+  return { txt:"Make another drink", xp:20, attr:`data-goto-drink="${S.drink}"` };
 }
 function renderCat(){
   const c = CATS.find(x => x.id === learnCat);
@@ -1101,6 +1256,50 @@ function renderCat(){
   $("#tab-tips").innerHTML = h;
 }
 
+/* ---------- First-run equipment setup (also from Pantry) ---------- */
+let onb = null; // {i}
+const ONB_STEPS = 4;
+function openOnboard(){ if (onb) return; onb = { i:0 }; const el = document.createElement("div"); el.className = "onb"; el.id = "onb";
+  el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-labelledby", "onb-h"); document.body.appendChild(el); paintOnboard(); }
+function paintOnboard(){
+  const el = $("#onb"), i = onb.i, last = i === ONB_STEPS - 1;
+  const top = `<div class="onb-top">${i ? `<button class="back" data-onb="back">${ic("back")}Back</button>` : "<span></span>"}
+    <div class="dots" aria-hidden="true">${Array.from({ length:ONB_STEPS }, (_, k) => `<i class="${k === i ? "on" : ""}"></i>`).join("")}</div>
+    ${last ? "<span></span>" : `<button class="help" data-onb="skip">Skip</button>`}</div>`;
+  let body = "";
+  if (i === 0) body = `<div class="art">${ic("moka")}</div><h1 id="onb-h">Let's get your equipment ready</h1>
+    <p class="lead">Three quick questions so every amount in the recipes fits your kitchen. About 30 seconds.</p>
+    <h2 class="sm">Which moka pot do you have?</h2>
+    <div class="tiles">${Object.entries(MOKA).map(([k, [w]]) => `<button class="tile ${+k === S.mokaSize ? "on" : ""}" data-onb="moka" data-v="${k}"><b>${k}-cup</b><small>${w} ml</small></button>`).join("")}</div>
+    <p class="hint">The cup count is usually printed on the bottom. Not sure? Fill the base to just below the valve and measure the water.</p>`;
+  if (i === 1) body = `<h1 id="onb-h">How do you grind your coffee?</h1><p class="lead">Grind time and texture are different for each.</p>
+    <div class="opts-list">${Object.entries(GRINDERS).map(([k, [icon, l, d]]) => `<button class="opt ${S.grinderType === k ? "on" : ""}" data-onb="grind" data-v="${k}">${ic(icon)}<span><b>${l}</b><small>${d}</small></span><span class="radio">${S.grinderType === k ? ic("check") : ""}</span></button>`).join("")}</div>`;
+  if (i === 2) body = `<h1 id="onb-h">What size is your milk pitcher?</h1><p class="lead">It decides how much milk to froth at a time, so the foam doesn't overflow.</p>
+    <div class="tiles">${PITCHERS.map(v => `<button class="tile ${v === S.pitcher ? "on" : ""}" data-onb="pitcher" data-v="${v}"><b>${v} ml</b><small>${v <= 350 ? "Small" : v <= 600 ? "Medium" : "Large"}</small></button>`).join("")}</div>
+    <p class="hint">Look for the size stamped on the bottom, or the highest mark inside. No pitcher? Pick 350 ml and use a tall mug.</p>`;
+  if (i === 3) body = `<div class="art ok">${ic("check")}</div><h1 id="onb-h">You're all set</h1><p class="lead">Every recipe now fits your equipment.</p>
+    <ul class="need card"><li><span>Moka pot</span><b>${S.mokaSize}-cup · ${S.mokaWater} ml</b></li><li><span>Grinder</span><b>${GRINDERS[S.grinderType][1]}</b></li><li><span>Milk pitcher</span><b>${S.pitcher} ml</b></li></ul>
+    <p class="hint">You can change any of this later in Pantry.</p>`;
+  el.innerHTML = `<div class="onb-in">${top}<div class="onb-body">${body}</div>
+    <button class="btn primary onb-go" data-onb="${last ? "done" : "next"}">${last ? `${ic("cup")}Start making coffee` : `Continue${ic("next")}`}</button></div>`;
+  el.scrollTop = 0;
+}
+function onbAct(a, v){
+  if (a === "moka") setMoka(+v);
+  else if (a === "grind"){ S.grinderType = v; if (v === "none"){ S.inv.ground = true; } else S.inv.beans = true; }
+  else if (a === "pitcher") S.pitcher = +v;
+  else if (a === "next") onb.i++;
+  else if (a === "back") onb.i = Math.max(0, onb.i - 1);
+  else if (a === "skip" || a === "done"){ closeOnboard(); return; }
+  save(); paintOnboard();
+}
+function closeOnboard(){
+  const first = !S.setupDone; S.setupDone = true; save();
+  $("#onb") && $("#onb").remove(); onb = null; renderAll(); if (tabVisible("tips")) renderLearn();
+  if (first) setTimeout(maybeInstall, 1200); // the Home Screen prompt waits until setup is done
+}
+function maybeInstall(){ if (!isStandalone() && PLAT.os !== "desktop" && !S.installSeen && S.view === "pick" && tabVisible("make")) sheetOpen("install", paintInstall); }
+
 /* ---------- Learn intro (first visit; replay from "How it works") ---------- */
 const INTRO = [
   ["cup", "Every drink counts", "Finish a drink to earn XP. Then rate it: tell the app what was off, and it tells you exactly what to change next time."],
@@ -1109,7 +1308,7 @@ const INTRO = [
 ];
 let introI = -1, introEl = null;
 function openIntro(){
-  if (introEl || sheet) return;
+  if (introEl || sheet || onb) return;
   introI = 0; introEl = document.createElement("div");
   introEl.innerHTML = `<div class="scrim" data-intro-close></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="intro-h"></div>`;
   document.body.appendChild(introEl);
@@ -1215,7 +1414,7 @@ function paintRestore(sh, err=""){
     <div class="acts"><button class="btn" data-sheet-close>${welcome ? "Start fresh" : "Cancel"}</button><button class="btn primary" data-restore>${ic("check")}Restore</button></div>`;
 }
 // Progress code: everything that makes the app yours, as one copyable line.
-const SETTINGS_KEYS = ["drink","people","strength","sweet","source","roast","grinder","mokaWater","mokaCoffee","yieldPct","pitcher","lang"];
+const SETTINGS_KEYS = ["drink","people","strength","sweet","source","roast","grinder","grinderType","mokaSize","mokaWater","mokaCoffee","yieldPct","pitcher","lang"];
 function exportCode(){
   const d = { v:1, log:S.log, learned:S.learned, quiz:S.quiz, inv:S.inv, set:Object.fromEntries(SETTINGS_KEYS.map(k => [k, S[k]])) };
   return "CG1." + btoa(unescape(encodeURIComponent(JSON.stringify(d))));
@@ -1231,7 +1430,7 @@ function importCode(raw){
     for (const c in (d.quiz || {})) S.quiz[c] = Math.max(S.quiz[c] || 0, d.quiz[c]);
     Object.assign(S.inv, d.inv || {});
     for (const k of SETTINGS_KEYS) if (d.set && d.set[k] !== undefined) S[k] = d.set[k];
-    S.view = "pick"; save(); return S.log.length;
+    S.view = "pick"; S.setupDone = true; save(); return S.log.length;
   }catch(e){ return null; }
 }
 async function copyText(text){
@@ -1241,7 +1440,7 @@ async function copyText(text){
 // One bottom sheet at a time (install, welcome, restore). The Learn intro uses the same look.
 let sheet = null;
 function sheetOpen(kind, paint){
-  if (sheet || introEl) return;
+  if (sheet || introEl || onb) return;
   const el = document.createElement("div");
   el.innerHTML = `<div class="scrim" data-sheet-close></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-h" tabindex="-1"></div>`;
   document.body.appendChild(el); sheet = { el, kind, paint };
@@ -1254,7 +1453,7 @@ function sheetClose(){
   if (!sheet) return;
   const { el, kind } = sheet; sheet = null;
   if (kind === "install") S.installSeen = true;
-  if (kind === "welcome") S.appWelcomed = true;
+  if (kind === "welcome"){ S.appWelcomed = true; if (!S.setupDone) setTimeout(openOnboard, 400); }
   if (kind === "rate"){ rateDraft = null; if (tabVisible("tips")) renderLearn(); else if (tabVisible("make") && S.view === "pick") renderPick(); }
   save();
   el.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.remove("show"));
@@ -1320,6 +1519,10 @@ document.addEventListener("click", e => {
   if ("restore" in D){ const ta = sheet.el.querySelector("textarea"), n = importCode(ta.value);
     if (n === null){ sheetRepaint("That code doesn't look right. Copy it again and paste the whole thing."); return; }
     S.appWelcomed = true; sheetClose(); renderAll(); if (tabVisible("tips")) renderLearn(); toast("check", `Progress restored · ${plural(n, "drink", "drinks")}`); return; }
+  if (D.gtype){ S.grinderType = D.gtype; if (D.gtype === "none"){ S.inv.ground = true; } save(); renderInv(); renderMake(); return; }
+  if ("onboard" in D){ openOnboard(); return; }
+  if (D.onb !== undefined){ onbAct(D.onb, D.v); return; }
+  if (D.gotoDrink){ S.drink = D.gotoDrink; showTab("make"); go("setup"); return; }
   if ("intro" in D){ openIntro(); return; }
   if ("introNext" in D){ introI++; paintIntro(); return; }
   if ("introGo" in D){ closeIntro(() => { learnCat = "drinks"; openLesson = "d1"; quiz = null; renderLearn(); window.scrollTo(0,0); }); return; }
@@ -1342,12 +1545,14 @@ document.addEventListener("click", e => {
   if (D.timer){ if (tStep === S.step && tInt !== null) stopTimer(); else startTimer(+D.timer); return; }
   // Rating
   if (D.rateLog){ openRate(+D.rateLog); return; }
-  if (D.star && rateDraft){ rateDraft.rating = +D.star; if (rateDraft.rating === 5) rateDraft.issues.clear(); repaintRate(); return; }
-  if (D.issue && rateDraft){ rateDraft.issues.has(D.issue) ? rateDraft.issues.delete(D.issue) : rateDraft.issues.add(D.issue); repaintRate(); return; }
-  if ("rate" in D && rateDraft){ reward(() => { const x = logEntry(rateDraft.t); if (x){ x.rating = rateDraft.rating; x.issues = [...rateDraft.issues]; } save(); }); rateDraft.saved = true; repaintRate(); return; }
+  if (D.star && rateDraft && !rateDraft.saved){ const C = rateDraft.cur; C.rating = +D.star; if (C.rating === 5) C.issues.clear(); repaintRate(); return; }
+  if (D.issue && rateDraft && !rateDraft.saved){ const C = rateDraft.cur; C.issues.has(D.issue) ? C.issues.delete(D.issue) : C.issues.add(D.issue); repaintRate(); return; }
+  if ("rate" in D && rateDraft && !rateDraft.saved){ const R = rateDraft; R.done.push(R.cur); R.cur = { rating:0, issues:new Set() };
+    if (R.done.length >= R.n) finishRating(); else { repaintRate(); toast("users", `Pass the phone to person ${R.done.length + 1}`); } return; }
+  if ("rateFinish" in D && rateDraft && rateDraft.done.length){ finishRating(); return; }
   if (D.fix && rateDraft){ const [issue, k, v] = D.fix.split(":"); S[k] = v; save(); rateDraft.applied.add(issue); repaintRate(); return; }
   // Learn
-  if (D.cat !== undefined){ learnCat = D.cat || null; openLesson = null; quiz = null; renderLearn(); window.scrollTo(0,0); return; }
+  if (D.cat !== undefined){ learnCat = D.cat || null; openLesson = D.open || null; quiz = null; renderLearn(); window.scrollTo(0,0); return; }
   if (D.lesson){ openLesson = openLesson === D.lesson ? null : D.lesson; renderCat(); return; }
   if (D.got){ reward(() => { S.learned[D.got] = true; save(); }); renderCat(); return; }
   if (D.quiz === "start"){ quiz = { i:0, score:0, picked:null }; renderCat(); window.scrollTo(0,0); return; }
@@ -1363,6 +1568,8 @@ document.addEventListener("change", e => {
   const t = e.target;
   if (t.dataset.inv){ S.inv[t.dataset.inv] = t.checked; save(); renderMake(); }
   if (t.id === "grinder"){ S.grinder = t.value; save(); renderMake(); }
+  if ("moka" in t.dataset){ setMoka(+t.value); save(); renderInv(); renderMake(); }
+  if ("pitcher" in t.dataset){ S.pitcher = +t.value; save(); renderInv(); renderMake(); }
   if (t.dataset.set){ const v = +t.value; if (v > 0){ S[t.dataset.set] = v; save(); renderMake(); } }
 });
 
@@ -1370,10 +1577,12 @@ document.addEventListener("change", e => {
 if (S.view === "done") S.view = "pick";
 renderAll();
 try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){}
+const iosAppWelcome = isStandalone() && PLAT.os === "ios" && !S.appWelcomed && !hasProgress();
+if (!S.setupDone && !iosAppWelcome) openOnboard(); // first run: get the equipment right before anything else
 setTimeout(() => {
-  if (S.view !== "pick" || !tabVisible("make")) return; // only on the drink list, never over a recipe or rating
-  if (isStandalone()){ if (PLAT.os === "ios" && !S.appWelcomed && !hasProgress()) sheetOpen("welcome", paintRestore); else if (!S.appWelcomed){ S.appWelcomed = true; save(); } }
-  else if (PLAT.os !== "desktop" && !S.installSeen) sheetOpen("install", paintInstall);
+  if (S.view !== "pick" || !tabVisible("make") || onb) return; // only on the drink list, never over a recipe, rating or setup
+  if (isStandalone()){ if (iosAppWelcome) sheetOpen("welcome", paintRestore); else if (!S.appWelcomed){ S.appWelcomed = true; save(); } }
+  else maybeInstall();
 }, 1200);
 </script>
 </body>
