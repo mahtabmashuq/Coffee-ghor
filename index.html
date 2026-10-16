@@ -287,6 +287,27 @@ input[type=number],select{font:inherit;font-size:17px;min-height:44px;padding:0 
 .sheet .acts .btn.primary{flex:2}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim{transition:none}}
 
+.sheet{max-height:calc(100dvh - var(--sat) - 16px);overflow-y:auto;overscroll-behavior:contain;outline:none}
+.sclose{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:0;background:var(--soft);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ihead{display:flex;gap:14px;align-items:center;margin:0 52px 16px 0}
+.ihead img{width:56px;height:56px;border-radius:13px;flex:0 0 56px;box-shadow:0 2px 8px oklch(0% 0 0 / .15)}
+.ihead h2{font-size:22px;margin:0;text-wrap:balance}
+.perks{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px}
+.perks li{display:flex;gap:8px;align-items:flex-start;font-size:16px}
+.perks .ic{color:var(--ok);width:20px;height:20px;stroke-width:2.4;margin-top:2px}
+.isteps{list-style:none;margin:0 0 8px;padding:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius)}
+.isteps li{display:flex;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.isteps li:last-child{border-bottom:0}
+.isteps .in{width:28px;height:28px;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex:0 0 28px}
+.isteps .it{flex:1;font-size:16px;line-height:1.4}
+.isteps .ii{color:var(--brand);display:flex;flex:0 0 auto}
+.isteps .ii .ic{width:26px;height:26px}
+.sheet .lead{margin:0 0 12px;font-size:16px;color:var(--ink)}
+.sheet textarea{display:block;width:100%;min-height:92px;margin:12px 0 0;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:15px/1.4 ui-monospace,Menlo,monospace;resize:vertical;caret-color:var(--brand)}
+.sheet .err{color:var(--bad);font-weight:700;font-size:15px;margin:8px 0 0}
+.rowbtn{flex:0 0 auto;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;min-height:44px;padding:0 16px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.rowbtn .ic{width:18px;height:18px}
+
 /* Floating timer + toast */
 .timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 16px);background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 16px;display:none;align-items:center;gap:10px;font-weight:700;font-size:19px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20;font-variant-numeric:tabular-nums}
 .timer.show{display:flex}
@@ -366,6 +387,15 @@ const ICONS = {
   compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13.5 13.5 8.5 15.5l2-5z"/>',
   medal:'<circle cx="12" cy="15" r="5.5"/><path d="M8.5 10.7 6 3h4l2 5M15.5 10.7 18 3h-4l-2 5"/><path d="M12 12.5l.8 1.6 1.7.2-1.2 1.2.3 1.7-1.6-.8-1.6.8.3-1.7-1.2-1.2 1.7-.2z"/>',
   crowd:'<circle cx="7" cy="8" r="2.5"/><circle cx="17" cy="8" r="2.5"/><circle cx="12" cy="6.5" r="3"/><path d="M2.5 19a4.5 4.5 0 0 1 7-3.8M21.5 19a4.5 4.5 0 0 0-7-3.8M7 20a5 5 0 0 1 10 0"/>',
+  share:'<path d="M12 3.5v11"/><path d="M8 7.5l4-4 4 4"/><path d="M8.5 10.5H7a1.5 1.5 0 0 0-1.5 1.5v7A1.5 1.5 0 0 0 7 20.5h10a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5h-1.5"/>',
+  plusSq:'<rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M12 8.5v7M8.5 12h7"/>',
+  dotsV:'<circle cx="12" cy="5.5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="18.5" r="1.4" fill="currentColor"/>',
+  dotsH:'<circle cx="5.5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="18.5" cy="12" r="1.4" fill="currentColor"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  download:'<path d="M12 4v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19.5h14"/>',
+  copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
+  paste:'<rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9.5 4.5v-1h5v1"/><path d="M9 10h6M9 14h6"/>',
+  phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>',
   book:'<path d="M4 4.5h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4.5h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>'
 };
 const ic = (n, cls="") => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||""}</svg>`;
@@ -385,6 +415,8 @@ const DEFAULTS = {
   step: 0,
   lang: "en",                     // steps language only: en | bn
   seenLearn: false,               // first-visit intro on the Learn tab
+  installSeen: false,             // Home Screen prompt shown and closed
+  appWelcomed: false,             // first launch of the installed app handled
   log: [],                        // [{d, n, t, rating, issues}] one per finished drink
   learned: {},                    // lessonId: true
   quiz: {}                        // categoryId: best score
@@ -943,6 +975,13 @@ function renderInv(){
     <div class="toggle"><div><div><b>Coffee yield</b><small>% of the water that comes out as coffee, usually 80-90</small></div></div><input type="number" min="50" max="100" data-set="yieldPct" value="${S.yieldPct}"></div>
     <div class="toggle"><div><div><b>Pitcher size</b><small>ml</small></div></div><input type="number" min="150" max="1000" data-set="pitcher" value="${S.pitcher}"></div>
   </div>
+  <h2 class="sm">App & progress</h2><div class="card">
+    ${isStandalone()
+      ? `<div class="toggle"><div>${ic("phone")}<div><b>Installed</b><small>You're using the Home Screen app</small></div></div><span class="tag">${ic("check")}</span></div>`
+      : `<div class="toggle"><div>${ic("phone")}<div><b>Add to Home Screen</b><small>Opens full screen and keeps your progress</small></div></div><button class="rowbtn" data-open-install>${ic("plusSq")}Add</button></div>`}
+    <div class="toggle"><div>${ic("copy")}<div><b>Copy progress code</b><small>Move your level, ratings and settings to another phone or browser</small></div></div><button class="rowbtn" data-copy-code>Copy</button></div>
+    <div class="toggle"><div>${ic("paste")}<div><b>Paste progress code</b><small>Restore progress you copied</small></div></div><button class="rowbtn" data-open-restore>Paste</button></div>
+  </div>
   <button class="btn" id="reset">${ic("refresh")}Reset settings to defaults</button>
   <p class="small muted" style="text-align:center">Your progress and ratings are kept.</p>`;
   $("#tab-inv").innerHTML = h;
@@ -1007,7 +1046,7 @@ const INTRO = [
 ];
 let introI = -1, introEl = null;
 function openIntro(){
-  if (introEl) return;
+  if (introEl || sheet) return;
   introI = 0; introEl = document.createElement("div");
   introEl.innerHTML = `<div class="scrim" data-intro-close></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="intro-h"></div>`;
   document.body.appendChild(introEl);
@@ -1032,6 +1071,132 @@ function closeIntro(then){
   if (then) then();
 }
 document.addEventListener("keydown", e => { if (introEl && e.key === "Escape") closeIntro(); });
+
+/* ---------- Home Screen install prompt and progress transfer ---------- */
+const PLAT = (() => {
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(ua);
+  const inapp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|Snapchat|LinkedInApp|TikTok|musical_ly|Twitter|GSA\//.test(ua) || (android && /; wv\)/.test(ua));
+  let br = "other";
+  if (inapp) br = "inapp";
+  else if (ios) br = /CriOS/.test(ua) ? "chrome" : /FxiOS/.test(ua) ? "firefox" : /EdgiOS/.test(ua) ? "edge" : /Safari/.test(ua) ? "safari" : "other";
+  else if (android) br = /SamsungBrowser/.test(ua) ? "samsung" : /Firefox/.test(ua) ? "firefox" : /EdgA/.test(ua) ? "edge" : /Chrome/.test(ua) ? "chrome" : "other";
+  return { os: ios ? "ios" : android ? "android" : "desktop", br };
+})();
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const hasProgress = () => S.log.length > 0 || Object.keys(S.learned).length > 0 || Object.keys(S.quiz).length > 0;
+let installEvt = null; // Android Chrome's own install prompt, when the browser offers one
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; if (sheet && sheet.kind === "install") sheetRepaint(); });
+window.addEventListener("appinstalled", () => { installEvt = null; S.installSeen = true; save(); sheetClose(); toast("check", "Installed. Open it from your Home Screen"); });
+
+function installGuide(){
+  const { os, br } = PLAT, g = { steps:[] };
+  if (br === "inapp"){
+    g.intro = `You're in another app's built-in browser, which can't add apps to your Home Screen. Open this page in ${os === "ios" ? "Safari" : "Chrome"} first.`;
+    g.steps = [[os === "ios" ? "dotsH" : "dotsV", "Tap the <b>menu</b> or <b>Share</b> button in this browser"],
+               ["compass", `Choose <b>Open in ${os === "ios" ? "Safari" : "Chrome"}</b> (or <b>Open in browser</b>)`],
+               ["plusSq", "This guide will show you the next steps there"]];
+    g.copyLink = true; return g;
+  }
+  if (os === "ios"){
+    g.steps = br === "safari"
+      ? [["share", "Tap <b>Share</b> in Safari's toolbar. Don't see it? Tap the <b>three dots</b> first"],
+         ["plusSq", "Scroll down and tap <b>Add to Home Screen</b>"],
+         ["check", "Keep <b>Open as Web App</b> on, then tap <b>Add</b>"]]
+      : br === "chrome"
+      ? [["share", "Tap <b>Share</b> in the address bar, at the top right"],
+         ["plusSq", "Tap <b>Add to Home Screen</b>"],
+         ["check", "Tap <b>Add</b>"]]
+      : [["menu", "Open the browser <b>menu</b>, then tap <b>Share</b>"],
+         ["plusSq", "Tap <b>Add to Home Screen</b>"],
+         ["check", "Tap <b>Add</b>"]];
+    g.transfer = hasProgress();
+    return g;
+  }
+  if (os === "android"){
+    if (installEvt){ g.install = true; return g; }
+    g.steps = br === "samsung"
+      ? [["menu", "Tap the <b>menu</b> at the bottom right"], ["plusSq", "Tap <b>Add page to</b>, then <b>Home screen</b>"], ["check", "Tap <b>Add</b>"]]
+      : br === "firefox"
+      ? [["dotsV", "Tap the <b>three-dot menu</b>"], ["plusSq", "Tap <b>Install</b> or <b>Add to Home screen</b>"], ["check", "Confirm with <b>Add</b>"]]
+      : [["dotsV", "Tap the <b>three-dot menu</b> at the top right"], ["plusSq", "Tap <b>Add to Home screen</b> or <b>Install app</b>"], ["check", "Tap <b>Install</b>"]];
+    return g;
+  }
+  g.intro = "Open <b>coffee-ghor.vercel.app</b> on your phone, and this guide will show the exact steps for it.";
+  g.steps = [["download", "On a computer, Chrome and Edge show an <b>Install</b> icon at the right of the address bar"]];
+  g.copyLink = true; return g;
+}
+function paintInstall(sh){
+  const g = installGuide(), ios = PLAT.os === "ios";
+  sh.innerHTML = `<button class="sclose" data-sheet-close aria-label="Close">${ic("x")}</button><div class="grab"></div>
+    <div class="ihead"><img src="apple-touch-icon.png" alt=""><h2 id="sh-h">Add Coffee Ghor to your Home Screen</h2></div>
+    <ul class="perks"><li>${ic("check")}Opens full screen, like a real app</li>
+      <li>${ic("check")}${ios ? "Keeps your progress, ratings and settings. Safari can clear saved data from sites you haven't opened in a while" : "Your progress, ratings and settings come with you"}</li></ul>
+    ${g.intro ? `<p class="lead">${g.intro}</p>` : ""}
+    ${g.steps.length ? `<ol class="isteps">${g.steps.map(([i, t], k) => `<li><span class="in">${k + 1}</span><span class="it">${t}</span><span class="ii">${ic(i)}</span></li>`).join("")}</ol>` : ""}
+    ${g.install ? `<button class="btn primary" data-install>${ic("download")}Install app</button>` : ""}
+    ${g.transfer ? `<div class="note n-tip"><b>Bring your progress with you</b>On iPhone the Home Screen app has its own storage, separate from Safari. Copy your progress now, then paste it when the app opens.<br><button class="apply" data-copyprog>${ic("copy")}Copy my progress</button></div>` : ""}
+    ${g.copyLink ? `<button class="btn" data-copylink>${ic("copy")}Copy link</button>` : ""}
+    <button class="btn" data-sheet-close>Not now</button>`;
+}
+function paintRestore(sh, err=""){
+  const welcome = sheet.kind === "welcome", val = sh.querySelector("textarea") ? sh.querySelector("textarea").value : "";
+  sh.innerHTML = `<button class="sclose" data-sheet-close aria-label="Close">${ic("x")}</button><div class="grab"></div>
+    <div class="art">${ic(welcome ? "cup" : "paste")}</div>
+    <h2 id="sh-h">${welcome ? "Welcome to the app" : "Paste your progress"}</h2>
+    <p>${welcome ? "Moved over from Safari? Paste the progress code you copied, and your level, badges, ratings and settings come with you." : "Paste a progress code you copied from another browser or phone. It adds to what's here, nothing is lost."}</p>
+    <textarea aria-label="Progress code" placeholder="CG1.…" autocomplete="off" autocapitalize="off" spellcheck="false">${val}</textarea>
+    ${err ? `<p class="err" role="alert">${err}</p>` : ""}
+    ${navigator.clipboard && navigator.clipboard.readText ? `<button class="btn" data-pasteclip>${ic("paste")}Paste from clipboard</button>` : ""}
+    <div class="acts"><button class="btn" data-sheet-close>${welcome ? "Start fresh" : "Cancel"}</button><button class="btn primary" data-restore>${ic("check")}Restore</button></div>`;
+}
+// Progress code: everything that makes the app yours, as one copyable line.
+const SETTINGS_KEYS = ["drink","people","strength","sweet","source","roast","grinder","mokaWater","mokaCoffee","yieldPct","pitcher","lang"];
+function exportCode(){
+  const d = { v:1, log:S.log, learned:S.learned, quiz:S.quiz, inv:S.inv, set:Object.fromEntries(SETTINGS_KEYS.map(k => [k, S[k]])) };
+  return "CG1." + btoa(unescape(encodeURIComponent(JSON.stringify(d))));
+}
+function importCode(raw){
+  try{
+    const m = String(raw).replace(/\s+/g, "").match(/CG1\.([A-Za-z0-9+/=]+)/); if (!m) return null;
+    const d = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (!d || d.v !== 1) return null;
+    const seen = new Set(S.log.map(x => x.t));
+    (Array.isArray(d.log) ? d.log : []).forEach(x => { if (x && x.d && x.t && !seen.has(x.t)) S.log.push(x); });
+    S.log.sort((a, b) => a.t - b.t); if (S.log.length > 200) S.log = S.log.slice(-200);
+    Object.assign(S.learned, d.learned || {});
+    for (const c in (d.quiz || {})) S.quiz[c] = Math.max(S.quiz[c] || 0, d.quiz[c]);
+    Object.assign(S.inv, d.inv || {});
+    for (const k of SETTINGS_KEYS) if (d.set && d.set[k] !== undefined) S[k] = d.set[k];
+    S.view = "pick"; save(); return S.log.length;
+  }catch(e){ return null; }
+}
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }catch(e){}
+  try{ const t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); const ok = document.execCommand("copy"); t.remove(); return ok; }catch(e){ return false; }
+}
+// One bottom sheet at a time (install, welcome, restore). The Learn intro uses the same look.
+let sheet = null;
+function sheetOpen(kind, paint){
+  if (sheet || introEl) return;
+  const el = document.createElement("div");
+  el.innerHTML = `<div class="scrim" data-sheet-close></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-h" tabindex="-1"></div>`;
+  document.body.appendChild(el); sheet = { el, kind, paint };
+  paint(el.querySelector(".sheet"));
+  requestAnimationFrame(() => requestAnimationFrame(() => el.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.add("show"))));
+  setTimeout(() => el.querySelector(".sheet").focus({ preventScroll:true }), 50); // focus the dialog, not a button, so no ring flashes on open
+}
+function sheetRepaint(err){ if (sheet) sheet.paint(sheet.el.querySelector(".sheet"), err); }
+function sheetClose(){
+  if (!sheet) return;
+  const { el, kind } = sheet; sheet = null;
+  if (kind === "install") S.installSeen = true;
+  if (kind === "welcome") S.appWelcomed = true;
+  save();
+  el.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.remove("show"));
+  setTimeout(() => el.remove(), 400);
+}
+document.addEventListener("keydown", e => { if (sheet && e.key === "Escape") sheetClose(); });
 
 /* ---------- Timer: lives on its step, floats as a pill when you move away ---------- */
 let tInt = null, tLeft = 0, tStep = -1, tDone = false;
@@ -1078,9 +1243,19 @@ function showTab(tab){
   updateFloat(); window.scrollTo(0,0);
 }
 document.addEventListener("click", e => {
-  const t = e.target.closest("button,[data-intro-close]");
+  const t = e.target.closest("button,[data-intro-close],[data-sheet-close]");
   if (!t || t.disabled) return;
   const D = t.dataset;
+  if ("sheetClose" in D){ sheetClose(); return; }
+  if ("openInstall" in D){ sheetOpen("install", paintInstall); return; }
+  if ("openRestore" in D){ sheetOpen("restore", paintRestore); return; }
+  if ("install" in D && installEvt){ const ev = installEvt; installEvt = null; ev.prompt(); ev.userChoice.then(c => { if (c.outcome === "accepted"){ S.installSeen = true; save(); sheetClose(); } else sheetRepaint(); }).catch(() => {}); return; }
+  if ("copyprog" in D || "copyCode" in D){ copyText(exportCode()).then(ok => toast(ok ? "copy" : "x", ok ? "Progress copied" : "Couldn't copy. Try again")); return; }
+  if ("copylink" in D){ copyText(location.origin && location.origin !== "null" ? location.origin + "/" : "https://coffee-ghor.vercel.app/").then(ok => toast(ok ? "copy" : "x", ok ? "Link copied" : "Couldn't copy")); return; }
+  if ("pasteclip" in D){ navigator.clipboard.readText().then(txt => { const ta = sheet && sheet.el.querySelector("textarea"); if (ta){ ta.value = txt; } }).catch(() => sheetRepaint("Couldn't read the clipboard. Long-press the box and tap Paste.")); return; }
+  if ("restore" in D){ const ta = sheet.el.querySelector("textarea"), n = importCode(ta.value);
+    if (n === null){ sheetRepaint("That code doesn't look right. Copy it again and paste the whole thing."); return; }
+    S.appWelcomed = true; sheetClose(); renderAll(); if (tabVisible("tips")) renderLearn(); toast("check", `Progress restored · ${plural(n, "drink", "drinks")}`); return; }
   if ("intro" in D){ openIntro(); return; }
   if ("introNext" in D){ introI++; paintIntro(); return; }
   if ("introGo" in D){ closeIntro(() => { learnCat = "drinks"; openLesson = "d1"; quiz = null; renderLearn(); window.scrollTo(0,0); }); return; }
@@ -1129,6 +1304,12 @@ document.addEventListener("change", e => {
 // A saved "done" screen is stale on reopen; resume cooking mid-recipe, otherwise start fresh.
 if (S.view === "done") S.view = "pick";
 renderAll();
+try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){}
+setTimeout(() => {
+  if (S.view !== "pick" || !tabVisible("make")) return; // only on the drink list, never over a recipe or rating
+  if (isStandalone()){ if (PLAT.os === "ios" && !S.appWelcomed && !hasProgress()) sheetOpen("welcome", paintRestore); else if (!S.appWelcomed){ S.appWelcomed = true; save(); } }
+  else if (PLAT.os !== "desktop" && !S.installSeen) sheetOpen("install", paintInstall);
+}, 1200);
 </script>
 </body>
 </html>
