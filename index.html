@@ -115,7 +115,7 @@ input[type=number],select{font:inherit;padding:8px 10px;border-radius:10px;borde
 <script>
 /* ---------- State ---------- */
 const DEFAULTS = {
-  drink: "cappuccino", people: 2, strength: "normal", sweet: "normal", source: "auto",
+  drink: "cappuccino", people: 2, strength: "normal", sweet: "normal", source: "auto", roast: "medium",
   grinder: "ok",                  // ok | check | broken
   mokaWater: 300,                 // ml, 6-cup pot, valve er thik niche
   mokaCoffee: 28,                 // g per brew, 6-cup basket level kore
@@ -146,6 +146,21 @@ const STRENGTH = { halka:0.75, normal:1, kora:1.3 };
 const STRENGTH_LBL = { halka:"Halka", normal:"Normal", kora:"Kora" };
 const SWEET = { none:0, kom:1, normal:2, beshi:3 };
 const SWEET_LBL = { none:"Chini chara", kom:"Kom", normal:"Normal", beshi:"Beshi" };
+// Roast onujayi grind, pani, anch, kokhon namabo. Dose same thake: moka basket shob shomoy level kore bhora.
+const ROASTS = {
+  light:  { lbl:"Light", pulse:"mot 15-18 sec. Light beans shokto, tai ektu beshi mihi korte hobe.", water:"Puro fute uthle namao. Light roast e beshi gorom lage flavor ber korte.", heat:"medium", pull:"Light roast e dhara ektu beshi cholte dao, kintu gurgle shuru holei namao.",
+            black:"Light roast kalo coffee te best: fruity, halka tok.", milk:"Light roast dudhe harie jay. Strength \"Kora\" dao, ba Moka/Americano try koro." },
+  medium: { lbl:"Medium", pulse:"mot 12-15 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"",
+            black:"Medium roast: balanced, kalo coffee te bhalo.", milk:"Medium roast: dudher shathe bhalo, balanced." },
+  mdark:  { lbl:"Medium-Dark", pulse:"mot 10-12 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"Dhara halka rong hote shuru korlei namao.",
+            black:"Medium-dark kalo khele ektu tita lagte pare. \"Halka\" strength try koro.", milk:"Medium-dark + dudh = perfect match. Chocolate-y swad." },
+  dark:   { lbl:"Dark", pulse:"mot 8-10 sec. Dark beans naram, taratari guro hoy. Beshi chalale powder hoye tita hobe.", water:"Fute uthle 1 min thanda hote dao, tarpor dhalo.", heat:"LOW", pull:"Dark roast e AGE namao: dhara halka hote shuru korlei. Dark taratari tita hoy.",
+            black:"Dark roast kalo khele beshi tita. Americano te pani beshi dao ba \"Halka\" strength.", milk:"Dark roast dudh ar chocolate er shathe best. Dudh tita bhab dhake." },
+  unknown:{ lbl:"Jani na", pulse:"mot 12-15 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"",
+            black:"Roast jana nai, medium dhore hishab korchi. Tips tab e \"Roast chinbo kivabe\" dekho.", milk:"Roast jana nai, medium dhore hishab korchi. Tips tab e \"Roast chinbo kivabe\" dekho." }
+};
+const BLACK = ["moka","americano"];
+const roast = () => ROASTS[S.roast] || ROASTS.medium;
 const INV_LBL = {
   beans:["Coffee beans (gota)","Grinder diye guro korte hobe"],
   ground:["Guro coffee (pre-ground)","Grinder kharap thakleo cholbe"],
@@ -216,12 +231,12 @@ function buildSteps(r, p){
     return s;
   }
   if (src === "beans"){
-    s.push({ t:`Beans grind koro: ${p.grams} g (~${p.tbsp} tbsp)`, d:"3-4 second er pulse, mot 10-15 sec. Majhe majhe grinder jhakao. Target: table salt er moto mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe." });
+    s.push({ t:`Beans grind koro: ${p.grams} g (~${p.tbsp} tbsp)`, d:`${roast().lbl} roast: 3-4 second er pulse, ${roast().pulse} Majhe majhe grinder jhakao. Target: table salt er moto mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.` });
   } else {
     s.push({ t:`Guro coffee mepe nao: ${p.grams} g (~${p.tbsp} tbsp)`, d:"Pre-ground coffee taratari flavor haray. Packet bhalo kore bondho rakho." });
   }
   const hotWater = p.brews * S.mokaWater + p.hotWaterTotal;
-  s.push({ t:`Kettle e ~${hotWater} ml pani gorom koro`, d:"Fute uthar thik age porjonto. Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake." });
+  s.push({ t:`Kettle e ~${hotWater} ml pani gorom koro`, d:`${roast().water} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.` });
   if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
     s.push({ t:`Ekshathe dudh gorom koro: ${p.milkTotal} ml`, d: r.milkMode === "boil"
       ? "Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro."
@@ -230,8 +245,8 @@ function buildSteps(r, p){
   const multi = p.brews > 1 ? ` (Brew 1 of ${p.brews})` : "";
   s.push({ t:`Moka bottom e gorom pani dhalo${multi}`, d:`Safety valve er thik niche porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.` });
   s.push({ t:`Basket e ${S.mokaCoffee} g coffee`, d:"Bhore level koro, chap dio NA (tamp korbe na). Rim er guro mucche felo, na hole leak korbe." });
-  s.push({ t:"Pot jora lagao, medium-low anche bosao", d:"Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro." });
-  s.push({ t:"Coffee ber hote dekho", d:"Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, SHATHE SHATHE namao. Shesh er pani ta tita.", timer:300 });
+  s.push({ t:`Pot jora lagao, ${roast().heat} anche bosao`, d:"Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro." });
+  s.push({ t:"Coffee ber hote dekho", d:`Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, SHATHE SHATHE namao. Shesh er pani ta tita. ${roast().pull}`, timer:300 });
   s.push({ t:"Bottom thanda panir niche 5 sec", d:"Extraction bondho hoye jay, tita bhab ashe na. Coffee ekta gorom jug/flask e dhele nara dao." });
   if (p.brews > 1){
     s.push({ t:`Aro ${p.brews - 1} bar brew koro`, d:"Pot thanda koro, puraton guro fele dhuye nao, abar 'Moka bottom e gorom pani' step theke. Ager coffee dhakna diye flask e rakho. Ei faanke dudh ready koro." });
@@ -277,6 +292,7 @@ function renderMake(){
     <div class="row"><label class="lbl" style="margin:0">Koto jon</label>
       <div class="stepper"><button data-ppl="-1" aria-label="kom">−</button><output>${S.people}</output><button data-ppl="1" aria-label="beshi">+</button></div></div>
     ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Coffee er strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
+    ${r.coffee ? `<div style="margin-top:14px"><label class="lbl">Beans er roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
     ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Mishti</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
     ${canBoth && r.coffee ? `<div style="margin-top:14px"><label class="lbl">Coffee source</label>${seg("source", {auto:"Auto",beans:"Fresh grind",ground:"Guro coffee"}, S.source)}</div>` : ""}
   </div>`;
@@ -290,6 +306,10 @@ function renderMake(){
   }
   if (p.brews >= 3){
     h += `<div class="alert a-warn"><b>${p.brews} ta moka brew = ~${p.minutes} min.</b> Ekta pot ekbar e ${p.yieldPerBrew} ml er beshi dey na. Shomoy bachate: strength "Halka" koro, ba ordhek jon ke Americano dao.</div>`;
+  }
+  if (r.coffee){
+    const ro = roast(), txt = BLACK.includes(r.id) ? ro.black : ro.milk;
+    h += `<div class="alert a-ok"><b>${ro.lbl} roast × ${r.name}:</b> ${txt}</div>`;
   }
   const st = [];
   if (r.instant){
@@ -363,6 +383,14 @@ function renderTips(){
     </ul>
     <p class="small muted">Sob thik thakle "Ki Ache" tab e grinder "Thik ache" koro.</p>
   </div>
+
+  <h2>Roast chinbo kivabe?</h2>
+  <div class="card tips"><ul>
+    <li><b>Light:</b> halka badami (dalchini rong), shukno, kono tel nai. Packet e "Light", "Breakfast", "Filter".</li>
+    <li><b>Medium:</b> milk chocolate er moto badami, shukno. Packet e "Medium", "House blend".</li>
+    <li><b>Medium-Dark:</b> dark chocolate rong, ekhane okhane tel er daag. Packet e "Full City", "Vienna".</li>
+    <li><b>Dark:</b> prai kalo, puro gaye tel chakchak kore. Packet e "Dark", "Espresso roast", "French", "Italian".</li>
+  </ul><p class="small muted" style="margin:6px 0 0">Moka pot + dudh er jonno sobcheye shohoj: Medium ba Medium-Dark. Roast bodlale app grind, pani, anch ar kokhon namabe shob bodle dey.</p></div>
 
   <h2>Grind size</h2>
   <div class="card tips"><p style="margin:0">Moka er jonno: <b>table salt er moto</b>. Espresso er cheye mota, filter er cheye mihi. Amader ta blade grinder (4 dhar er cross blade), tai guro ekdom shoman hoy na. Choto choto pulse dao, majhe grinder ta jhakao, ar ekbare 30 g er beshi bhoro na. Lomba shomoy chalale blade gorom hoye coffee er flavor nosto kore. Beshi powder hole coffee tita ar ghola hobe.</p></div>
