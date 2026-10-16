@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coffee Ghor</title>
 <meta name="description" content="Our home coffee guide: pick a drink and how many people, get exact amounts and step-by-step instructions.">
-<meta name="theme-color" content="#f7f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#3b2418" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1a120d" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Coffee Ghor">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -21,7 +21,8 @@
 :root{
   --bg:oklch(96.5% .012 70); --card:oklch(98.8% .006 75); --ink:oklch(24% .03 45); --muted:oklch(48% .03 50); --line:oklch(89% .02 65);
   --brand:oklch(40% .08 45); --brand-ink:oklch(98.5% .005 75); --soft:oklch(93% .022 70);
-  --ok:oklch(48% .1 150); --warn:oklch(55% .13 60); --bad:oklch(50% .16 25); --gold:oklch(72% .14 75);
+  --ok:oklch(48% .1 150); --warn:oklch(55% .13 60); --bad:oklch(50% .16 25); --gold:oklch(62% .14 68);
+  --bar:oklch(30% .045 45); --sat:env(safe-area-inset-top);
   --c-coffee:oklch(33% .06 45); --c-water:oklch(46% .07 55); --c-milk:oklch(91% .035 80); --c-foam:oklch(98% .01 85); --c-whip:oklch(68% .1 65);
   --radius:14px; --ease:cubic-bezier(.22,1,.36,1);
   --f-display:"Young Serif",Georgia,serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
@@ -32,12 +33,17 @@
     --bg:oklch(18% .015 50); --card:oklch(22% .018 50); --ink:oklch(93% .015 70); --muted:oklch(72% .025 60); --line:oklch(31% .02 50);
     --brand:oklch(74% .09 60); --brand-ink:oklch(18% .015 50); --soft:oklch(27% .022 50);
     --ok:oklch(72% .12 150); --warn:oklch(76% .12 65); --bad:oklch(70% .14 25); --gold:oklch(80% .13 80);
+    --bar:oklch(18% .015 50);
     --c-milk:oklch(86% .03 80); --c-foam:oklch(95% .01 85);
   }
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:18px/1.55 var(--f-body);padding-bottom:calc(var(--nav-h) + 24px);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+::selection{background:color-mix(in oklch,var(--brand) 28%,transparent)}
+input,select{accent-color:var(--brand);caret-color:var(--brand)}
+.statusbar{position:fixed;top:0;left:0;right:0;height:var(--sat);background:var(--bar);z-index:40;pointer-events:none}
+body{background:var(--bg);color:var(--ink);font:18px/1.55 var(--f-body);padding-top:var(--sat);padding-bottom:calc(var(--nav-h) + 24px);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 body.has-cta{padding-bottom:calc(var(--nav-h) + 110px)}
 body.cooking{padding-bottom:calc(var(--nav-h) + 40px)}
 body.cooking header,body.cooking nav.tabs,body.has-cta header,body.sub header{display:none}
@@ -73,25 +79,32 @@ h2.sm{font-size:20px;margin:28px 0 10px}
 .st-ok .ic,.st-no .ic{width:16px;height:16px;stroke-width:2.4}
 
 /* Setup */
-.back{display:inline-flex;align-items:center;gap:4px;background:none;border:0;color:var(--brand);font-weight:700;font-size:16px;padding:10px 0;margin-top:12px;cursor:pointer}
+.back{display:inline-flex;align-items:center;gap:4px;background:none;border:0;color:var(--brand);font-weight:700;font-size:16px;min-height:44px;padding:0 8px 0 0;margin-top:8px;cursor:pointer}
 .hero{display:flex;gap:16px;align-items:center;margin:8px 0 6px}
 .hero svg.cupsvg{width:64px;height:70px;flex:0 0 64px}
 .hero h2{margin:0}
 .hero p{margin:4px 0 0;color:var(--muted);font-size:16px}
 .field+.field{margin-top:20px}
+.field.row{flex-wrap:nowrap}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .lbl-ic{display:flex;align-items:center;gap:8px}
-.stepper{display:flex;align-items:center;gap:8px}
+.stepper{display:flex;align-items:center;gap:8px;margin-left:auto}
 .stepper button{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .stepper output{font:400 32px var(--f-display);min-width:48px;text-align:center}
-.seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
-.seg button{flex:1;border:0;background:none;font-size:16px;padding:11px 10px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:background .2s var(--ease)}
+.seg{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));background:var(--soft);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;font-size:16px;line-height:1.15;min-height:44px;padding:6px 4px;border-radius:9px;cursor:pointer;transition:background .2s var(--ease)}
 .seg button.on{background:var(--brand);color:var(--brand-ink);font-weight:700}
+.seg.five{grid-template-columns:repeat(6,1fr)}
+.seg.five button{grid-column:span 2;font-size:15px}
+.seg[style*="--n:4"] button{font-size:15px}
+.seg.five button:nth-child(n+4){grid-column:span 3}
 label.lbl{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--muted);margin-bottom:8px;font-weight:700}
 label.lbl .ic{width:18px;height:18px}
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px 12px}
-.stat .v{font:400 25px/1.15 var(--f-display)}
-.stat .k{font-size:15px;color:var(--muted)}
+.need{list-style:none;margin:0;padding:0}
+.need li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.need li:last-child{border-bottom:0}
+.need li span{color:var(--muted)}
+.need li b{font-weight:700;text-align:right}
 .note{border-radius:12px;padding:12px 14px;font-size:16px;margin:10px 0}
 .n-warn{background:color-mix(in oklch,var(--warn) 14%,var(--bg))}
 .n-bad{background:color-mix(in oklch,var(--bad) 13%,var(--bg))}
@@ -105,22 +118,23 @@ label.lbl .ic{width:18px;height:18px}
 .cta button:disabled{background:var(--line);color:var(--muted);cursor:not-allowed}
 
 /* Cook */
-.cook-top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.x{background:none;border:0;color:var(--muted);font-weight:700;font-size:16px;padding:10px 4px;cursor:pointer;display:flex;align-items:center;gap:4px}
-.lang{display:flex;background:var(--soft);border-radius:99px;padding:3px}
-.lang button{border:0;background:none;font-weight:700;font-size:14px;letter-spacing:.04em;padding:7px 14px;border-radius:99px;cursor:pointer;color:var(--muted)}
+.cook-top{position:sticky;top:var(--sat);z-index:5;background:var(--bg);padding:6px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.x{background:none;border:0;color:var(--muted);font-weight:700;font-size:16px;min-height:44px;padding:0 6px 0 0;cursor:pointer;display:flex;align-items:center;gap:4px}
+.lang{display:flex;background:var(--soft);border-radius:99px;padding:2px}
+.lang button{border:0;background:none;font-weight:700;font-size:15px;letter-spacing:.04em;min-height:44px;min-width:50px;padding:0 12px;border-radius:99px;cursor:pointer;color:var(--muted)}
 .lang button.on{background:var(--brand);color:var(--brand-ink)}
-.prog{display:flex;gap:4px;margin:4px 0 22px}
+.progrow{display:flex;align-items:center;gap:12px;margin:6px 0 24px}
+.progrow .pn{font-size:15px;font-weight:700;color:var(--muted)}
+.prog{display:flex;gap:4px;flex:1}
 .prog i{flex:1;height:6px;border-radius:99px;background:var(--line);transition:background .3s var(--ease)}
 .prog i.d{background:var(--brand)}
 .prog i.c{background:color-mix(in oklch,var(--brand) 45%,var(--line))}
-.count{font-size:15px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.drinkname{font-size:15px;color:var(--muted);margin-bottom:6px}
+.count{font-size:16px;font-weight:700;color:var(--ink);text-align:center;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stepcard{animation:in .35s var(--ease)}
 .stepcard.back-anim{animation:inb .35s var(--ease)}
 @keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 @keyframes inb{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
-.stepcard h3{font:400 30px/1.2 var(--f-display);margin:6px 0 14px;text-wrap:balance}
+.stepcard h3{font:400 30px/1.2 var(--f-display);margin:0 0 14px;text-wrap:balance;letter-spacing:-.01em}
 .stepcard p{font-size:20px;line-height:1.6;margin:0;max-width:60ch}
 .stepcard p strong{font-weight:700}
 .tbox{margin-top:24px;display:flex;align-items:center;gap:16px;background:var(--soft);border-radius:var(--radius);padding:14px 16px}
@@ -151,11 +165,12 @@ label.lbl .ic{width:18px;height:18px}
 .stars button.on .ic{fill:var(--gold)}
 .stars button:active{transform:scale(1.2)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:9px 14px;font-size:15px;cursor:pointer}
+.chips button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;min-height:44px;padding:0 16px;font-size:16px;cursor:pointer}
+.chips button:disabled{opacity:.6}
 .chips button.on{border-color:var(--brand);background:var(--soft);font-weight:700}
 .advice{margin-top:14px}
 .advice .note{text-align:left}
-.apply{margin-top:8px;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;padding:7px 14px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.apply{margin-top:10px;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;min-height:44px;padding:0 16px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .apply .ic{width:16px;height:16px}
 .btn{border:0;background:var(--soft);border-radius:12px;padding:15px 16px;font-weight:700;font-size:17px;cursor:pointer;width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn.primary{background:var(--brand);color:var(--brand-ink)}
@@ -169,34 +184,42 @@ label.lbl .ic{width:18px;height:18px}
 .toggle>div:first-child>.ic{margin-top:2px;color:var(--brand)}
 .toggle small{display:block;color:var(--muted);font-size:15px}
 .tag{font-size:15px;font-weight:700;color:var(--ok);white-space:nowrap}
-.sw{position:relative;width:52px;height:32px;flex:0 0 52px}
+.sw{position:relative;width:52px;height:32px;flex:0 0 52px;cursor:pointer}
+.sw::after{content:"";position:absolute;inset:-8px -4px}
 .sw input{opacity:0;width:0;height:0}
 .sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:background .2s var(--ease);cursor:pointer}
 .sw i:before{content:"";position:absolute;width:26px;height:26px;left:3px;top:3px;background:var(--card);border-radius:50%;transition:transform .2s var(--ease)}
 .sw input:checked+i{background:var(--ok)}
 .sw input:checked+i:before{transform:translateX(20px)}
 .sw input:focus-visible+i{outline:2px solid var(--brand);outline-offset:2px}
-input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:120px}
+.toggle select,.toggle input[type=number]{flex:0 0 auto}
+input[type=number],select{font:inherit;font-size:17px;min-height:44px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:120px}
 
 /* Learn */
 .level{background:var(--brand);color:var(--brand-ink);border-radius:18px;padding:18px;margin-top:20px}
 .level .top{display:flex;align-items:center;gap:12px}
 .level .badge-ic{width:52px;height:52px;border-radius:50%;background:color-mix(in oklch,var(--brand-ink) 18%,transparent);display:flex;align-items:center;justify-content:center}
 .level .badge-ic .ic{width:30px;height:30px}
-.level small{opacity:.8;font-size:14px;display:block}
-.level b{font:400 24px/1.2 var(--f-display)}
+.level h2{margin:0;font-size:26px;color:inherit}
+.level p{margin:2px 0 0;font-size:15px;color:color-mix(in oklch,var(--brand-ink) 82%,var(--brand))}
 .xpbar{height:10px;border-radius:99px;background:color-mix(in oklch,var(--brand-ink) 22%,transparent);margin:14px 0 6px;overflow:hidden}
 .xpbar i{display:block;height:100%;background:var(--gold);border-radius:99px;transition:width .6s var(--ease)}
-.level .xpt{font-size:14px;opacity:.85;display:flex;justify-content:space-between}
-.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.mini div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.mini b{font:400 22px var(--f-display);display:block}
-.mini span{font-size:13px;color:var(--muted)}
-.cats{display:grid;gap:10px}
-.cat{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;text-align:left;cursor:pointer;width:100%;transition:transform .15s var(--ease)}
-.cat:active{transform:scale(.98)}
-.cat .ci{width:46px;height:46px;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--brand);flex:0 0 46px}
-.cat .ci .ic{width:26px;height:26px}
+.level .xpt{font-size:15px;color:color-mix(in oklch,var(--brand-ink) 85%,var(--brand));display:flex;justify-content:space-between}
+.summary{margin:12px 2px 0;color:var(--muted);font-size:16px}
+.summary b{color:var(--ink)}
+.lhead{display:flex;align-items:center;justify-content:space-between;margin:28px 0 10px}
+.lhead h2{margin:0}
+.help{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--brand);font-weight:700;font-size:15px;min-height:44px;cursor:pointer}
+.cats{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.cat{display:flex;align-items:center;gap:14px;background:none;border:0;border-bottom:1px solid var(--line);padding:14px 16px;text-align:left;cursor:pointer;width:100%;transition:background .15s var(--ease)}
+.cat:last-child{border-bottom:0}
+.cat:active{background:var(--soft)}
+.cat .ci{color:var(--brand);flex:0 0 auto;display:flex}
+.cat .ci .ic{width:28px;height:28px}
+.chero{display:flex;gap:12px;align-items:center;margin:4px 0 8px}
+.chero>.ic{width:34px;height:34px;color:var(--brand)}
+.chero h2{margin:0}
+.chero p{margin:2px 0 0;color:var(--muted);font-size:16px}
 .cat .cm{flex:1;min-width:0}
 .cat b{display:block;font-size:17px}
 .cat small{color:var(--muted);font-size:14px}
@@ -205,9 +228,9 @@ input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-ra
 .cat .pn{font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .cat .pb i{display:block;height:100%;background:var(--ok);border-radius:99px}
 .cat>.ic{color:var(--muted)}
-.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
-.bdg{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 8px;text-align:center;font-size:13px;line-height:1.3}
-.bdg .bi{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;background:color-mix(in oklch,var(--gold) 22%,var(--bg));color:color-mix(in oklch,var(--gold) 60%,var(--ink))}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:18px 8px}
+.bdg{text-align:center;font-size:14px;line-height:1.3}
+.bdg .bi{width:52px;height:52px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;background:color-mix(in oklch,var(--gold) 22%,var(--bg));color:color-mix(in oklch,var(--gold) 60%,var(--ink))}
 .bdg b{display:block;font-size:14px}
 .bdg span{color:var(--muted)}
 .bdg.locked .bi{background:var(--soft);color:var(--muted)}
@@ -215,7 +238,10 @@ input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-ra
 .log li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}
 .log li:last-child{border-bottom:0}
 .log ul{list-style:none;margin:0;padding:0}
-.log .s{color:var(--gold);white-space:nowrap;letter-spacing:1px}
+.srow{display:inline-flex;gap:1px;vertical-align:-3px;color:var(--gold)}
+.srow .ic{width:17px;height:17px;stroke-width:1.6}
+.srow .ic.f{fill:currentColor}
+.log .s{white-space:nowrap;font-size:15px;color:var(--muted)}
 .log small{color:var(--muted);display:block;font-size:14px}
 .lesson{border-bottom:1px solid var(--line)}
 .lesson:last-child{border-bottom:0}
@@ -231,7 +257,7 @@ input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-ra
 .lesson .body p{margin:0 0 10px}
 .lesson .body ul{margin:0 0 10px;padding-left:20px}
 .lesson .body li+li{margin-top:4px}
-.got{border:0;background:var(--ok);color:var(--brand-ink);border-radius:99px;padding:9px 16px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.got{border:0;background:var(--ok);color:var(--brand-ink);border-radius:99px;min-height:44px;padding:0 18px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .got .ic{width:16px;height:16px;stroke-width:2.6}
 .quiz .q{font:400 22px/1.3 var(--f-display);margin:4px 0 14px}
 .quiz .opts{display:grid;gap:8px}
@@ -240,18 +266,39 @@ input[type=number],select{font:inherit;font-size:17px;padding:9px 10px;border-ra
 .quiz .opts button.wrong{border-color:var(--bad);background:color-mix(in oklch,var(--bad) 12%,var(--bg))}
 .quiz .opts button .ic{margin-left:auto;width:20px;height:20px;stroke-width:2.6}
 .quiz .why{margin-top:12px;font-size:16px}
-.qcount{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.qcount{font-size:15px;font-weight:700;color:var(--muted)}
+
+/* Learn intro: bottom sheet */
+.scrim{position:fixed;inset:0;background:oklch(15% .02 45 / .45);z-index:50;opacity:0;transition:opacity .25s var(--ease)}
+.scrim.show{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;background:var(--card);border-radius:22px 22px 0 0;padding:10px 20px calc(20px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto;transform:translateY(100%);transition:transform .4s var(--ease);box-shadow:0 -10px 40px oklch(0% 0 0 / .18)}
+.sheet.show{transform:none}
+.sheet .grab{width:40px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 18px}
+.sheet .art{width:64px;height:64px;border-radius:50%;background:var(--soft);color:var(--brand);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.sheet .art .ic{width:34px;height:34px}
+.sheet h2{margin:0 0 8px;font-size:26px}
+.sheet p{margin:0;font-size:17px;color:var(--muted);max-width:44ch}
+.sheet .dots{display:flex;gap:6px;margin:22px 0 4px}
+.sheet .dots i{width:8px;height:8px;border-radius:99px;background:var(--line);transition:width .3s var(--ease),background .3s var(--ease)}
+.sheet .dots i.on{width:22px;background:var(--brand)}
+.sheet .acts{display:flex;gap:10px;margin-top:14px}
+.sheet .acts .btn{margin:0}
+.sheet .acts .btn:first-child{flex:1}
+.sheet .acts .btn.primary{flex:2}
+@media (prefers-reduced-motion:reduce){.sheet,.scrim{transition:none}}
 
 /* Floating timer + toast */
 .timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 16px);background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 16px;display:none;align-items:center;gap:10px;font-weight:700;font-size:19px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20;font-variant-numeric:tabular-nums}
 .timer.show{display:flex}
 .timer.ding{background:var(--ok);color:var(--brand-ink)}
-.timer button{background:none;border:1.5px solid currentColor;border-radius:99px;padding:4px 12px;font-weight:700;font-size:14px;cursor:pointer}
+.timer button{background:none;border:1.5px solid currentColor;border-radius:99px;min-height:44px;padding:0 16px;font-weight:700;font-size:14px;cursor:pointer}
 body.has-cta .timer{bottom:calc(var(--nav-h) + 96px)}
-.toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-140%);background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 18px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;z-index:30;transition:transform .4s var(--ease);box-shadow:0 8px 28px oklch(0% 0 0 / .25);white-space:nowrap}
-.toast.show{transform:translate(-50%,0)}
+.toast{position:fixed;top:calc(12px + var(--sat));left:50%;transform:translate(-50%,-12px);opacity:0;visibility:hidden;background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 18px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;z-index:30;transition:transform .4s var(--ease);box-shadow:0 8px 28px oklch(0% 0 0 / .25);white-space:nowrap}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.toast{transition:transform .35s var(--ease),opacity .25s var(--ease),visibility 0s linear .35s}
+.toast.show{transition:transform .35s var(--ease),opacity .25s var(--ease)}
 .toast .ic{color:var(--gold);width:20px;height:20px}
-@media (prefers-reduced-motion:reduce){.stepcard,.stepcard.back-anim{animation:none}.toast,.xpbar i{transition:none}}
+@media (prefers-reduced-motion:reduce){.stepcard,.stepcard.back-anim{animation:none}.toast,.xpbar i{transition:none!important}}
 
 .muted{color:var(--muted)}
 .small{font-size:15px}
@@ -260,6 +307,7 @@ footer{text-align:center;margin:32px 0;color:var(--muted);font-size:15px}
 </style>
 </head>
 <body>
+<div class="statusbar" aria-hidden="true"></div>
 <header>
   <h1>Coffee Ghor</h1>
   <p>Pick a drink, tell us how many people, then follow along one step at a time.</p>
@@ -336,6 +384,7 @@ const DEFAULTS = {
   view: "pick",                   // pick | setup | cook | done
   step: 0,
   lang: "en",                     // steps language only: en | bn
+  seenLearn: false,               // first-visit intro on the Learn tab
   log: [],                        // [{d, n, t, rating, issues}] one per finished drink
   learned: {},                    // lessonId: true
   quiz: {}                        // categoryId: best score
@@ -582,6 +631,7 @@ function buildSteps(r, p, lang){
   }
   return s;
 }
+const starRow = n => `<span class="srow" role="img" aria-label="${n} of 5 stars">${[1,2,3,4,5].map(k => ic("star", k <= n ? "f" : "")).join("")}</span>`;
 const md = t => t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
 
 /* ---------- Progress: XP, levels, badges (all derived from the log, so nothing double-counts) ---------- */
@@ -742,7 +792,8 @@ const $ = (sel, el=document) => el.querySelector(sel);
 const recipe = () => RECIPES.find(x => x.id === S.drink) || RECIPES[0];
 const tabVisible = id => !$("#tab-"+id).classList.contains("hide");
 function seg(name, opts, cur){
-  return `<div class="seg" data-seg="${name}">${Object.entries(opts).map(([k,v]) => `<button data-v="${k}" class="${k===cur?"on":""}">${v}</button>`).join("")}</div>`;
+  const n = Object.keys(opts).length;
+  return `<div class="seg ${n === 5 ? "five" : ""}" style="--n:${n}" data-seg="${name}">${Object.entries(opts).map(([k,v]) => `<button data-v="${k}" class="${k===cur?"on":""}">${v}</button>`).join("")}</div>`;
 }
 let animDir = "";
 function renderMake(){
@@ -769,10 +820,10 @@ function renderSetup(){
   const last = [...S.log].reverse().find(x => x.d === r.id && x.rating);
   if (last){
     const a = (last.issues || []).map(i => advice(i, r)).filter(Boolean)[0];
-    h += `<div class="note n-last"><b>Last time: ${"★".repeat(last.rating)}${"☆".repeat(5-last.rating)}</b>${a ? a.t + " " + a.d : (S.lang === "bn" ? "Darun hoyechilo. Abar same!" : "You loved it. Same again!")}</div>`;
+    h += `<div class="note n-last"><b>Last time ${starRow(last.rating)}</b>${a ? a.t + " " + a.d : (S.lang === "bn" ? "Darun hoyechilo. Abar same!" : "You loved it. Same again!")}</div>`;
   }
   h += `<div class="card">
-    <div class="field row"><label class="lbl" style="margin:0">${ic("users")}How many people?</label>
+    <div class="field row"><label class="lbl" style="margin:0">${ic("users")}People</label>
       <div class="stepper"><button data-ppl="-1" aria-label="Fewer people">${ic("minus")}</button><output>${S.people}</output><button data-ppl="1" aria-label="More people">${ic("plus")}</button></div></div>
     ${r.instant ? "" : `<div class="field"><label class="lbl">${ic("bolt")}Strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
     ${r.coffee ? `<div class="field"><label class="lbl">${ic("bean")}Bean roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
@@ -785,17 +836,17 @@ function renderSetup(){
   if (r.coffee){ const ro = roast(); h += `<div class="note n-tip"><b>${ro.lbl} roast in a ${r.name}</b>${BLACK.includes(r.id) ? ro.black : ro.milk}</div>`; }
   const st = [];
   if (r.instant){
-    st.push([p.instantTbsp+" tbsp","Instant coffee"],[p.instantTbsp+" tbsp","Sugar"],[p.instantTbsp+" tbsp","Hot water"]);
+    st.push(["Instant coffee", p.instantTbsp+" tbsp"],["Sugar", p.instantTbsp+" tbsp"],["Hot water", p.instantTbsp+" tbsp"]);
   } else {
-    st.push(S.inv.scale ? [p.grams+" g","Coffee (about "+p.tbsp+" tbsp)"] : [p.tbsp+" tbsp","Coffee (about "+p.grams+" g)"],[p.brews+"×","Moka brews"],[p.coffeeTotal+" ml","Brewed coffee"]);
-    if (p.hotWaterTotal) st.push([p.hotWaterTotal+" ml","Extra hot water"]);
+    const what = src === "beans" ? "Coffee beans" : "Ground coffee";
+    st.push([what, S.inv.scale ? `${p.grams} g` : `${p.tbsp} tbsp (about ${p.grams} g)`],["Moka brews", plural(p.brews, "brew", "brews")],["Brewed coffee", p.coffeeTotal+" ml"]);
+    if (p.hotWaterTotal) st.push(["Extra hot water", p.hotWaterTotal+" ml"]);
   }
-  if (p.milkTotal) st.push([p.milkTotal+" ml","Milk"]);
-  if (p.sugarTsp) st.push([p.sugarTsp+" tsp","Sugar"]);
-  if (p.cocoaTbsp) st.push([p.cocoaTbsp+" tbsp","Cocoa"]);
-  if (p.ice) st.push([p.ice,"Ice cubes"]);
-  h += `<h2 class="sm">You'll need</h2><div class="card"><div class="stats">${st.map(([v,k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
-    ${r.coffee ? `<p class="small muted" style="margin:14px 0 0">Using ${src==="beans"?"freshly ground beans":src==="ground"?"ground coffee":"no coffee yet"}.</p>` : ""}</div>`;
+  if (p.milkTotal) st.push(["Milk", p.milkTotal+" ml"]);
+  if (p.sugarTsp) st.push(["Sugar", p.sugarTsp+" tsp"]);
+  if (p.cocoaTbsp) st.push(["Cocoa", p.cocoaTbsp+" tbsp"]);
+  if (p.ice) st.push(["Ice", plural(p.ice, "cube", "cubes")]);
+  h += `<h2 class="sm">You'll need</h2><div class="card"><ul class="need">${st.map(([k,v]) => `<li><span>${k}</span><b>${v}</b></li>`).join("")}</ul></div>`;
   const n = buildSteps(r, p, "en").length;
   h += `<div class="cta"><button data-start ${miss.length?"disabled":""}>${miss.length ? ic("lock","lg") : ic("play","lg")}<span>${miss.length ? "Missing "+plural(miss.length,"item","items") : "Start making"}<small>${n} steps · about ${p.minutes} min</small></span></button></div>`;
   $("#tab-make").innerHTML = h;
@@ -808,11 +859,10 @@ function renderCook(){
       <button data-timer="${x.timer}">${mine && !tDone ? ic("stop")+"Stop" : ic("play")+"Start timer"}</button></div>` : "";
   $("#tab-make").innerHTML = `
     <div class="cook-top"><button class="x" data-go="setup">${ic("x")}Exit</button>
-      <span class="count">Step ${i+1} of ${steps.length}</span>
+      <span class="count">${r.name} · ${plural(S.people,"person","people")}</span>
       <div class="lang" role="group" aria-label="Step language"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}">BN</button></div></div>
-    <div class="prog">${steps.map((_,k) => `<i class="${k<i?"d":k===i?"c":""}"></i>`).join("")}</div>
+    <div class="progrow"><div class="prog" role="progressbar" aria-valuemin="1" aria-valuemax="${steps.length}" aria-valuenow="${i+1}" aria-label="Step ${i+1} of ${steps.length}">${steps.map((_,k) => `<i class="${k<i?"d":k===i?"c":""}"></i>`).join("")}</div><span class="pn">${i+1}/${steps.length}</span></div>
     <div class="stepcard ${animDir}" id="stepcard">
-      <div class="drinkname">${r.name} for ${plural(S.people,"person","people")}</div>
       <h3>${x.t}</h3><p>${md(x.d)}</p>${tb}
     </div>
     ${i === 0 ? `<p class="swipe-hint">Tap Next or swipe to move between steps</p>` : ""}
@@ -908,17 +958,17 @@ function renderLearn(){
   const recent = [...S.log].reverse().slice(0, 5);
   $("#tab-tips").innerHTML = `
   <div class="level"><div class="top"><div class="badge-ic">${ic(s.li >= 4 ? "trophy" : s.li >= 2 ? "medal" : "cup")}</div>
-    <div><small>Your barista level</small><b>${s.level}</b></div></div>
+    <div><h2>${s.level}</h2><p>Level ${s.li + 1} of ${LEVELS.length}</p></div></div>
     <div class="xpbar"><i style="width:${pct}%"></i></div>
     <div class="xpt"><span>${s.xp} XP</span><span>${s.to ? `${s.to - s.xp} XP to ${s.nextName}` : "Top level!"}</span></div></div>
-  <div class="mini"><div><b>${s.cups}</b><span>Drinks made</span></div><div><b>${s.avg ? s.avg.toFixed(1) : "–"}</b><span>Avg rating</span></div><div><b>${s.streak}</b><span>Day streak</span></div></div>
-  <h2 class="sm">Learn</h2>
+  <p class="summary">${s.cups ? `<b>${plural(s.cups,"drink","drinks")}</b> made${s.avg ? ` · <b>${s.avg.toFixed(1)}</b> average rating` : ""}${s.streak ? ` · <b>${s.streak}-day</b> streak` : ""}.` : "Finish your first drink to start earning XP."}</p>
+  <div class="lhead"><h2 class="sm">Lessons</h2><button class="help" data-intro>${ic("compass")}How it works</button></div>
   <div class="cats">${CATS.map(c => { const [d, t] = catProgress(c); return `<button class="cat" data-cat="${c.id}"><span class="ci">${ic(c.icon)}</span>
     <span class="cm"><b>${c.name}</b><small>${c.sub}</small><span class="pbr"><span class="pb"><i style="width:${Math.round(d/t*100)}%"></i></span><span class="pn">${d}/${t}</span></span></span>${ic("next")}</button>`; }).join("")}</div>
   <h2 class="sm">Badges <span class="muted small">${got.length}/${BADGES.length}</span></h2>
   <div class="badges">${BADGES.map(b => { const on = got.includes(b[0]); return `<div class="bdg ${on?"":"locked"}"><div class="bi">${ic(on ? b[1] : "lock")}</div><b>${b[2]}</b><span>${b[3]}</span></div>`; }).join("")}</div>
   <h2 class="sm">Recent drinks</h2>
-  <div class="card log">${recent.length ? `<ul>${recent.map(x => { const r = RECIPES.find(y => y.id === x.d); return `<li><div>${r ? r.name : x.d}<small>${new Date(x.t).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})} · ${plural(x.n,"person","people")}</small></div><span class="s">${x.rating ? "★".repeat(x.rating) + "☆".repeat(5-x.rating) : "Not rated"}</span></li>`; }).join("")}</ul>`
+  <div class="card log">${recent.length ? `<ul>${recent.map(x => { const r = RECIPES.find(y => y.id === x.d); return `<li><div>${r ? r.name : x.d}<small>${new Date(x.t).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})} · ${plural(x.n,"person","people")}</small></div><span class="s">${x.rating ? starRow(x.rating) : "Not rated"}</span></li>`; }).join("")}</ul>`
     : `<p class="muted" style="margin:0">Make your first drink and it will show up here.</p>`}</div>
   <h2 class="sm">How to earn XP</h2>
   <div class="card small"><p style="margin:0">Finish a drink <b>+20</b> · rate it <b>+10</b> · 5 stars <b>+10</b> · first time making a drink <b>+30</b> · lesson <b>+5</b> · each quiz answer right <b>+15</b></p></div>
@@ -927,7 +977,7 @@ function renderLearn(){
 function renderCat(){
   const c = CATS.find(x => x.id === learnCat);
   let h = `<button class="back" data-cat="">${ic("back")}Learn</button>
-    <div class="hero"><span class="cat" style="border:0;padding:0;background:none;width:auto"><span class="ci">${ic(c.icon)}</span></span><div><h2>${c.name}</h2><p>${c.sub}</p></div></div>`;
+    <div class="chero">${ic(c.icon)}<div><h2>${c.name}</h2><p>${c.sub}</p></div></div>`;
   if (quiz){
     const q = c.quiz[quiz.i], answered = quiz.picked !== null;
     if (quiz.i >= c.quiz.length){
@@ -948,6 +998,40 @@ function renderCat(){
   }
   $("#tab-tips").innerHTML = h;
 }
+
+/* ---------- Learn intro (first visit; replay from "How it works") ---------- */
+const INTRO = [
+  ["cup", "Every drink counts", "Finish a drink to earn XP. Then rate it: tell the app what was off, and it tells you exactly what to change next time."],
+  ["book", "Short lessons and quizzes", "Five topics, from the drinks themselves to safety. Each lesson takes a minute. Tap Got it, then take the 3-question quiz."],
+  ["trophy", "Level up and collect badges", "Go from Beginner to Coffee Master, and unlock 10 badges along the way, like Milk Master and Full Menu."]
+];
+let introI = -1, introEl = null;
+function openIntro(){
+  if (introEl) return;
+  introI = 0; introEl = document.createElement("div");
+  introEl.innerHTML = `<div class="scrim" data-intro-close></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="intro-h"></div>`;
+  document.body.appendChild(introEl);
+  paintIntro();
+  requestAnimationFrame(() => requestAnimationFrame(() => introEl.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.add("show"))));
+}
+function paintIntro(){
+  const [icon, h, t] = INTRO[introI], last = introI === INTRO.length - 1;
+  const sh = introEl.querySelector(".sheet");
+  sh.innerHTML = `<div class="grab"></div><div class="art">${ic(icon)}</div><h2 id="intro-h">${h}</h2><p>${t}</p>
+    <div class="dots">${INTRO.map((_, k) => `<i class="${k === introI ? "on" : ""}"></i>`).join("")}</div>
+    <div class="acts"><button class="btn" data-intro-close>${introI ? "Close" : "Skip"}</button>
+    <button class="btn primary" ${last ? 'data-intro-go' : 'data-intro-next'}>${last ? "Start with The Drinks" : "Next"}${ic("next")}</button></div>`;
+  sh.querySelector(".btn.primary").focus({ preventScroll:true });
+}
+function closeIntro(then){
+  if (!introEl) return;
+  S.seenLearn = true; save();
+  const el = introEl; introEl = null;
+  el.querySelectorAll(".scrim,.sheet").forEach(x => x.classList.remove("show"));
+  setTimeout(() => el.remove(), 400);
+  if (then) then();
+}
+document.addEventListener("keydown", e => { if (introEl && e.key === "Escape") closeIntro(); });
 
 /* ---------- Timer: lives on its step, floats as a pill when you move away ---------- */
 let tInt = null, tLeft = 0, tStep = -1, tDone = false;
@@ -990,13 +1074,17 @@ function showTab(tab){
   ["make","inv","tips"].forEach(x => $("#tab-"+x).classList.toggle("hide", x !== tab));
   document.body.classList.remove("cooking","has-cta","sub");
   if (tab === "make") renderMake();
-  else { wakeOff(); if (tab === "tips") renderLearn(); }
+  else { wakeOff(); if (tab === "tips"){ renderLearn(); if (!S.seenLearn) setTimeout(openIntro, 250); } }
   updateFloat(); window.scrollTo(0,0);
 }
 document.addEventListener("click", e => {
-  const t = e.target.closest("button");
+  const t = e.target.closest("button,[data-intro-close]");
   if (!t || t.disabled) return;
   const D = t.dataset;
+  if ("intro" in D){ openIntro(); return; }
+  if ("introNext" in D){ introI++; paintIntro(); return; }
+  if ("introGo" in D){ closeIntro(() => { learnCat = "drinks"; openLesson = "d1"; quiz = null; renderLearn(); window.scrollTo(0,0); }); return; }
+  if ("introClose" in D){ closeIntro(); return; }
   if (D.tab){
     if (D.tab === "make" && tabVisible("make") && S.view === "setup") go("pick");
     else if (D.tab === "tips" && tabVisible("tips")){ learnCat = null; quiz = null; renderLearn(); window.scrollTo(0,0); }
