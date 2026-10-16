@@ -5,7 +5,6 @@ Banglish coffee guide for the family: pick a drink and the number of people, get
 Static site, no build step. Settings are saved per phone (localStorage).
 
 ## Deploy
-```
-gh repo create coffee-ghor --public --source=. --push
-npx vercel --prod --yes --token "$VERCEL_TOKEN"
-```
+Vercel project `coffee-ghor` is linked to this repo.
+- Push or merge to `main`: production deploy to https://coffee-ghor.vercel.app
+- Push to any other branch: preview deploy (needs Vercel login to view)
