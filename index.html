@@ -192,7 +192,7 @@ function plan(r){
   p.grams = p.brews * S.mokaCoffee;
   p.tbsp = Math.round(p.grams / 5.5);
   p.milkPer = r.milk; p.milkTotal = r.milk * n;
-  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.4) : Math.round(S.pitcher * 0.57);
+  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.43) : Math.round(S.pitcher * 0.57); // 350 pitcher: 150 dag / 200
   p.frothCap = cap;
   p.frothBatches = r.froth !== "none" && p.milkTotal ? Math.ceil(p.milkTotal / cap) : 0;
   p.sugarTsp = r.instant ? 0 : SWEET[S.sweet] * n;
@@ -210,7 +210,7 @@ function buildSteps(r, p){
   const src = coffeeSource();
   if (r.instant){
     s.push({ t:"Dalgona cream banao", d:`Pitcher e ${p.instantTbsp} tbsp instant coffee + ${p.instantTbsp} tbsp chini + ${p.instantTbsp} tbsp gorom pani nao. Shob shoman shoman.` });
-    s.push({ t:"Frother diye whip koro", d:"2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.", timer:180 });
+    s.push({ t:"Frother diye whip koro", d:"FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.", timer:180 });
     s.push({ t:"Glass ready koro", d:`Proti glass e ${r.ice} ta borof, ${p.milkPer} ml thanda dudh. Mishti beshi chaile dudhe ektu chini aage gholao.` });
     s.push({ t:"Upore cream dao", d:"Chamuch diye dalgona cream dudher upor rakho. Serve korar shomoy mix kore khabe." });
     return s;
@@ -239,8 +239,8 @@ function buildSteps(r, p){
   if (r.froth !== "none" && p.milkTotal){
     const bt = p.frothBatches > 1 ? ` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)` : "";
     s.push(r.froth === "thick"
-      ? { t:`Dudh froth koro${bt}`, d:"Pitcher e gorom dudh. Frother dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.", timer:30 }
-      : { t:`Dudh froth koro${bt}`, d:"Frother puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.", timer:15 });
+      ? { t:`Dudh froth koro${bt}`, d:"Pitcher e gorom dudh, 150 dag porjonto (er beshi na). Frother FAST speed e (button double-click kore speed bodlao). Dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.", timer:30 }
+      : { t:`Dudh froth koro${bt}`, d:"Pitcher e 150 ar 250 dag er majhamajhi porjonto dudh. Frother MEDIUM speed, puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.", timer:15 });
   }
   const sw = SWEET[S.sweet];
   const sugarLine = sw ? ` ${sw} chamuch chini proti cup e, coffee gorom thaktei gholao.` : "";
@@ -318,11 +318,11 @@ function renderMake(){
 function renderInv(){
   const g = {ok:"Thik ache ✅", check:"Check lagbe ⚠️", broken:"Noshto ❌"};
   let h = `<h2>Equipment</h2><div class="card">
-    <div class="toggle"><div>☕ <b>Moka pot</b><small>6-cup stovetop, ~300 ml</small></div><span class="badge b-ok">Ache</span></div>
-    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Type pore confirm korbo. Kono shomossha hole ekhane "Check lagbe" dao.</small></div>
+    <div class="toggle"><div>☕ <b>Moka pot</b><small>6-cup stovetop, ~300 ml. Rubber ring er shamne-pichon ache, ulta lagabe na.</small></div><span class="badge b-ok">Ache</span></div>
+    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Blade grinder (NS-2026, 220V). Kono shomossha hole ekhane "Check lagbe" dao.</small></div>
       <select id="grinder">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
-    <div class="toggle"><div>🥛 <b>Milk pitcher</b><small>Stainless steel</small></div><span class="badge b-ok">${S.pitcher} ml</span></div>
-    <div class="toggle"><div>🌀 <b>Enjoy milk frother</b><small>Rechargeable. Charge ache to?</small></div><span class="badge b-ok">Ache</span></div>
+    <div class="toggle"><div>🥛 <b>Milk pitcher</b><small>Stainless steel, bhitore 150 / 250 / 350 ml dag</small></div><span class="badge b-ok">${S.pitcher} ml</span></div>
+    <div class="toggle"><div>🌀 <b>Enjoy milk frother</b><small>3 speed (double-click e bodlay), USB-C. Fast charger dio na.</small></div><span class="badge b-ok">Ache</span></div>
   </div>
   <h2>Ghore ki ache?</h2><div class="card">` +
   Object.entries(INV_LBL).map(([k,[l,d]]) => `<div class="toggle"><div><b>${l}</b>${d?`<small>${d}</small>`:""}</div>
@@ -365,7 +365,7 @@ function renderTips(){
   </div>
 
   <h2>Grind size</h2>
-  <div class="card tips"><p style="margin:0">Moka er jonno: <b>table salt er moto</b>. Espresso er cheye mota, filter er cheye mihi. Blade grinder ekdom shoman guro korte pare na, tai choto choto pulse dao ar majhe jhakao. Beshi powder hole coffee tita ar ghola hobe.</p></div>
+  <div class="card tips"><p style="margin:0">Moka er jonno: <b>table salt er moto</b>. Espresso er cheye mota, filter er cheye mihi. Amader ta blade grinder (4 dhar er cross blade), tai guro ekdom shoman hoy na. Choto choto pulse dao, majhe grinder ta jhakao, ar ekbare 30 g er beshi bhoro na. Lomba shomoy chalale blade gorom hoye coffee er flavor nosto kore. Beshi powder hole coffee tita ar ghola hobe.</p></div>
 
   <h2>Frother tips</h2>
   <div class="card tips"><ul>
@@ -373,8 +373,14 @@ function renderTips(){
     <li>Pitcher er 40% er beshi dudh nio na cappuccino te, foam double hoye upche porbe.</li>
     <li>Full cream dudh = shobcheye bhalo foam. Low fat e foam beshi kintu pani pani.</li>
     <li>Frother dudhe dubiye tarpor on koro, on kore dubale chhitbe.</li>
+    <li>Speed: ghono foam (cappuccino, dalgona) = FAST. Silky foam (latte, flat white) = MEDIUM. Single click on, double-click e speed bodlay.</li>
+    <li>Charge: normal 5V phone charger, 2 ghontar beshi na. Fast charger e noshto hote pare. Use na korleo 3 mash e ekbar charge dao.</li>
+    <li>Dhoar por rod upore kore rakho na, pani bhitore dhuke jabe.</li>
     <li>Dalgona whip: frother diye 2-4 min, hath diye 10 min er kaj.</li>
   </ul></div>
+
+  <h2>Notun moka pot?</h2>
+  <div class="card tips"><p style="margin:0">Box er niyom: prothom use er age <b>3 bar shudhu pani diye</b> brew koro, fele dao. Factory er gondho/tel chole jabe. Rubber ring er shamne-pichon ache: ulta lagale leak korbe.</p></div>
 
   <h2>Moka porishkar</h2>
   <div class="card tips"><p style="margin:0">Shudhu gorom pani diye dhuo, <b>saban dio na</b> (aluminium hole swad noshto hoy). Puro shukiye tarpor jora lagao. Rubber gasket mashe ekbar check koro.</p></div>
