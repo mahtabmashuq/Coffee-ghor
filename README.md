@@ -1,6 +1,6 @@
 # Coffee Ghor
 
-**Version 2.0.1** · Live at **https://coffee-ghor.vercel.app** · [Changelog](CHANGELOG.md)
+**Version 1.0.0** · Live at **https://coffee-ghor.vercel.app** · [Changelog](CHANGELOG.md)
 
 A home coffee guide for a moka pot kitchen. Pick a drink and how many people, and Coffee Ghor works out the amounts for *your* equipment, walks you through it one step at a time, then helps you get better with every cup.
 
@@ -38,14 +38,14 @@ Installable on iPhone and Android as a Home Screen app. No account, no backend: 
 
 | Version | Highlights |
 |---|---|
-| **2.0.1** | Spacing fixes; app version shown in Pantry |
-| **2.0.0** | Equipment setup, equipment-aware recipes, per-cup ratings, level-up guide |
-| 1.5.0 | iOS type scale; rate drinks later |
-| 1.4.0 | Every recipe refined to coffee standards; recipe evaluation |
-| 1.3.0 | UI pass; iPhone status bar fix; Learn intro; Home Screen prompt; progress transfer |
-| 1.2.0 | Learn tab, XP, levels, badges; ratings with fixes; more Pantry |
-| 1.1.0 | Guided flow: pick, set up, then one step at a time |
-| 1.0.0 | Plain English, standard drink names, redesign; installable on iPhone |
+| **1.0.0** | First full release: spacing fixes, app version shown in Pantry, README and changelog |
+| 0.8.0 | Equipment setup, equipment-aware recipes, per-cup ratings, level-up guide |
+| 0.7.0 | iOS type scale; rate drinks later |
+| 0.6.0 | Every recipe refined to coffee standards; recipe evaluation |
+| 0.5.0 | UI pass; iPhone status bar fix; Learn intro; Home Screen prompt; progress transfer |
+| 0.4.0 | Learn tab, XP, levels, badges; ratings with fixes; more Pantry |
+| 0.3.0 | Guided flow: pick, set up, then one step at a time |
+| 0.2.0 | Plain English, standard drink names, redesign; installable on iPhone |
 | 0.1.0 | First version: Banglish family coffee guide |
 
 Full details in [CHANGELOG.md](CHANGELOG.md).

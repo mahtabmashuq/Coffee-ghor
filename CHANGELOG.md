@@ -1,8 +1,9 @@
 # Changelog
 
-All notable changes to Coffee Ghor. Versions follow [semantic versioning](https://semver.org): a major version changes how the app works for existing users, a minor version adds features, a patch fixes things.
+All notable changes to Coffee Ghor. Versions follow [semantic versioning](https://semver.org). The 0.x releases built the app up to its first full release, 1.0.0. From here on, a major version changes how the app works for existing users, a minor version adds features, and a patch fixes things.
 
-## 2.0.1 · 2026-10-16
+## 1.0.0 · 2026-10-16
+The first full release: everything from the 0.x series below, plus:
 ### Fixed
 - "You're all set" summary: text touched the card border because the list style zeroed the card padding
 - More room in the XP pills; smaller selector text on narrow phones so options don't crowd
@@ -10,7 +11,7 @@ All notable changes to Coffee Ghor. Versions follow [semantic versioning](https:
 - App version shown at the bottom of Pantry
 - `tests/spacing-check.js`: scans every screen for text touching or spilling past its box
 
-## 2.0.0 · 2026-10-16
+## 0.8.0 · 2026-10-16
 ### Added
 - **First-run setup**, "Let's get your equipment ready": moka pot size, grinder type and milk pitcher size, with Back, Skip and a summary. Existing users keep their settings and can rerun it from Pantry
 - **Equipment in Pantry**: moka pot 1 to 12 cup, grinder (electric, manual, none) and pitcher 350 to 1000 ml, as native pickers
@@ -23,13 +24,13 @@ All notable changes to Coffee Ghor. Versions follow [semantic versioning](https:
 ### Fixed
 - A step timer left running covered the finish screen; finishing a drink now stops it
 
-## 1.5.0 · 2026-10-16
+## 0.7.0 · 2026-10-16
 ### Added
 - **Rate later**: "N drinks to rate" reminder on the drink list, a "Waiting for your rating" list in Learn, and a rating sheet for any past drink
 ### Changed
 - UI resized to the iOS type scale: 17 px body, smaller headings, cards, icons and tab bar; compact controls keep a 44 px touch area. Step mode stays one notch larger for reading at arm's length
 
-## 1.4.0 · 2026-10-16
+## 0.6.0 · 2026-10-16
 ### Changed
 - Every drink's steps refined to coffee standards: kettle first and grind while it heats, milk heated after brewing and frothed straight away, grinding in batches the grinder can take, warmed cups, "never leave the pot unattended", a use for leftover coffee
 - Strength stays inside each drink's café ratio; hidden for Espresso, whose dose the basket fixes
@@ -37,7 +38,7 @@ All notable changes to Coffee Ghor. Versions follow [semantic versioning](https:
 ### Added
 - `tests/coffee-eval.js`: 21 coffee rules over every drink and setting (63.8% before this release, 100% after)
 
-## 1.3.0 · 2026-10-16
+## 0.5.0 · 2026-10-16
 ### Added
 - **Home Screen prompt** on first visit with steps for iPhone Safari and Chrome, Android Chrome (one-tap Install), Samsung Internet and in-app browsers
 - **Progress codes** to copy and paste level, ratings and settings between browsers and phones; a welcome screen to restore them in the installed iPhone app
@@ -48,7 +49,7 @@ All notable changes to Coffee Ghor. Versions follow [semantic versioning](https:
 - White bar behind the iPhone Dynamic Island: translucent status bar with a brown band behind the clock
 - A hidden notification peeking out at the top of the screen
 
-## 1.2.0 · 2026-10-16
+## 0.4.0 · 2026-10-16
 ### Added
 - **Learn tab** with 5 categories of lessons and quizzes
 - **XP, 5 levels, 10 badges**, drinks made, average rating and day streak
@@ -56,13 +57,13 @@ All notable changes to Coffee Ghor. Versions follow [semantic versioning](https:
 - **Pantry tools**: kettle, scale, thermometer, flask, cinnamon, vanilla, and steps that adapt to them
 - One consistent icon set across the app
 
-## 1.1.0 · 2026-10-16
+## 0.3.0 · 2026-10-16
 ### Added
 - **Guided flow**: pick a drink, set it up, then one step at a time with progress, swipe, timers inside steps and a finish screen
 - **EN | BN switch** for the step text
 - Screen kept awake while cooking; resumes mid-recipe after a reload
 
-## 1.0.0 · 2026-10-16
+## 0.2.0 · 2026-10-16
 ### Changed
 - Whole app in plain English with standard café drink names
 - Redesign: new type, warm palette that works in light and dark, cup illustrations drawn from each recipe
