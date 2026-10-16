@@ -1,6 +1,6 @@
 # Coffee Ghor
 
-Banglish coffee guide for the family: pick a drink and the number of people, get quantities and step-by-step instructions for our moka pot, blade grinder, 350 ml pitcher and Enjoy frother.
+Coffee guide for the family: pick a drink and the number of people, get quantities and step-by-step instructions for our moka pot, blade grinder, 350 ml pitcher and Enjoy frother.
 
 Static site, no build step. Settings are saved per phone (localStorage).
 

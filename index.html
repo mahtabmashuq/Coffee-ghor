@@ -1,101 +1,115 @@
 <!doctype html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coffee Ghor</title>
-<meta name="description" content="Amader barir coffee guide: koto jon, kon coffee, ki ki lagbe, step by step.">
+<meta name="description" content="Our home coffee guide: pick a drink and how many people, get exact amounts and step-by-step instructions.">
 <meta name="theme-color" content="#3b2418">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Young+Serif&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f7f1ea; --card:#fffaf5; --ink:#2a1a12; --muted:#7a6457; --line:#e6d8cb;
-  --brand:#6b3f26; --brand-ink:#fff; --accent:#c8873a; --ok:#2f7d4f; --warn:#b5651d; --bad:#b23a3a;
-  --soft:#f0e3d6; --radius:16px;
+  --bg:oklch(96.5% .012 70); --card:oklch(98.8% .006 75); --ink:oklch(24% .03 45); --muted:oklch(50% .03 50); --line:oklch(89% .02 65);
+  --brand:oklch(40% .08 45); --brand-ink:oklch(98.5% .005 75); --soft:oklch(93% .022 70);
+  --ok:oklch(48% .1 150); --warn:oklch(55% .13 60); --bad:oklch(50% .16 25);
+  --c-coffee:oklch(33% .06 45); --c-water:oklch(46% .07 55); --c-milk:oklch(91% .035 80); --c-foam:oklch(98% .01 85); --c-whip:oklch(68% .1 65);
+  --radius:14px; --ease:cubic-bezier(.22,1,.36,1);
+  --f-display:"Young Serif",Georgia,serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#1a120d; --card:#251a13; --ink:#f3e8dd; --muted:#b39c8c; --line:#3a2b21;
-    --brand:#d39a62; --brand-ink:#1a120d; --accent:#e0a75e; --ok:#5fbf86; --warn:#e39a52; --bad:#e06b6b;
-    --soft:#2f2219;
+    --bg:oklch(18% .015 50); --card:oklch(22% .018 50); --ink:oklch(93% .015 70); --muted:oklch(70% .025 60); --line:oklch(31% .02 50);
+    --brand:oklch(74% .09 60); --brand-ink:oklch(18% .015 50); --soft:oklch(27% .022 50);
+    --ok:oklch(72% .12 150); --warn:oklch(76% .12 65); --bad:oklch(70% .14 25);
+    --c-milk:oklch(86% .03 80); --c-foam:oklch(95% .01 85);
   }
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
-header{padding:20px 16px 8px;max-width:720px;margin:0 auto}
-header h1{margin:0;font-size:26px;letter-spacing:-.3px}
-header p{margin:2px 0 0;color:var(--muted);font-size:14px}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--f-body);padding-bottom:104px;-webkit-font-smoothing:antialiased}
+header{padding:28px 16px 4px;max-width:720px;margin:0 auto}
+header h1{margin:0;font:400 32px/1.1 var(--f-display);letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--muted);font-size:16px;max-width:36ch}
 main{max-width:720px;margin:0 auto;padding:0 16px}
-nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:10}
-nav.tabs button{flex:1;max-width:180px;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;padding:6px;border-radius:12px;cursor:pointer}
-nav.tabs button span{display:block;font-size:22px;line-height:1.2}
-nav.tabs button.on{color:var(--brand);background:var(--soft);font-weight:600}
-h2{font-size:18px;margin:22px 0 10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:10px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.drink{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:12px;text-align:left;font:inherit;color:inherit;cursor:pointer;position:relative}
-.drink.on{border-color:var(--brand);background:var(--soft)}
-.drink .e{font-size:28px}
-.drink b{display:block;font-size:15px;margin-top:2px}
-.drink small{color:var(--muted);font-size:12px;display:block;line-height:1.35;margin-top:2px}
-.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:6px}
-.b-ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
-.b-no{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));z-index:10}
+nav.tabs button{flex:1;max-width:180px;background:none;border:0;color:var(--muted);font:700 15px var(--f-body);padding:12px 6px;border-radius:10px;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+nav.tabs button.on{color:var(--brand-ink);background:var(--brand)}
+h2{font:400 22px/1.2 var(--f-display);margin:36px 0 12px;display:flex;align-items:baseline;gap:10px}
+h2 .num{font:700 13px var(--f-body);color:var(--muted);letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(156px,1fr));gap:10px}
+.drink{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 12px 14px;text-align:left;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.drink:hover{border-color:var(--muted)}
+.drink.on{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.drink svg{width:40px;height:44px;margin-bottom:6px}
+.drink b{font-size:16px;line-height:1.25}
+.drink small{color:var(--muted);font-size:14px;line-height:1.4}
+.drink .state{margin-top:auto;padding-top:8px;font-size:13px;font-weight:700}
+.st-ok{color:var(--ok)} .st-no{color:var(--bad)}
+.field+.field{margin-top:18px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.stepper{display:flex;align-items:center;gap:10px}
-.stepper button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:22px;cursor:pointer}
-.stepper output{font-size:28px;font-weight:700;min-width:44px;text-align:center}
-.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;gap:3px;flex-wrap:wrap}
-.seg button{flex:1;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:8px 10px;border-radius:9px;cursor:pointer;white-space:nowrap}
-.seg button.on{background:var(--brand);color:var(--brand-ink);font-weight:600}
-label.lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.stat{background:var(--soft);border-radius:12px;padding:10px 12px}
-.stat .v{font-size:20px;font-weight:700}
-.stat .k{font-size:12px;color:var(--muted)}
-.alert{border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0}
-.a-warn{background:color-mix(in srgb,var(--warn) 14%,transparent);border-left:4px solid var(--warn)}
-.a-bad{background:color-mix(in srgb,var(--bad) 13%,transparent);border-left:4px solid var(--bad)}
-.a-ok{background:color-mix(in srgb,var(--ok) 13%,transparent);border-left:4px solid var(--ok)}
-ol.steps{list-style:none;padding:0;margin:0;counter-reset:s}
-ol.steps li{counter-increment:s;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:24px;cursor:pointer}
+.stepper output{font:400 30px var(--f-display);min-width:44px;text-align:center}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:inherit;font-size:15px;padding:10px 10px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:background .2s var(--ease)}
+.seg button.on{background:var(--brand);color:var(--brand-ink);font-weight:700}
+label.lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:8px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px 12px}
+.stat .v{font:400 24px/1.15 var(--f-display)}
+.stat .k{font-size:14px;color:var(--muted)}
+.note{border-radius:12px;padding:12px 14px;font-size:15px;margin:10px 0}
+.n-warn{background:color-mix(in oklch,var(--warn) 14%,var(--bg))}
+.n-bad{background:color-mix(in oklch,var(--bad) 13%,var(--bg))}
+.n-tip{background:var(--soft)}
+.note b{display:block;margin-bottom:2px}
+ol.steps{list-style:none;padding:0;margin:0}
+ol.steps li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
 ol.steps li:last-child{border-bottom:0}
-ol.steps li .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;cursor:pointer;user-select:none}
-ol.steps li.done .n{background:var(--ok);color:#fff}
-ol.steps li.done .t{opacity:.5;text-decoration:line-through}
+ol.steps li .n{flex:0 0 34px;height:34px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;cursor:pointer;user-select:none;transition:background .2s var(--ease)}
+ol.steps li.done .n{background:var(--ok);border-color:var(--ok);color:var(--brand-ink)}
+ol.steps li.done .t{opacity:.5}
+ol.steps li.done .t b{text-decoration:line-through}
 ol.steps li .t{flex:1}
-ol.steps li .t b{display:block}
-.tbtn{margin-top:6px;border:1px solid var(--brand);background:none;color:var(--brand);border-radius:99px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
-.btn{border:0;background:var(--brand);color:var(--brand-ink);border-radius:12px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer;width:100%}
-.toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+ol.steps li .t b{display:block;margin-bottom:2px}
+ol.steps li .t span{font-size:15px;color:var(--muted)}
+.tbtn{margin-top:8px;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:99px;padding:6px 14px;font:700 14px var(--f-body);cursor:pointer}
+.btn{border:0;background:var(--soft);color:var(--ink);border-radius:12px;padding:14px 16px;font:700 16px var(--f-body);cursor:pointer;width:100%;margin-top:16px}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);gap:12px}
 .toggle:last-child{border-bottom:0}
-.toggle small{display:block;color:var(--muted);font-size:12px}
-.sw{position:relative;width:50px;height:30px;flex:0 0 50px}
+.toggle small{display:block;color:var(--muted);font-size:14px}
+.tag{font-size:14px;font-weight:700;color:var(--ok);white-space:nowrap}
+.sw{position:relative;width:52px;height:32px;flex:0 0 52px}
 .sw input{opacity:0;width:0;height:0}
-.sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.2s;cursor:pointer}
-.sw i:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:background .2s var(--ease);cursor:pointer}
+.sw i:before{content:"";position:absolute;width:26px;height:26px;left:3px;top:3px;background:var(--card);border-radius:50%;transition:transform .2s var(--ease)}
 .sw input:checked+i{background:var(--ok)}
 .sw input:checked+i:before{transform:translateX(20px)}
-input[type=number],select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:110px}
-.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 18px;display:none;align-items:center;gap:12px;font-weight:700;font-size:18px;box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:20}
+.sw input:focus-visible+i{outline:2px solid var(--brand);outline-offset:2px}
+input[type=number],select{font:inherit;font-size:16px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:120px}
+.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 12px 10px 20px;display:none;align-items:center;gap:14px;font-weight:700;font-size:19px;box-shadow:0 8px 28px oklch(0% 0 0 / .25);z-index:20}
 .timer.show{display:flex}
-.timer.ding{background:var(--ok);color:#fff}
-.timer button{background:none;border:1px solid currentColor;color:inherit;border-radius:99px;padding:2px 10px;font:inherit;font-size:13px;cursor:pointer}
-.tips h3{margin:0 0 6px;font-size:16px}
-.tips p,.tips li{font-size:15px}
-.tips ul{padding-left:20px;margin:6px 0}
+.timer.ding{background:var(--ok);color:var(--brand-ink)}
+.timer button{background:none;border:1.5px solid currentColor;color:inherit;border-radius:99px;padding:4px 12px;font:700 14px var(--f-body);cursor:pointer}
+.tips p,.tips li{font-size:16px}
+.tips ul{padding-left:20px;margin:4px 0}
+.tips li+li{margin-top:6px}
 .muted{color:var(--muted)}
-.small{font-size:13px}
+.small{font-size:14px}
 .hide{display:none}
+button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+footer{text-align:center;margin:32px 0;color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
 <header>
-  <h1>☕ Coffee Ghor</h1>
-  <p>Amader barir coffee guide. Koto jon, kon coffee, baki ta app bole dibe.</p>
+  <h1>Coffee Ghor</h1>
+  <p>Pick a drink and how many people. The app works out the amounts and the steps.</p>
 </header>
 
 <main>
@@ -104,22 +118,23 @@ input[type=number],select{font:inherit;padding:8px 10px;border-radius:10px;borde
   <section id="tab-tips" class="hide"></section>
 </main>
 
-<div class="timer" id="timer"><span id="tval">0:00</span><button id="tstop">Bondho</button></div>
+<div class="timer" id="timer" role="status"><span id="tval">0:00</span><button id="tstop">Stop</button></div>
 
 <nav class="tabs">
-  <button data-tab="make" class="on"><span>☕</span>Banao</button>
-  <button data-tab="inv"><span>🧺</span>Ki Ache</button>
-  <button data-tab="tips"><span>💡</span>Tips</button>
+  <button data-tab="make" class="on">Make</button>
+  <button data-tab="inv">Pantry</button>
+  <button data-tab="tips">Tips</button>
 </nav>
 
 <script>
 /* ---------- State ---------- */
+// Keys (halka/kora, kom/beshi) are kept from v1 so saved settings on phones still load.
 const DEFAULTS = {
   drink: "cappuccino", people: 2, strength: "normal", sweet: "normal", source: "auto", roast: "medium",
   grinder: "ok",                  // ok | check | broken
-  mokaWater: 300,                 // ml, 6-cup pot, valve er thik niche
-  mokaCoffee: 28,                 // g per brew, 6-cup basket level kore
-  yieldPct: 88,                   // pani theke koto % coffee ashe
+  mokaWater: 300,                 // ml, 6-cup pot, just below the valve
+  mokaCoffee: 28,                 // g per brew, 6-cup basket filled level
+  yieldPct: 88,                   // % of water that comes out as coffee
   pitcher: 350,
   inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false }
 };
@@ -128,49 +143,75 @@ function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s) ret
 let S = load();
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
-/* ---------- Recipes (per jon) ---------- */
-// coffee: moka coffee ml, water: gorom pani ml, milk: ml, milkMode: hot|cold|boil, froth: thick|light|none
+/* ---------- Recipes (per person) ---------- */
+// coffee: moka coffee ml, water: hot water ml, milk: ml, milkMode: hot|cold|boil, froth: thick|light|none
 const RECIPES = [
-  { id:"moka", e:"☕", name:"Moka Coffee", desc:"Kora, kalo, Italian style. Choto cup e.", coffee:50, water:0, milk:0, froth:"none" },
-  { id:"americano", e:"🫖", name:"Americano", desc:"Moka coffee + gorom pani. Halka kalo coffee.", coffee:60, water:120, milk:0, froth:"none" },
-  { id:"cappuccino", e:"🥛", name:"Cappuccino", desc:"Coffee, gorom dudh, upore ghono foam.", coffee:60, water:0, milk:100, milkMode:"hot", froth:"thick" },
-  { id:"latte", e:"🍼", name:"Caffè Latte", desc:"Dudh beshi, halka foam. Shobar priyo.", coffee:60, water:0, milk:180, milkMode:"hot", froth:"light" },
-  { id:"flatwhite", e:"🤍", name:"Flat White", desc:"Coffee beshi, kom dudh, silky foam.", coffee:70, water:0, milk:110, milkMode:"hot", froth:"light" },
-  { id:"mocha", e:"🍫", name:"Mocha", desc:"Latte + chocolate. Mishti premi der jonno.", coffee:60, water:0, milk:150, milkMode:"hot", froth:"light", cocoa:1 },
-  { id:"doodh", e:"🏠", name:"Deshi Doodh Coffee", desc:"Dudh e fotano, mishti, halka coffee. Barir style.", coffee:45, water:0, milk:160, milkMode:"boil", froth:"light", condensedOpt:true },
-  { id:"icedlatte", e:"🧊", name:"Iced Latte", desc:"Borof, thanda dudh, coffee. Gorom din er jonno.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5 },
-  { id:"icedmocha", e:"🥤", name:"Iced Mocha", desc:"Iced latte + chocolate.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5, cocoa:1 },
-  { id:"dalgona", e:"🌪️", name:"Dalgona", desc:"Instant coffee whip kore thanda dudher upor. Moka lagbe na.", coffee:0, instant:1, water:0, milk:200, milkMode:"cold", froth:"none", ice:4 }
+  { id:"moka", name:"Espresso", desc:"Strong and black, in a small cup. Made in the moka pot.", coffee:50, water:0, milk:0, froth:"none" },
+  { id:"americano", name:"Americano", desc:"Espresso topped up with hot water. Lighter black coffee.", coffee:60, water:120, milk:0, froth:"none" },
+  { id:"cappuccino", name:"Cappuccino", desc:"Espresso, hot milk and a thick layer of foam.", coffee:60, water:0, milk:100, milkMode:"hot", froth:"thick" },
+  { id:"latte", name:"Latte", desc:"Lots of milk, a thin layer of foam. Mild and creamy.", coffee:60, water:0, milk:180, milkMode:"hot", froth:"light" },
+  { id:"flatwhite", name:"Flat White", desc:"More coffee, less milk, smooth silky foam.", coffee:70, water:0, milk:110, milkMode:"hot", froth:"light" },
+  { id:"mocha", name:"Mocha", desc:"A latte with chocolate. For a sweet tooth.", coffee:60, water:0, milk:150, milkMode:"hot", froth:"light", cocoa:1 },
+  { id:"doodh", name:"Café au Lait", desc:"Coffee stirred into boiled, sweetened milk. Home style.", coffee:45, water:0, milk:160, milkMode:"boil", froth:"light", condensedOpt:true },
+  { id:"icedlatte", name:"Iced Latte", desc:"Espresso, cold milk and ice. For hot days.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5 },
+  { id:"icedmocha", name:"Iced Mocha", desc:"An iced latte with chocolate.", coffee:60, water:0, milk:150, milkMode:"cold", froth:"none", ice:5, cocoa:1 },
+  { id:"dalgona", name:"Whipped Coffee", desc:"Whipped instant coffee on cold milk. No moka pot needed.", coffee:0, instant:1, water:0, milk:200, milkMode:"cold", froth:"none", ice:4 }
 ];
 const STRENGTH = { halka:0.75, normal:1, kora:1.3 };
-const STRENGTH_LBL = { halka:"Halka", normal:"Normal", kora:"Kora" };
+const STRENGTH_LBL = { halka:"Mild", normal:"Normal", kora:"Strong" };
 const SWEET = { none:0, kom:1, normal:2, beshi:3 };
-const SWEET_LBL = { none:"Chini chara", kom:"Kom", normal:"Normal", beshi:"Beshi" };
-// Roast onujayi grind, pani, anch, kokhon namabo. Dose same thake: moka basket shob shomoy level kore bhora.
+const SWEET_LBL = { none:"No sugar", kom:"Less", normal:"Normal", beshi:"More" };
+// Per roast: grind time, water temp, heat, when to take off. Dose stays the same: the basket is always filled level.
 const ROASTS = {
-  light:  { lbl:"Light", pulse:"mot 15-18 sec. Light beans shokto, tai ektu beshi mihi korte hobe.", water:"Puro fute uthle namao. Light roast e beshi gorom lage flavor ber korte.", heat:"medium", pull:"Light roast e dhara ektu beshi cholte dao, kintu gurgle shuru holei namao.",
-            black:"Light roast kalo coffee te best: fruity, halka tok.", milk:"Light roast dudhe harie jay. Strength \"Kora\" dao, ba Moka/Americano try koro." },
-  medium: { lbl:"Medium", pulse:"mot 12-15 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"",
-            black:"Medium roast: balanced, kalo coffee te bhalo.", milk:"Medium roast: dudher shathe bhalo, balanced." },
-  mdark:  { lbl:"Medium-Dark", pulse:"mot 10-12 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"Dhara halka rong hote shuru korlei namao.",
-            black:"Medium-dark kalo khele ektu tita lagte pare. \"Halka\" strength try koro.", milk:"Medium-dark + dudh = perfect match. Chocolate-y swad." },
-  dark:   { lbl:"Dark", pulse:"mot 8-10 sec. Dark beans naram, taratari guro hoy. Beshi chalale powder hoye tita hobe.", water:"Fute uthle 1 min thanda hote dao, tarpor dhalo.", heat:"LOW", pull:"Dark roast e AGE namao: dhara halka hote shuru korlei. Dark taratari tita hoy.",
-            black:"Dark roast kalo khele beshi tita. Americano te pani beshi dao ba \"Halka\" strength.", milk:"Dark roast dudh ar chocolate er shathe best. Dudh tita bhab dhake." },
-  unknown:{ lbl:"Jani na", pulse:"mot 12-15 sec.", water:"Fute uthar thik age porjonto.", heat:"medium-low", pull:"",
-            black:"Roast jana nai, medium dhore hishab korchi. Tips tab e \"Roast chinbo kivabe\" dekho.", milk:"Roast jana nai, medium dhore hishab korchi. Tips tab e \"Roast chinbo kivabe\" dekho." }
+  light:  { lbl:"Light", pulse:"about 15-18 seconds in total. Light beans are hard, so grind a little finer.", water:"Bring it to a full boil. Light roasts need more heat to bring out the flavour.", heat:"medium", pull:"Let light roasts run a little longer, but take it off as soon as it starts gurgling.",
+            black:"Light roast is best black: fruity, slightly sour.", milk:"Light roast gets lost in milk. Pick \"Strong\", or try Espresso or Americano." },
+  medium: { lbl:"Medium", pulse:"about 12-15 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"",
+            black:"Medium roast: balanced, good black.", milk:"Medium roast: balanced, good with milk." },
+  mdark:  { lbl:"Medium-Dark", pulse:"about 10-12 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"Take it off as soon as the stream starts turning pale.",
+            black:"Medium-dark can taste a bit bitter black. Try \"Mild\" strength.", milk:"Medium-dark with milk is a perfect match. Chocolatey." },
+  dark:   { lbl:"Dark", pulse:"about 8-10 seconds in total. Dark beans are soft and grind fast. Too long turns them to powder and makes it bitter.", water:"Boil, then let it cool for 1 minute before pouring.", heat:"low", pull:"Take dark roasts off EARLY, as soon as the stream turns pale. Dark roasts go bitter fast.",
+            black:"Dark roast is very bitter black. Add more water to the Americano, or pick \"Mild\".", milk:"Dark roast is best with milk and chocolate. The milk hides the bitterness." },
+  unknown:{ lbl:"Not sure", pulse:"about 12-15 seconds in total.", water:"Heat until just before it boils.", heat:"medium-low", pull:"",
+            black:"Roast unknown, so the app assumes medium. See \"How to tell the roast\" in Tips.", milk:"Roast unknown, so the app assumes medium. See \"How to tell the roast\" in Tips." }
 };
 const BLACK = ["moka","americano"];
 const roast = () => ROASTS[S.roast] || ROASTS.medium;
 const INV_LBL = {
-  beans:["Coffee beans (gota)","Grinder diye guro korte hobe"],
-  ground:["Guro coffee (pre-ground)","Grinder kharap thakleo cholbe"],
-  instant:["Instant coffee","Dalgona er jonno"],
-  milk:["Dudh","Full cream hole foam bhalo hoy"],
-  sugar:["Chini",""],
-  cocoa:["Cocoa powder / chocolate","Mocha er jonno"],
-  ice:["Borof","Iced drinks er jonno"],
-  condensed:["Condensed milk","Optional, deshi coffee te"]
+  beans:["Whole coffee beans","Need the grinder"],
+  ground:["Ground coffee","Works even if the grinder is broken"],
+  instant:["Instant coffee","For Whipped Coffee"],
+  milk:["Milk","Full-cream milk makes the best foam"],
+  sugar:["Sugar",""],
+  cocoa:["Cocoa powder or chocolate","For Mocha"],
+  ice:["Ice","For iced drinks"],
+  condensed:["Condensed milk","Optional, for Café au Lait"]
 };
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+/* ---------- Cup illustration: layers drawn to the recipe's real proportions ---------- */
+function cup(r){
+  const W = 40, H = 44, top = 4, bot = 40, inner = bot - top;
+  const L = [];
+  if (r.instant){ L.push(["--c-milk", r.milk], ["--c-whip", 60]); }
+  else {
+    if (r.coffee) L.push([r.water ? "--c-water" : "--c-coffee", r.coffee + r.water]);
+    if (r.milk){
+      const foam = r.froth === "thick" ? .4 : r.froth === "light" ? .15 : 0;
+      L.push(["--c-milk", r.milk * (1 - foam)]);
+      if (foam) L.push(["--c-foam", r.milk * foam]);
+    }
+  }
+  const total = L.reduce((a, [, v]) => a + v, 0), fill = Math.min(1, total / 260);
+  let y = bot, rects = "";
+  for (const [c, v] of L){
+    const h = inner * fill * v / total; y -= h;
+    rects += `<rect x="0" y="${y.toFixed(1)}" width="${W}" height="${h.toFixed(1)}" fill="var(${c})"/>`;
+  }
+  if (r.ice) rects += [[8, bot - 12], [20, bot - 20], [13, bot - 27]].map(([x, yy]) => `<rect x="${x}" y="${yy}" width="9" height="9" rx="2" fill="none" stroke="var(--card)" stroke-width="1.5" opacity=".8"/>`).join("");
+  const path = `M6 ${top} L34 ${top} L31 ${bot} Q30.5 ${bot + 2} 28 ${bot + 2} L12 ${bot + 2} Q9.5 ${bot + 2} 9 ${bot} Z`;
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><clipPath id="c-${r.id}"><path d="${path}"/></clipPath></defs>
+    <g clip-path="url(#c-${r.id})">${rects}</g><path d="${path}" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>`;
+}
 
 /* ---------- Logic ---------- */
 const grinderOk = () => S.grinder === "ok";
@@ -185,21 +226,21 @@ function coffeeSource(){
 function missing(r){
   const m = [];
   if (r.coffee > 0 && !coffeeSource()){
-    if (S.inv.beans && !grinderOk()) m.push("grinder thik nai (guro coffee lagbe)");
-    else m.push("coffee (beans ba guro)");
+    if (S.inv.beans && !grinderOk()) m.push("a working grinder (or ground coffee)");
+    else m.push("coffee (beans or ground)");
   }
   if (r.instant && !S.inv.instant) m.push("instant coffee");
-  if (r.instant && !S.inv.sugar) m.push("chini (whip er jonno)");
-  if (r.milk > 0 && !S.inv.milk) m.push("dudh");
-  if (r.cocoa && !S.inv.cocoa) m.push("cocoa/chocolate");
-  if (r.ice && !S.inv.ice) m.push("borof");
+  if (r.instant && !S.inv.sugar) m.push("sugar (needed for whipping)");
+  if (r.milk > 0 && !S.inv.milk) m.push("milk");
+  if (r.cocoa && !S.inv.cocoa) m.push("cocoa or chocolate");
+  if (r.ice && !S.inv.ice) m.push("ice");
   return m;
 }
 function plan(r){
   const n = S.people, f = STRENGTH[S.strength];
   const p = { n };
   p.coffeePer = Math.round(r.coffee * f);
-  // Halka americano: coffee kom, pani beshi, cup size same thake
+  // Mild americano: less coffee, more water, same cup size
   p.waterPer = r.water ? Math.round(r.water + r.coffee - p.coffeePer) : 0;
   p.coffeeTotal = p.coffeePer * n;
   p.yieldPerBrew = Math.round(S.mokaWater * S.yieldPct / 100);
@@ -207,7 +248,7 @@ function plan(r){
   p.grams = p.brews * S.mokaCoffee;
   p.tbsp = Math.round(p.grams / 5.5);
   p.milkPer = r.milk; p.milkTotal = r.milk * n;
-  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.43) : Math.round(S.pitcher * 0.57); // 350 pitcher: 150 dag / 200
+  const cap = r.froth === "thick" ? Math.round(S.pitcher * 0.43) : Math.round(S.pitcher * 0.57); // 350 pitcher: 150 / 200 mark
   p.frothCap = cap;
   p.frothBatches = r.froth !== "none" && p.milkTotal ? Math.ceil(p.milkTotal / cap) : 0;
   p.sugarTsp = r.instant ? 0 : SWEET[S.sweet] * n;
@@ -215,7 +256,7 @@ function plan(r){
   p.ice = (r.ice || 0) * n;
   p.instantTbsp = r.instant ? Math.max(2, r.instant * n) : 0;
   p.hotWaterTotal = p.waterPer * n;
-  // Time: proti brew ~8 min + majhe 3 min thanda/refill, + 4 min prep
+  // Time: ~8 min per brew + 3 min cool/refill between brews, + 4 min prep
   p.minutes = r.instant ? 6 + Math.ceil(n/2) : p.brews * 8 + Math.max(0, p.brews - 1) * 3 + 4 + (p.frothBatches > 1 ? p.frothBatches - 1 : 0);
   return p;
 }
@@ -224,195 +265,196 @@ function buildSteps(r, p){
   const s = [];
   const src = coffeeSource();
   if (r.instant){
-    s.push({ t:"Dalgona cream banao", d:`Pitcher e ${p.instantTbsp} tbsp instant coffee + ${p.instantTbsp} tbsp chini + ${p.instantTbsp} tbsp gorom pani nao. Shob shoman shoman.` });
-    s.push({ t:"Frother diye whip koro", d:"FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.", timer:180 });
-    s.push({ t:"Glass ready koro", d:`Proti glass e ${r.ice} ta borof, ${p.milkPer} ml thanda dudh. Mishti beshi chaile dudhe ektu chini aage gholao.` });
-    s.push({ t:"Upore cream dao", d:"Chamuch diye dalgona cream dudher upor rakho. Serve korar shomoy mix kore khabe." });
+    s.push({ t:"Make the coffee cream", d:`In the pitcher: ${p.instantTbsp} tbsp instant coffee, ${p.instantTbsp} tbsp sugar and ${p.instantTbsp} tbsp hot water. Equal amounts of each.` });
+    s.push({ t:"Whip it with the frother", d:"FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.", timer:180 });
+    s.push({ t:"Fill the glasses", d:`${r.ice} ice cubes and ${p.milkPer} ml cold milk in each glass. For extra sweetness, stir a little sugar into the milk first.` });
+    s.push({ t:"Spoon the cream on top", d:"Spoon the whipped coffee over the milk. Stir it in before drinking." });
     return s;
   }
   if (src === "beans"){
-    s.push({ t:`Beans grind koro: ${p.grams} g (~${p.tbsp} tbsp)`, d:`${roast().lbl} roast: 3-4 second er pulse, ${roast().pulse} Majhe majhe grinder jhakao. Target: table salt er moto mihi. Powder er moto mihi hole moka te tita hobe ar chhakni bondho hoye jabe.` });
+    s.push({ t:`Grind the beans: ${p.grams} g (about ${p.tbsp} tbsp)`, d:`${roast().lbl} roast: short 3-4 second pulses, ${roast().pulse} Shake the grinder between pulses. Aim for the texture of table salt. Powder-fine makes moka coffee bitter and can clog the filter.` });
   } else {
-    s.push({ t:`Guro coffee mepe nao: ${p.grams} g (~${p.tbsp} tbsp)`, d:"Pre-ground coffee taratari flavor haray. Packet bhalo kore bondho rakho." });
+    s.push({ t:`Measure the ground coffee: ${p.grams} g (about ${p.tbsp} tbsp)`, d:"Pre-ground coffee loses flavour fast. Keep the packet sealed tight." });
   }
   const hotWater = p.brews * S.mokaWater + p.hotWaterTotal;
-  s.push({ t:`Kettle e ~${hotWater} ml pani gorom koro`, d:`${roast().water} Moka te gorom pani dile coffee pora/tita hoy na, karon pot chula te kom shomoy thake.` });
+  s.push({ t:`Heat about ${hotWater} ml water in the kettle`, d:`${roast().water} Starting with hot water means the pot spends less time on the stove, so the coffee doesn't burn or turn bitter.` });
   if ((r.milkMode === "hot" || r.milkMode === "boil") && p.milkTotal){
-    s.push({ t:`Ekshathe dudh gorom koro: ${p.milkTotal} ml`, d: r.milkMode === "boil"
-      ? "Deshi style: dudh ekbar fotiye nao, tarpor anch komao. Chini ekhoni dudhe dite paro."
-      : "Dhoa uthbe, kinar e choto bubble, kintu futbe NA (~65°C). Beshi gorom hole foam hoy na ar dudher mishti bhab chole jay." });
+    s.push({ t:`Heat all the milk at once: ${p.milkTotal} ml`, d: r.milkMode === "boil"
+      ? "Bring the milk to a boil once, then turn the heat down. You can add the sugar to the milk now."
+      : "Steaming, with small bubbles at the edge, but NOT boiling (about 65°C). Too hot and it won't foam, and it loses its sweetness." });
   }
-  const multi = p.brews > 1 ? ` (Brew 1 of ${p.brews})` : "";
-  s.push({ t:`Moka bottom e gorom pani dhalo${multi}`, d:`Safety valve er thik niche porjonto (~${S.mokaWater} ml). Valve dubbe na. Bottom gorom, kapor diye dhoro.` });
-  s.push({ t:`Basket e ${S.mokaCoffee} g coffee`, d:"Bhore level koro, chap dio NA (tamp korbe na). Rim er guro mucche felo, na hole leak korbe." });
-  s.push({ t:`Pot jora lagao, ${roast().heat} anche bosao`, d:"Kapor diye dhore shokto kore pyach dao. Dhakna khola rakho jate dekhte paro." });
-  s.push({ t:"Coffee ber hote dekho", d:`Modhu er moto dhire dhara ashbe. Jokhon rong halka holud hoye jabe ba gurgle shobdo shuru hobe, SHATHE SHATHE namao. Shesh er pani ta tita. ${roast().pull}`, timer:300 });
-  s.push({ t:"Bottom thanda panir niche 5 sec", d:"Extraction bondho hoye jay, tita bhab ashe na. Coffee ekta gorom jug/flask e dhele nara dao." });
+  const multi = p.brews > 1 ? ` (brew 1 of ${p.brews})` : "";
+  s.push({ t:`Pour hot water into the moka base${multi}`, d:`Fill to just below the safety valve (about ${S.mokaWater} ml). Never cover the valve. The base is hot: hold it with a cloth.` });
+  s.push({ t:`Put ${S.mokaCoffee} g coffee in the filter basket`, d:"Fill it level. Do NOT press it down. Wipe any grounds off the rim, or it will leak." });
+  s.push({ t:`Screw the pot together, put it on ${roast().heat} heat`, d:"Hold the base with a cloth and screw it on tight. Leave the lid open so you can watch." });
+  s.push({ t:"Watch the coffee come out", d:`It should flow slowly, like honey. As soon as it turns pale yellow or starts gurgling, take it off the heat RIGHT AWAY. The last bit is bitter. ${roast().pull}`, timer:300 });
+  s.push({ t:"Cool the base under cold water for 5 seconds", d:"This stops the brewing so it doesn't turn bitter. Pour the coffee into a warm jug or flask and stir." });
   if (p.brews > 1){
-    s.push({ t:`Aro ${p.brews - 1} bar brew koro`, d:"Pot thanda koro, puraton guro fele dhuye nao, abar 'Moka bottom e gorom pani' step theke. Ager coffee dhakna diye flask e rakho. Ei faanke dudh ready koro." });
+    s.push({ t:`Brew ${plural(p.brews - 1, "more time", "more times")}`, d:"Cool the pot, throw out the old grounds and rinse it, then repeat from \"Pour hot water into the moka base\". Keep the earlier coffee covered in the flask. Get the milk ready meanwhile." });
   }
   if (r.froth !== "none" && p.milkTotal){
-    const bt = p.frothBatches > 1 ? ` (${p.frothBatches} batch, proti batch e max ${p.frothCap} ml)` : "";
+    const bt = p.frothBatches > 1 ? ` (${p.frothBatches} batches, max ${p.frothCap} ml each)` : "";
     s.push(r.froth === "thick"
-      ? { t:`Dudh froth koro${bt}`, d:"Pitcher e gorom dudh, 150 dag porjonto (er beshi na). Frother FAST speed e (button double-click kore speed bodlao). Dudher uporer dike rekhe 15-20 sec chalao (bataash dhuke foam hobe), tarpor niche namiye 10 sec. Foam double hobe. Table e 2-3 bar thuk thuk kore boro bubble bhango.", timer:30 }
-      : { t:`Dudh froth koro${bt}`, d:"Pitcher e 150 ar 250 dag er majhamajhi porjonto dudh. Frother MEDIUM speed, puro niche dubiye 10-15 sec. Amra silky, choto bubble er foam chai, ghono na. Pitcher ghuriye mix koro.", timer:15 });
+      ? { t:`Froth the milk${bt}`, d:"Hot milk in the pitcher, up to the 150 mark (no more). Frother on FAST (double-click the button to change speed). Hold it near the top of the milk for 15-20 seconds to pull in air, then lower it for 10 seconds. The foam will double. Tap the pitcher on the counter 2-3 times to pop big bubbles.", timer:30 }
+      : { t:`Froth the milk${bt}`, d:"Milk in the pitcher, between the 150 and 250 marks. Frother on MEDIUM, fully under the surface, 10-15 seconds. You want silky, tiny bubbles, not stiff foam. Swirl the pitcher to mix.", timer:15 });
   }
   const sw = SWEET[S.sweet];
-  const sugarLine = sw ? ` ${sw} chamuch chini proti cup e, coffee gorom thaktei gholao.` : "";
+  const sugarLine = sw ? ` Stir ${plural(sw, "teaspoon", "teaspoons")} of sugar into each cup while the coffee is hot.` : "";
   switch (r.id){
-    case "moka": s.push({ t:`Serve: proti cup e ${p.coffeePer} ml`, d:`Choto cup e dhalo.${sugarLine}` }); break;
-    case "americano": s.push({ t:"Serve", d:`Cup e age ${p.waterPer} ml gorom pani, tarpor ${p.coffeePer} ml coffee.${sugarLine}` }); break;
-    case "cappuccino": s.push({ t:"Assemble", d:`Cup e ${p.coffeePer} ml coffee.${sugarLine} Chamuch diye foam atkiye dudh dhalo, sheshe foam upore tule dao. Upore cocoa chhitate paro.` }); break;
+    case "moka": s.push({ t:`Serve ${p.coffeePer} ml per cup`, d:`Pour into small cups.${sugarLine}` }); break;
+    case "americano": s.push({ t:"Serve", d:`Pour ${p.waterPer} ml hot water into each cup first, then ${p.coffeePer} ml coffee.${sugarLine}` }); break;
+    case "cappuccino": s.push({ t:"Put it together", d:`${p.coffeePer} ml coffee in each cup.${sugarLine} Hold back the foam with a spoon and pour the milk, then spoon the foam on top. Dust with cocoa if you like.` }); break;
     case "latte":
-    case "flatwhite": s.push({ t:"Assemble", d:`Cup e ${p.coffeePer} ml coffee.${sugarLine} Tarpor ${p.milkPer} ml froth kora dudh dhire dhire, majhkhane theke dhalo.` }); break;
-    case "mocha": s.push({ t:"Chocolate paste + assemble", d:`Proti cup e ${r.cocoa} tbsp cocoa + chini + 2 chamuch gorom coffee mishiye paste banao (dola thakbe na). Tarpor baki coffee, tarpor ${p.milkPer} ml dudh.` }); break;
-    case "doodh": s.push({ t:"Mix kore serve", d:`Gorom dudhe coffee dhalo (proti cup e ${p.coffeePer} ml coffee, ${p.milkPer} ml dudh).${sugarLine}${S.inv.condensed ? " Condensed milk 1 chamuch dile ar o creamy hobe." : ""} Upore halka foam.` }); break;
+    case "flatwhite": s.push({ t:"Put it together", d:`${p.coffeePer} ml coffee in each cup.${sugarLine} Then pour ${p.milkPer} ml frothed milk slowly into the middle.` }); break;
+    case "mocha": s.push({ t:"Make the chocolate paste, then put it together", d:`In each cup, mix ${r.cocoa} tbsp cocoa, the sugar and 2 spoons of hot coffee into a smooth paste (no lumps). Then add the rest of the coffee, then ${p.milkPer} ml milk.` }); break;
+    case "doodh": s.push({ t:"Mix and serve", d:`Pour the coffee into the hot milk (${p.coffeePer} ml coffee and ${p.milkPer} ml milk per cup).${sugarLine}${S.inv.condensed ? " A spoon of condensed milk makes it extra creamy." : ""} A little foam on top.` }); break;
     case "icedlatte":
-    case "icedmocha": s.push({ t:"Glass e assemble", d:`${r.cocoa ? "Gorom coffee te cocoa ar chini gholao. " : (sw ? "Chini gorom coffee te AGE gholao, thanda te mishe na. " : "")}Glass e ${r.ice} ta borof, ${p.coffeePer} ml coffee, tarpor ${p.milkPer} ml thanda dudh. Coffee ektu thanda kore nile borof kom gole.` }); break;
+    case "icedmocha": s.push({ t:"Build it in the glass", d:`${r.cocoa ? "Stir the cocoa and sugar into the hot coffee. " : (sw ? "Stir the sugar into the hot coffee FIRST, it won't dissolve in cold. " : "")}${r.ice} ice cubes in each glass, ${p.coffeePer} ml coffee, then ${p.milkPer} ml cold milk. Let the coffee cool a bit first so the ice melts less.` }); break;
   }
   return s;
 }
 
-/* ---------- Render: Banao ---------- */
+/* ---------- Render: Make ---------- */
 const $ = (sel, el=document) => el.querySelector(sel);
 function seg(name, opts, cur){
   return `<div class="seg" data-seg="${name}">${Object.entries(opts).map(([k,v]) => `<button data-v="${k}" class="${k===cur?"on":""}">${v}</button>`).join("")}</div>`;
 }
+const head = (n, txt) => `<h2><span class="num">${n}</span>${txt}</h2>`;
 function renderMake(){
   const r = RECIPES.find(x => x.id === S.drink) || RECIPES[0];
   const miss = missing(r), p = plan(r), src = coffeeSource();
   const canBoth = S.inv.beans && grinderOk() && S.inv.ground;
-  let h = `<h2>1. Ki khabo?</h2><div class="grid">` + RECIPES.map(x => {
+  let h = head("01", "Choose a drink") + `<div class="grid">` + RECIPES.map(x => {
     const m = missing(x);
-    return `<button class="drink ${x.id===r.id?"on":""}" data-drink="${x.id}"><div class="e">${x.e}</div><b>${x.name}</b><small>${x.desc}</small>
-      <span class="badge ${m.length?"b-no":"b-ok"}">${m.length?"Lagbe: "+m.length+" jinish":"Ekhon banano jabe"}</span></button>`;
+    return `<button class="drink ${x.id===r.id?"on":""}" data-drink="${x.id}">${cup(x)}<b>${x.name}</b><small>${x.desc}</small>
+      <span class="state ${m.length?"st-no":"st-ok"}">${m.length?"Missing "+plural(m.length,"item","items"):"Ready to make"}</span></button>`;
   }).join("") + `</div>`;
 
-  h += `<h2>2. Koto jon, kemon?</h2><div class="card">
-    <div class="row"><label class="lbl" style="margin:0">Koto jon</label>
-      <div class="stepper"><button data-ppl="-1" aria-label="kom">−</button><output>${S.people}</output><button data-ppl="1" aria-label="beshi">+</button></div></div>
-    ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Coffee er strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
-    ${r.coffee ? `<div style="margin-top:14px"><label class="lbl">Beans er roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
-    ${r.instant ? "" : `<div style="margin-top:14px"><label class="lbl">Mishti</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
-    ${canBoth && r.coffee ? `<div style="margin-top:14px"><label class="lbl">Coffee source</label>${seg("source", {auto:"Auto",beans:"Fresh grind",ground:"Guro coffee"}, S.source)}</div>` : ""}
+  h += head("02", "How many, and how?") + `<div class="card">
+    <div class="field row"><label class="lbl" style="margin:0">People</label>
+      <div class="stepper"><button data-ppl="-1" aria-label="Fewer people">−</button><output>${S.people}</output><button data-ppl="1" aria-label="More people">+</button></div></div>
+    ${r.instant ? "" : `<div class="field"><label class="lbl">Strength</label>${seg("strength", STRENGTH_LBL, S.strength)}</div>`}
+    ${r.coffee ? `<div class="field"><label class="lbl">Bean roast</label>${seg("roast", Object.fromEntries(Object.entries(ROASTS).map(([k,v]) => [k,v.lbl])), S.roast)}</div>` : ""}
+    ${r.instant ? "" : `<div class="field"><label class="lbl">Sugar</label>${seg("sweet", SWEET_LBL, S.sweet)}</div>`}
+    ${canBoth && r.coffee ? `<div class="field"><label class="lbl">Which coffee</label>${seg("source", {auto:"Auto",beans:"Grind beans",ground:"Ground coffee"}, S.source)}</div>` : ""}
   </div>`;
 
-  h += `<h2>3. ${r.e} ${r.name} × ${S.people} jon</h2>`;
+  h += head("03", `${r.name} for ${plural(S.people, "person", "people")}`);
   if (miss.length){
-    h += `<div class="alert a-bad"><b>Ekhon banano jabe na.</b> Lagbe: ${miss.join(", ")}.<br><span class="small">"Ki Ache" tab e giye update koro, ba onno drink bachai koro.</span></div>`;
+    h += `<div class="note n-bad"><b>Can't make this yet.</b> You need: ${miss.join(", ")}. Update the Pantry tab, or pick another drink.</div>`;
   }
   if (r.coffee && S.grinder !== "ok" && S.inv.beans){
-    h += `<div class="alert a-warn"><b>Grinder check hoy nai.</b> Lobon-pani lagar por grinder chalano risky (short circuit, mortcha). "Tips" tab e check list ache. Totokkhon guro coffee use koro.</div>`;
+    h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Tips. Use ground coffee until then.</div>`;
   }
   if (p.brews >= 3){
-    h += `<div class="alert a-warn"><b>${p.brews} ta moka brew = ~${p.minutes} min.</b> Ekta pot ekbar e ${p.yieldPerBrew} ml er beshi dey na. Shomoy bachate: strength "Halka" koro, ba ordhek jon ke Americano dao.</div>`;
+    h += `<div class="note n-warn"><b>${p.brews} moka brews, about ${p.minutes} minutes.</b> One pot makes at most ${p.yieldPerBrew} ml at a time. To save time, pick "Mild" strength, or give half the group an Americano.</div>`;
   }
   if (r.coffee){
     const ro = roast(), txt = BLACK.includes(r.id) ? ro.black : ro.milk;
-    h += `<div class="alert a-ok"><b>${ro.lbl} roast × ${r.name}:</b> ${txt}</div>`;
+    h += `<div class="note n-tip"><b>${ro.lbl} roast in a ${r.name}</b>${txt}</div>`;
   }
   const st = [];
   if (r.instant){
-    st.push([p.instantTbsp+" tbsp","Instant coffee"],[p.instantTbsp+" tbsp","Chini"],[p.instantTbsp+" tbsp","Gorom pani"]);
+    st.push([p.instantTbsp+" tbsp","Instant coffee"],[p.instantTbsp+" tbsp","Sugar"],[p.instantTbsp+" tbsp","Hot water"]);
   } else {
-    st.push([p.brews+" bar","Moka brew"],[p.grams+" g","Coffee (~"+p.tbsp+" tbsp)"],[p.coffeeTotal+" ml","Mot coffee"]);
-    if (p.hotWaterTotal) st.push([p.hotWaterTotal+" ml","Extra gorom pani"]);
+    st.push([p.brews+"×","Moka brews"],[p.grams+" g","Coffee (about "+p.tbsp+" tbsp)"],[p.coffeeTotal+" ml","Brewed coffee"]);
+    if (p.hotWaterTotal) st.push([p.hotWaterTotal+" ml","Extra hot water"]);
   }
-  if (p.milkTotal) st.push([p.milkTotal+" ml","Dudh"]);
-  if (p.frothBatches) st.push([p.frothBatches+" batch","Froth (350ml pitcher)"]);
-  if (p.sugarTsp) st.push([p.sugarTsp+" chamuch","Chini"]);
+  if (p.milkTotal) st.push([p.milkTotal+" ml","Milk"]);
+  if (p.frothBatches) st.push([p.frothBatches+"×","Frothing batches"]);
+  if (p.sugarTsp) st.push([p.sugarTsp+" tsp","Sugar"]);
   if (p.cocoaTbsp) st.push([p.cocoaTbsp+" tbsp","Cocoa"]);
-  if (p.ice) st.push([p.ice+" ta","Borof"]);
-  st.push(["~"+p.minutes+" min","Mot shomoy"]);
+  if (p.ice) st.push([p.ice,"Ice cubes"]);
+  st.push(["~"+p.minutes+" min","Total time"]);
   h += `<div class="card"><div class="stats">${st.map(([v,k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
-    ${r.coffee ? `<p class="small muted" style="margin:10px 0 0">Proti jon: ${p.coffeePer} ml coffee${p.milkPer?`, ${p.milkPer} ml dudh`:""}${p.waterPer?`, ${p.waterPer} ml pani`:""}. Source: ${src==="beans"?"fresh grind":src==="ground"?"guro coffee":"nai"}.</p>` : ""}</div>`;
+    ${r.coffee ? `<p class="small muted" style="margin:14px 0 0">Per person: ${p.coffeePer} ml coffee${p.milkPer?`, ${p.milkPer} ml milk`:""}${p.waterPer?`, ${p.waterPer} ml water`:""}. Using: ${src==="beans"?"freshly ground beans":src==="ground"?"ground coffee":"none available"}.</p>` : ""}</div>`;
 
   const steps = buildSteps(r, p);
-  h += `<h2>4. Step by step</h2><div class="card"><p class="small muted" style="margin:0 0 4px">Number e tap korle step "done" hobe.</p><ol class="steps">` +
-    steps.map((x,i) => `<li><div class="n" data-done>${i+1}</div><div class="t"><b>${x.t}</b><span class="small">${x.d}</span>${x.timer?`<br><button class="tbtn" data-timer="${x.timer}">⏱ ${fmt(x.timer)} timer</button>`:""}</div></li>`).join("") +
+  h += head("04", "Step by step") + `<div class="card"><p class="small muted" style="margin:0 0 4px">Tap a number to mark the step done.</p><ol class="steps">` +
+    steps.map((x,i) => `<li><div class="n" data-done role="button" aria-label="Mark step ${i+1} done">${i+1}</div><div class="t"><b>${x.t}</b><span>${x.d}</span>${x.timer?`<br><button class="tbtn" data-timer="${x.timer}">Start ${fmt(x.timer)} timer</button>`:""}</div></li>`).join("") +
     `</ol></div>`;
   $("#tab-make").innerHTML = h;
 }
 
-/* ---------- Render: Ki Ache ---------- */
+/* ---------- Render: Pantry ---------- */
 function renderInv(){
-  const g = {ok:"Thik ache ✅", check:"Check lagbe ⚠️", broken:"Noshto ❌"};
+  const g = {ok:"Working", check:"Needs checking", broken:"Broken"};
   let h = `<h2>Equipment</h2><div class="card">
-    <div class="toggle"><div>☕ <b>Moka pot</b><small>6-cup stovetop, ~300 ml. Rubber ring er shamne-pichon ache, ulta lagabe na.</small></div><span class="badge b-ok">Ache</span></div>
-    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Blade grinder (NS-2026, 220V). Kono shomossha hole ekhane "Check lagbe" dao.</small></div>
-      <select id="grinder">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
-    <div class="toggle"><div>🥛 <b>Milk pitcher</b><small>Stainless steel, bhitore 150 / 250 / 350 ml dag</small></div><span class="badge b-ok">${S.pitcher} ml</span></div>
-    <div class="toggle"><div>🌀 <b>Enjoy milk frother</b><small>3 speed (double-click e bodlay), USB-C. Fast charger dio na.</small></div><span class="badge b-ok">Ache</span></div>
+    <div class="toggle"><div><b>Moka pot</b><small>6-cup stovetop, about 300 ml. The rubber ring has a front and back: don't fit it upside down.</small></div><span class="tag">Have it</span></div>
+    <div class="toggle"><div><b>Electric grinder</b><small>Blade grinder (NS-2026, 220V). If anything seems wrong, set it to "Needs checking".</small></div>
+      <select id="grinder" aria-label="Grinder status">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
+    <div class="toggle"><div><b>Milk pitcher</b><small>Stainless steel, with 150 / 250 / 350 ml marks inside</small></div><span class="tag">${S.pitcher} ml</span></div>
+    <div class="toggle"><div><b>Enjoy milk frother</b><small>3 speeds (double-click to change), USB-C. Don't use a fast charger.</small></div><span class="tag">Have it</span></div>
   </div>
-  <h2>Ghore ki ache?</h2><div class="card">` +
+  <h2>What's in the kitchen?</h2><div class="card">` +
   Object.entries(INV_LBL).map(([k,[l,d]]) => `<div class="toggle"><div><b>${l}</b>${d?`<small>${d}</small>`:""}</div>
-    <label class="sw"><input type="checkbox" data-inv="${k}" ${S.inv[k]?"checked":""}><i></i></label></div>`).join("") +
+    <label class="sw"><input type="checkbox" data-inv="${k}" ${S.inv[k]?"checked":""} aria-label="${l}"><i></i></label></div>`).join("") +
   `</div>
-  <h2>Moka calibration</h2><div class="card">
-    <p class="small muted" style="margin-top:0">Prothom bar ekta measuring cup diye mepe nao, tarpor ekhane boshao. App er shob hishab eta theke.</p>
-    <div class="toggle"><div><b>Bottom e koto pani</b><small>Valve er thik niche porjonto, ml</small></div><input type="number" min="50" max="600" data-set="mokaWater" value="${S.mokaWater}"></div>
-    <div class="toggle"><div><b>Basket e koto coffee</b><small>Level kore bhorle, gram</small></div><input type="number" min="5" max="60" data-set="mokaCoffee" value="${S.mokaCoffee}"></div>
-    <div class="toggle"><div><b>Koto % coffee ber hoy</b><small>Shadharonoto 80-90%</small></div><input type="number" min="50" max="100" data-set="yieldPct" value="${S.yieldPct}"></div>
+  <h2>Moka pot settings</h2><div class="card">
+    <p class="small muted" style="margin-top:0">Measure once with a measuring cup and enter the numbers here. Every amount in the app is based on these.</p>
+    <div class="toggle"><div><b>Water in the base</b><small>Up to just below the valve, ml</small></div><input type="number" min="50" max="600" data-set="mokaWater" value="${S.mokaWater}"></div>
+    <div class="toggle"><div><b>Coffee in the basket</b><small>Filled level, grams</small></div><input type="number" min="5" max="60" data-set="mokaCoffee" value="${S.mokaCoffee}"></div>
+    <div class="toggle"><div><b>Coffee yield</b><small>% of the water that comes out as coffee, usually 80-90</small></div><input type="number" min="50" max="100" data-set="yieldPct" value="${S.yieldPct}"></div>
     <div class="toggle"><div><b>Pitcher size</b><small>ml</small></div><input type="number" min="150" max="1000" data-set="pitcher" value="${S.pitcher}"></div>
   </div>
-  <button class="btn" id="reset" style="background:var(--soft);color:var(--ink)">Shob default e ferot nao</button>`;
+  <button class="btn" id="reset">Reset everything to defaults</button>`;
   $("#tab-inv").innerHTML = h;
 }
 
 /* ---------- Render: Tips ---------- */
 function renderTips(){
   $("#tab-tips").innerHTML = `
-  <h2>Best coffee er 5 ta niyom</h2>
+  <h2>5 rules for great coffee</h2>
   <div class="card tips"><ul>
-    <li><b>Fresh beans, fresh grind.</b> Grind korar 15 min er moddhe brew koro. Beans air-tight jar e, rodd theke dure, fridge e na.</li>
-    <li><b>Moka te gorom pani.</b> Thanda pani dile pot onek kkhon chula te thake, coffee pure tita hoy.</li>
-    <li><b>Tamp korbe na.</b> Basket shudhu level kore bhoro. Chap dile pressure beshi, tita ar safety risk.</li>
-    <li><b>Shesh e namao.</b> Gurgle shobdo ba halka rong dekhlei namao. Shesh er dhara tai shob theke tita.</li>
-    <li><b>Dudh futabe na</b> (latte/cappuccino te). 60-65°C: hath diye pitcher 3 sec er beshi dhora jay na, emon.</li>
+    <li><b>Fresh beans, fresh grind.</b> Brew within 15 minutes of grinding. Keep beans in an airtight jar, out of the sun, not in the fridge.</li>
+    <li><b>Hot water in the moka pot.</b> Cold water keeps the pot on the stove too long and burns the coffee.</li>
+    <li><b>Don't press the coffee down.</b> Just fill the basket level. Pressing it raises the pressure: bitter, and a safety risk.</li>
+    <li><b>Take it off early.</b> Remove it as soon as you hear gurgling or see the stream go pale. The last part is the most bitter.</li>
+    <li><b>Don't boil the milk</b> for lattes and cappuccinos. Aim for 60-65°C: too hot to hold the pitcher for more than 3 seconds.</li>
   </ul></div>
 
-  <h2>⚠️ Grinder safety check</h2>
+  <h2>Grinder safety check</h2>
   <div class="card tips">
-    <p style="margin-top:0">Lobon-pani lagle electric jinish e short circuit ar mortcha hote pare. Ei check na kore plug e lagabe na:</p>
+    <p style="margin-top:0">Salt water can cause short circuits and rust in electrical things. Don't plug it in until you've done this:</p>
     <ul>
-      <li>Plug khule, blade/chamber tissue diye mucho. Lobon er shada daag thakle ektu bheja kapor diye mucho, tarpor shukano kapor.</li>
-      <li>Kom koreo 48 ghonta shukno, batash ache emon jaygay rakho. Motor er vent e pani dhukle aro beshi shomoy.</li>
-      <li>Cord, plug er pin e kalo/sobuj daag (mortcha) ache kina dekho. Thakle chalabe na.</li>
-      <li>Prothom bar khali chalao 3 sec. Pora gondho, spark, ajob shobdo hole shathe shathe bondho, ar use korbe na.</li>
-      <li>Tarpor alpo beans (10 g) grind kore fele dao. Er por normal use.</li>
+      <li>Unplug it and wipe the blade and chamber with a tissue. If there are white salt marks, wipe with a slightly damp cloth, then a dry one.</li>
+      <li>Leave it to dry for at least 48 hours somewhere airy. Longer if water got into the motor vents.</li>
+      <li>Check the cord and plug pins for black or green marks (corrosion). If you see any, don't use it.</li>
+      <li>Run it empty for 3 seconds first. If you smell burning, see sparks or hear odd noises, stop immediately and don't use it again.</li>
+      <li>Then grind a small amount of beans (10 g) and throw it away. After that, use it as normal.</li>
     </ul>
-    <p class="small muted">Sob thik thakle "Ki Ache" tab e grinder "Thik ache" koro.</p>
+    <p class="small muted">If everything is fine, set the grinder to "Working" in the Pantry tab.</p>
   </div>
 
-  <h2>Roast chinbo kivabe?</h2>
+  <h2>How to tell the roast</h2>
   <div class="card tips"><ul>
-    <li><b>Light:</b> halka badami (dalchini rong), shukno, kono tel nai. Packet e "Light", "Breakfast", "Filter".</li>
-    <li><b>Medium:</b> milk chocolate er moto badami, shukno. Packet e "Medium", "House blend".</li>
-    <li><b>Medium-Dark:</b> dark chocolate rong, ekhane okhane tel er daag. Packet e "Full City", "Vienna".</li>
-    <li><b>Dark:</b> prai kalo, puro gaye tel chakchak kore. Packet e "Dark", "Espresso roast", "French", "Italian".</li>
-  </ul><p class="small muted" style="margin:6px 0 0">Moka pot + dudh er jonno sobcheye shohoj: Medium ba Medium-Dark. Roast bodlale app grind, pani, anch ar kokhon namabe shob bodle dey.</p></div>
+    <li><b>Light:</b> light brown (cinnamon coloured), dry, no oil. Packets say "Light", "Breakfast" or "Filter".</li>
+    <li><b>Medium:</b> milk-chocolate brown, dry. Packets say "Medium" or "House blend".</li>
+    <li><b>Medium-Dark:</b> dark-chocolate colour, a few oily spots. Packets say "Full City" or "Vienna".</li>
+    <li><b>Dark:</b> almost black and shiny with oil all over. Packets say "Dark", "Espresso roast", "French" or "Italian".</li>
+  </ul><p class="small muted" style="margin:8px 0 0">Easiest for a moka pot with milk: Medium or Medium-Dark. When you change the roast, the app adjusts grind time, water temperature, heat and when to take it off.</p></div>
 
   <h2>Grind size</h2>
-  <div class="card tips"><p style="margin:0">Moka er jonno: <b>table salt er moto</b>. Espresso er cheye mota, filter er cheye mihi. Amader ta blade grinder (4 dhar er cross blade), tai guro ekdom shoman hoy na. Choto choto pulse dao, majhe grinder ta jhakao, ar ekbare 30 g er beshi bhoro na. Lomba shomoy chalale blade gorom hoye coffee er flavor nosto kore. Beshi powder hole coffee tita ar ghola hobe.</p></div>
+  <div class="card tips"><p style="margin:0">For a moka pot: <b>like table salt</b>. Coarser than espresso, finer than filter. Ours is a blade grinder (4-point cross blade), so the grind is never perfectly even. Use short pulses, shake it in between, and don't fill it with more than 30 g at once. Running it too long heats the blade and ruins the flavour. Too much powder makes the coffee bitter and muddy.</p></div>
 
   <h2>Frother tips</h2>
   <div class="card tips"><ul>
-    <li>Frother dudh <b>gorom kore na</b>, shudhu foam banay. Age dudh gorom koro.</li>
-    <li>Pitcher er 40% er beshi dudh nio na cappuccino te, foam double hoye upche porbe.</li>
-    <li>Full cream dudh = shobcheye bhalo foam. Low fat e foam beshi kintu pani pani.</li>
-    <li>Frother dudhe dubiye tarpor on koro, on kore dubale chhitbe.</li>
-    <li>Speed: ghono foam (cappuccino, dalgona) = FAST. Silky foam (latte, flat white) = MEDIUM. Single click on, double-click e speed bodlay.</li>
-    <li>Charge: normal 5V phone charger, 2 ghontar beshi na. Fast charger e noshto hote pare. Use na korleo 3 mash e ekbar charge dao.</li>
-    <li>Dhoar por rod upore kore rakho na, pani bhitore dhuke jabe.</li>
-    <li>Dalgona whip: frother diye 2-4 min, hath diye 10 min er kaj.</li>
+    <li>The frother <b>doesn't heat milk</b>, it only makes foam. Heat the milk first.</li>
+    <li>For cappuccino, don't fill the pitcher more than 40%. The foam doubles and will overflow.</li>
+    <li>Full-cream milk makes the best foam. Low-fat makes more foam, but it's watery.</li>
+    <li>Put the frother in the milk before switching it on, or it will splash.</li>
+    <li>Speed: thick foam (cappuccino, whipped coffee) = FAST. Silky foam (latte, flat white) = MEDIUM. Click once to turn on, double-click to change speed.</li>
+    <li>Charging: a normal 5V phone charger, no more than 2 hours. A fast charger can damage it. Charge it every 3 months even if unused.</li>
+    <li>After washing, don't store it with the whisk pointing up, or water runs inside.</li>
+    <li>Whipped coffee: 2-4 minutes with the frother, versus 10 minutes by hand.</li>
   </ul></div>
 
-  <h2>Notun moka pot?</h2>
-  <div class="card tips"><p style="margin:0">Box er niyom: prothom use er age <b>3 bar shudhu pani diye</b> brew koro, fele dao. Factory er gondho/tel chole jabe. Rubber ring er shamne-pichon ache: ulta lagale leak korbe.</p></div>
+  <h2>New moka pot?</h2>
+  <div class="card tips"><p style="margin:0">From the box: before first use, <b>brew 3 times with just water</b> and throw it away. That removes the factory smell and oil. The rubber ring has a front and back: fitted upside down, it leaks.</p></div>
 
-  <h2>Moka porishkar</h2>
-  <div class="card tips"><p style="margin:0">Shudhu gorom pani diye dhuo, <b>saban dio na</b> (aluminium hole swad noshto hoy). Puro shukiye tarpor jora lagao. Rubber gasket mashe ekbar check koro.</p></div>
-  <p class="small muted" style="text-align:center;margin:24px 0">Coffee Ghor · barir jonno banano 🤎</p>`;
+  <h2>Cleaning the moka pot</h2>
+  <div class="card tips"><p style="margin:0">Wash with hot water only, <b>no soap</b> (on aluminium it ruins the taste). Let it dry completely before screwing it together. Check the rubber gasket once a month.</p></div>
+  <footer>Coffee Ghor · made for home</footer>`;
 }
 
 /* ---------- Timer ---------- */
@@ -423,7 +465,7 @@ function startTimer(sec){
   const el = $("#timer"); el.classList.add("show"); el.classList.remove("ding"); $("#tval").textContent = fmt(tLeft);
   tInt = setInterval(() => {
     tLeft--; $("#tval").textContent = fmt(Math.max(0,tLeft));
-    if (tLeft <= 0){ clearInterval(tInt); el.classList.add("ding"); $("#tval").textContent = "Shomoy shesh! Dekho ☕"; beep(); try{ navigator.vibrate && navigator.vibrate([300,150,300]); }catch(e){} }
+    if (tLeft <= 0){ clearInterval(tInt); el.classList.add("ding"); $("#tval").textContent = "Time's up! Check it"; beep(); try{ navigator.vibrate && navigator.vibrate([300,150,300]); }catch(e){} }
   }, 1000);
 }
 function beep(){
@@ -448,7 +490,7 @@ document.addEventListener("click", e => {
   if (sg && t.dataset.v){ S[sg.dataset.seg] = t.dataset.v; save(); renderMake(); return; }
   if (t.dataset.timer){ startTimer(+t.dataset.timer); return; }
   if (t.hasAttribute("data-done")){ t.closest("li").classList.toggle("done"); return; }
-  if (t.id === "reset" && confirm("Shob setting default e ferot jabe. Thik ache?")){ S = structuredClone(DEFAULTS); save(); renderAll(); }
+  if (t.id === "reset" && confirm("This resets all settings to the defaults. Continue?")){ S = structuredClone(DEFAULTS); save(); renderAll(); }
 });
 document.addEventListener("change", e => {
   const t = e.target;
