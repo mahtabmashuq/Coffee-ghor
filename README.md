@@ -14,3 +14,8 @@ Vercel project `coffee-ghor` is linked to this repo.
 ```
 npm i -D playwright && node tests/coffee-eval.js index.html
 ```
+
+`tests/spacing-check.js` walks every screen (setup, drinks, steps, rating, sheets, Pantry, Learn, quiz) at 375 and 430 px in light and dark mode and reports text that touches or spills past the edge of its box.
+```
+node tests/spacing-check.js index.html
+```

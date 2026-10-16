@@ -102,6 +102,7 @@ h2.sm{font-size:18px;margin:24px 0 8px}
 .seg.five{grid-template-columns:repeat(6,1fr)}
 .seg.five button{grid-column:span 2;font-size:14px}
 .seg[style*="--n:4"] button{font-size:14px}
+@media (max-width:390px){.seg[style*="--n:4"] button,.seg.five button{font-size:13px}}
 .seg.five button:nth-child(n+4){grid-column:span 3}
 label.lbl{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:700}
 label.lbl .ic{width:16px;height:16px}
@@ -345,7 +346,9 @@ input[type=number],select{font:inherit;font-size:16px;min-height:44px;padding:0 
 .opt .radio .ic{width:14px;height:14px;stroke-width:3}
 .opt.on{border-color:var(--brand);background:var(--soft);box-shadow:inset 0 0 0 1px var(--brand)}
 .opt.on .radio{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
-.onb .need{margin-top:16px}
+.onb .card{margin-top:16px}
+/* a list that is also a card keeps the card's inner padding */
+.card.need,.card.log ul{padding-left:16px;padding-right:16px}
 .onb-go{margin-top:20px}
 .seg.pad{margin:2px 0 10px}
 .toggle.eq{border-bottom:0;padding-bottom:6px}
@@ -354,7 +357,7 @@ input[type=number],select{font:inherit;font-size:16px;min-height:44px;padding:0 
 .nextmove{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:10px 12px;border-radius:12px;border:0;background:color-mix(in oklch,var(--brand-ink) 14%,transparent);color:inherit;text-align:left;cursor:pointer;min-height:48px}
 .nextmove span:first-child{flex:1;font-weight:700;font-size:15px}
 .nextmove small{display:block;font-weight:400;font-size:12px;opacity:.8}
-.nextmove .xp{font-weight:700;font-size:13px;background:var(--gold);color:oklch(22% .03 45);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.nextmove .xp{font-weight:700;font-size:13px;background:var(--gold);color:oklch(22% .03 45);border-radius:99px;padding:5px 12px;white-space:nowrap}
 .path{list-style:none;margin:0;padding:0;position:relative}
 .path li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;position:relative}
 .path li:not(:last-child)::after{content:"";position:absolute;left:17px;top:46px;bottom:-6px;width:2px;background:var(--line)}
@@ -364,7 +367,7 @@ input[type=number],select{font:inherit;font-size:16px;min-height:44px;padding:0 
 .path b{display:block;font-size:16px}
 .path small{display:block;font-size:13.5px;color:var(--muted);line-height:1.35}
 .path small.bonus{color:var(--ink);margin-top:3px}
-.path .xp{font-weight:700;font-size:14px;color:var(--brand);background:var(--soft);border-radius:99px;padding:3px 10px;white-space:nowrap;margin-top:6px;text-align:center}
+.path .xp{font-weight:700;font-size:14px;color:var(--brand);background:var(--soft);border-radius:99px;padding:5px 12px;white-space:nowrap;margin-top:6px;text-align:center}
 .path .xp small{display:inline;font-size:11px;color:var(--muted);margin-left:2px}
 .ladder{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .ladder li{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line)}
@@ -1278,7 +1281,7 @@ function paintOnboard(){
     <div class="tiles">${PITCHERS.map(v => `<button class="tile ${v === S.pitcher ? "on" : ""}" data-onb="pitcher" data-v="${v}"><b>${v} ml</b><small>${v <= 350 ? "Small" : v <= 600 ? "Medium" : "Large"}</small></button>`).join("")}</div>
     <p class="hint">Look for the size stamped on the bottom, or the highest mark inside. No pitcher? Pick 350 ml and use a tall mug.</p>`;
   if (i === 3) body = `<div class="art ok">${ic("check")}</div><h1 id="onb-h">You're all set</h1><p class="lead">Every recipe now fits your equipment.</p>
-    <ul class="need card"><li><span>Moka pot</span><b>${S.mokaSize}-cup · ${S.mokaWater} ml</b></li><li><span>Grinder</span><b>${GRINDERS[S.grinderType][1]}</b></li><li><span>Milk pitcher</span><b>${S.pitcher} ml</b></li></ul>
+    <div class="card"><ul class="need"><li><span>Moka pot</span><b>${S.mokaSize}-cup · ${S.mokaWater} ml</b></li><li><span>Grinder</span><b>${GRINDERS[S.grinderType][1]}</b></li><li><span>Milk pitcher</span><b>${S.pitcher} ml</b></li></ul></div>
     <p class="hint">You can change any of this later in Pantry.</p>`;
   el.innerHTML = `<div class="onb-in">${top}<div class="onb-body">${body}</div>
     <button class="btn primary onb-go" data-onb="${last ? "done" : "next"}">${last ? `${ic("cup")}Start making coffee` : `Continue${ic("next")}`}</button></div>`;
