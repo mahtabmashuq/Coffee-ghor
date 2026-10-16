@@ -116,10 +116,10 @@ input[type=number],select{font:inherit;padding:8px 10px;border-radius:10px;borde
 /* ---------- State ---------- */
 const DEFAULTS = {
   drink: "cappuccino", people: 2, strength: "normal", sweet: "normal", source: "auto",
-  grinder: "check",               // ok | check | broken
-  mokaWater: 270,                 // ml, valve er thik niche
-  mokaCoffee: 25,                 // g per brew, basket level kore
-  yieldPct: 85,                   // pani theke koto % coffee ashe
+  grinder: "ok",                  // ok | check | broken
+  mokaWater: 300,                 // ml, 6-cup pot, valve er thik niche
+  mokaCoffee: 28,                 // g per brew, 6-cup basket level kore
+  yieldPct: 88,                   // pani theke koto % coffee ashe
   pitcher: 350,
   inv: { beans:true, ground:false, instant:false, milk:true, sugar:true, cocoa:false, ice:false, condensed:false }
 };
@@ -318,8 +318,8 @@ function renderMake(){
 function renderInv(){
   const g = {ok:"Thik ache ✅", check:"Check lagbe ⚠️", broken:"Noshto ❌"};
   let h = `<h2>Equipment</h2><div class="card">
-    <div class="toggle"><div>☕ <b>Moka pot</b><small>Stovetop, "300 ml"</small></div><span class="badge b-ok">Ache</span></div>
-    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Lobon-pani legechilo. Check na kore chalio na.</small></div>
+    <div class="toggle"><div>☕ <b>Moka pot</b><small>6-cup stovetop, ~300 ml</small></div><span class="badge b-ok">Ache</span></div>
+    <div class="toggle"><div>⚙️ <b>Electric grinder</b><small>Type pore confirm korbo. Kono shomossha hole ekhane "Check lagbe" dao.</small></div>
       <select id="grinder">${Object.entries(g).map(([k,v]) => `<option value="${k}" ${S.grinder===k?"selected":""}>${v}</option>`).join("")}</select></div>
     <div class="toggle"><div>🥛 <b>Milk pitcher</b><small>Stainless steel</small></div><span class="badge b-ok">${S.pitcher} ml</span></div>
     <div class="toggle"><div>🌀 <b>Enjoy milk frother</b><small>Rechargeable. Charge ache to?</small></div><span class="badge b-ok">Ache</span></div>
