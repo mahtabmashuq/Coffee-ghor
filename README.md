@@ -6,14 +6,14 @@
   <a href="https://coffee-ghor.vercel.app"><b>Open the app</b></a> &nbsp;·&nbsp;
   <a href="#-put-it-on-your-phone">Install on your phone</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
-  <b>Version 1.0.0</b>
+  <b>Version 1.1.0</b>
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-6b3f26">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-6b3f26">
   <img alt="Single file" src="https://img.shields.io/badge/one_file-index.html-8a5a3c">
   <img alt="No build step" src="https://img.shields.io/badge/build_step-none-a87b5a">
-  <img alt="Recipe checks" src="https://img.shields.io/badge/recipe_checks-8%2C640_passing-2f7d4f">
+  <img alt="Recipe checks" src="https://img.shields.io/badge/recipe_checks-12%2C096_passing-2f7d4f">
   <img alt="Deployed on Vercel" src="https://img.shields.io/badge/deployed_on-Vercel-111">
 </p>
 
@@ -65,9 +65,15 @@ Change any of it later in **Pantry** and every recipe updates straight away.
 
 ---
 
-### 2. Ten café drinks, with names you already know
+### 2. Fourteen drinks, with names you already know
 
-Espresso · Americano · Cappuccino · Latte · Flat White · Mocha · Café au Lait · Iced Latte · Iced Mocha · Whipped Coffee
+**Hot:** Espresso · Italian Moka · Americano · Cappuccino · Latte · Flat White · Mocha · Café au Lait
+
+**Cold:** Iced Latte · Iced Mocha · Whipped Coffee
+
+**Frappes:** Butterscotch · Dark Chocolate · Cookies & Creme
+
+**Italian Moka** is made the way Italian homes have done it since 1933: cold water, low heat, off at the first gurgle, and a *cremina* of sugar whipped with the first drops of coffee. **Frappes** chill the coffee first, then blend it with milk and ice until thick and frosty.
 
 Pick a drink, then choose:
 
@@ -167,7 +173,7 @@ Getting better at coffee should feel like a game, not homework.
 
 <img src="docs/screenshots/11-pantry.png" alt="Pantry" width="260" align="right">
 
-Tick off what's in your kitchen: beans or ground coffee, milk, sugar, cocoa, ice, condensed milk, a kettle, a scale, a thermometer, a flask, cinnamon and vanilla.
+Tick off what's in your kitchen: beans or ground coffee, milk, sugar, cocoa, ice, condensed milk, a kettle, a scale, a thermometer, a flask, a blender, butterscotch sauce, chocolate cookies, whipped cream, cinnamon and vanilla.
 
 The steps quietly adapt. Have a scale? You get grams. No scale? You get tablespoons. No kettle? It has you heat the water in a pot.
 
@@ -229,7 +235,7 @@ Coffee Ghor is deliberately simple. **The whole app is one file.** No framework,
 Everything lives in `index.html`, top to bottom:
 
 - **Settings:** moka pot table (`MOKA`), pitcher sizes, grinder types, and the default state.
-- **Recipes:** `RECIPES` holds the 10 drinks and their ratio limits. `plan()` does the maths. `buildSteps()` writes the steps in English and Banglish.
+- **Recipes:** `RECIPES` holds the 14 drinks and their ratio limits. `plan()` does the maths. `buildSteps()` writes the steps in English and Banglish.
 - **Ratings and advice:** `ISSUES` and `advice()` turn "too bitter" into a fix that fits your grinder and roast.
 - **Learn:** `CATS` holds the lessons and quizzes. `LEVELS`, `BADGES` and `reward()` run the XP system.
 - **Screens:** small `render*` functions draw each view. One click handler routes every tap using `data-*` attributes.
@@ -242,13 +248,15 @@ Every change runs through two automatic checks in a real headless browser.
 
 **Recipe check:** `tests/coffee-eval.js`
 
-Tries **every drink** with every mix of people, strength, roast, sugar, kitchen tools, moka pot size, pitcher size and grinder type. That's **8,640 combinations**, each checked against **23 coffee rules**:
+Tries **every drink** with every mix of people, strength, roast, sugar, kitchen tools, moka pot size, pitcher size and grinder type. That's **12,096 combinations**, each checked against **30 coffee rules**:
 
 - Café ratios for every drink
 - Kettle on before grinding, milk heated right before frothing
 - Never overfill the pitcher or the grinder
 - Safe moka pot handling, including "never leave it unattended"
 - Unsweetened cocoa warnings for mochas
+- Italian Moka: cold water, low heat, and a cremina only when there is sugar
+- Frappes: coffee chilled before blending, never more than 3 drinks in the blender
 - English and Banglish steps say the same numbers
 
 Current score: **100%**.
@@ -286,7 +294,8 @@ npx serve .        # or just open index.html in a browser
 
 | Version | What shipped |
 |---|---|
-| **1.0.0** | First full release: spacing fixes across the app, version shown in Pantry, new README |
+| **1.1.0** | Italian Moka with cremina; Butterscotch, Dark Chocolate and Cookies & Creme Frappes; blender in Pantry |
+| 1.0.0 | First full release: spacing fixes across the app, version shown in Pantry, new README |
 | 0.8.0 | Equipment setup on first open, recipes that follow your equipment, a rating for every cup, level-up guide |
 | 0.7.0 | Standard iOS text sizes; rate drinks later |
 | 0.6.0 | Every recipe refined to café standards, plus the automatic recipe check |

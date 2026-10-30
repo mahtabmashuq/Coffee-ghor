@@ -2,6 +2,20 @@
 
 All notable changes to Coffee Ghor. Versions follow [semantic versioning](https://semver.org). The 0.x releases built the app up to its first full release, 1.0.0. From here on, a major version changes how the app works for existing users, a minor version adds features, and a patch fixes things.
 
+## 1.1.0 · 2026-10-30
+### Added
+- **Italian Moka**: moka pot coffee the traditional Italian way: fresh cold water in the base, low heat with the lid open, off at the first gurgle, stirred in the pot. With sugar, the first drops are whipped into a **cremina** that floats on each cup like a golden crema
+- **Frappes**: Butterscotch, Dark Chocolate and Cookies & Creme. Sugar and cocoa go into the hot coffee, the coffee is chilled in an ice bath, then blended with cold milk and ice (up to 3 drinks per blender batch), with toppings to finish
+- Pantry: Blender, butterscotch or caramel sauce, chocolate sandwich cookies and whipped cream
+- Learn: "The Italian way" (Moka Pot) and "Frappes" (The Drinks)
+- Rating: "Watery or icy" for frappes, with a fix
+- Recipe check: 7 new rules (cold water and low heat, cremina, coffee chilled before blending, blender batch size, sugar dissolved hot); now 12,096 combinations
+### Changed
+- The Full Menu badge counts every drink on the menu (now 14)
+- Sauce and cookie frappes use one notch less sugar, since the flavouring is sweet already
+### Fixed
+- "in a Italian Moka": roast tips now use "an" before a vowel
+
 ## 1.0.0 · 2026-10-16
 The first full release: everything from the 0.x series below, plus:
 ### Fixed
