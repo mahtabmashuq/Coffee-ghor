@@ -2,6 +2,38 @@
 
 All notable changes to Coffee Ghor. Versions follow [semantic versioning](https://semver.org). The 0.x releases built the app up to its first full release, 1.0.0. From here on, a major version changes how the app works for existing users, a minor version adds features, and a patch fixes things.
 
+## 1.2.0 · 2026-11-04
+### Added
+- **An animated scene for every step**, 24 in all: kettle steam, a buzzing grinder with bouncing beans, a turning crank, water rising to the valve line, grounds being levelled, the moka pot on the flame with coffee bubbling up inside (smaller flames on low heat), the cold tap on the base, cremina whisked from dark to golden, milk steaming with a thermometer, the frother spinning as foam rises, an ice bath, a blender vortex and ice dropping into glasses. Scenes follow the step's action, not its text, so they're the same in English and Banglish
+- Scenes speed up and glow while a timer runs, and the timer box drains as time runs out
+- **Finish celebration**: the drink fills layer by layer in its real proportions, confetti, and an XP card that counts up with a breakdown (+20 made, +30 first time, +25 special), level-ups and new badges
+- **Level-up and new-badge cards** with confetti wherever you earn them (ratings, lessons, quizzes)
+- **Today's Special**: one drink a day from what you can make, +25 XP. New badge **Chef's Pick** for making three (11 badges now)
+- **Streak flame** on the drink list, with a nudge when the streak is about to end
+- One cup per person beside the people counter; stars pop when tapped and 5 stars throws confetti; quiz answers bounce or shake, a perfect quiz throws confetti; the finished step pops in the progress bar; Finish shimmers
+- **Resume**: Exit keeps your place, and the drink page offers "Resume at step N" or "Start over"
+- **Works offline**: a service worker keeps a copy (network first, so online is always the newest version)
+- Android Back steps back inside the app instead of leaving it
+- `tests/security-check.js`: 20 checks with a hostile progress code, corrupt saves, log folding, timer drift and Back; the recipe check now also requires a scene for every step (31 rules)
+### Security
+- **Fixed: a crafted progress code could run script in the app**, every time it opened. All saved and imported data now goes through one gate (`normalize()`) that whitelists every option, clamps every number and rebuilds every drink in the log field by field
+- Strict Content Security Policy (`script-src 'self'`, no inline scripts); the code moved to `app.js` to allow it
+- Security headers on every response: no framing, nosniff, referrer policy, permissions locked down
+- Fonts are served from the site itself (SIL Open Font License), so the app makes no requests to Google
+### Fixed
+- Corrupt saved data (an unknown grinder type, a missing log, odd values) could leave a blank app with no way to reset; it now always opens
+- A huge person count in a saved drink could freeze the phone; people are capped at 20 everywhere
+- The timer counted ticks, so it fell behind when the phone slept; it now counts to a real end time. The alarm sound is unlocked by the Start tap, so iOS plays it
+- A running timer could hide when you switched drinks; timers belong to a drink and a step
+- The screen could stay awake after leaving the steps
+- XP and badges could go down after 200 drinks, and On a Roll vanished when a streak ended; old drinks are now folded into a running total and badges are kept for good
+- Two imported drinks with the same time could not both be rated
+- Reset brought back the first-run screens; it now resets settings only
+- Pantry number boxes accepted any value (0.5 ml of water meant infinite brews); they now stay inside their limits and the summary updates
+- Toasts appeared dimmed under pop-up sheets
+- Accessibility: focus stays on the control you used after each tap, the page behind a sheet can't be reached, focus returns when it closes, option buttons announce their state, and the timer no longer talks to screen readers every second
+- The progress code's restore text now says plainly that pantry and pot settings come from the code
+
 ## 1.1.0 · 2026-10-30
 ### Added
 - **Italian Moka**: moka pot coffee the traditional Italian way: fresh cold water in the base, low heat with the lid open, off at the first gurgle, stirred in the pot. With sugar, the first drops are whipped into a **cremina** that floats on each cup like a golden crema

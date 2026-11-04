@@ -6,12 +6,12 @@
   <a href="https://coffee-ghor.vercel.app"><b>Open the app</b></a> &nbsp;·&nbsp;
   <a href="#-put-it-on-your-phone">Install on your phone</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
-  <b>Version 1.1.0</b>
+  <b>Version 1.2.0</b>
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-6b3f26">
-  <img alt="Single file" src="https://img.shields.io/badge/one_file-index.html-8a5a3c">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.2.0-6b3f26">
+  <img alt="Works offline" src="https://img.shields.io/badge/works-offline-8a5a3c">
   <img alt="No build step" src="https://img.shields.io/badge/build_step-none-a87b5a">
   <img alt="Recipe checks" src="https://img.shields.io/badge/recipe_checks-12%2C096_passing-2f7d4f">
   <img alt="Deployed on Vercel" src="https://img.shields.io/badge/deployed_on-Vercel-111">
@@ -110,14 +110,40 @@ This is the heart of the app. Instead of one long recipe, you get **one step per
 - Big **Back** and **Next** buttons, or just swipe.
 - **Built-in timers** for the parts that need watching, like the moka pot brew.
 - **The screen stays awake** while you cook. No unlocking with coffee on your fingers.
-- **Leave and come back.** It remembers which step you were on.
+- **Leave and come back.** Exit keeps your place: the drink page offers **Resume at step 4** (or start over).
+- **A moving picture for every action.** See the section below.
 - **EN | BN switch** at the top. Steps and advice switch to Banglish. Drink names stay in English on purpose.
 
 The order follows how a real barista works: kettle on first, grind while the water heats, brew, cool the base, then heat and froth the milk right before serving so nothing sits around going cold.
 
 ---
 
-### 4. Everyone at the table rates their own cup
+### 4. Every step comes alive
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/14-step-scene.png" alt="Brewing scene with a running timer" width="250"><br><sub>The pot bubbles while the timer runs</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/15-finish.png" alt="Finish screen with XP" width="250"><br><sub>Your drink fills up, the XP counts up</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/16-special.png" alt="Today's special and streak" width="250"><br><sub>Today's Special and your streak</sub></td>
+  </tr>
+</table>
+
+Each step shows a small animated picture of exactly what your hands are doing:
+
+- The **kettle** steams, the **grinder** buzzes with beans bouncing inside, a **manual grinder's crank** turns.
+- Water **rises to the valve line**, grounds fall and get **levelled** (with a reminder not to press).
+- The **moka pot** sits on the flame with its lid open and coffee bubbling up inside. On **low heat** the flames shrink.
+- The **cold tap** hits the base, the **cremina** turns from dark to golden as you whisk, **milk** steams in the pan with a thermometer, the **frother** spins while the foam rises.
+- Frappes get an **ice bath** and a **blender vortex**. Iced drinks get ice cubes dropping into the glass.
+- **When a timer runs, the scene speeds up and glows**, and a bar in the timer box drains as time runs out.
+
+When you finish, **your actual drink fills up layer by layer**, in that recipe's real proportions, with confetti. Then an XP card **counts up** and shows exactly what you earned (+20 made it, +30 first time, +25 Today's Special), plus any level-up or new badge.
+
+The pictures follow the step, never the language, so they're the same in English and Banglish. And if your phone is set to **Reduce motion**, everything stays still.
+
+---
+
+### 5. Everyone at the table rates their own cup
 
 <img src="docs/screenshots/06-rate-person.png" alt="Rating per person" width="260" align="right">
 
@@ -132,13 +158,13 @@ Made coffee for three? Pass the phone around. **Person 1, Person 2, Person 3**, 
 
 The app then shows **a real fix for each problem**, written for your exact grinder and roast. For example: *"Take it off the heat earlier. Try shorter grinder pulses for a slightly coarser grind."*
 
-Forgot to rate? No problem. Drinks you skipped wait for you in **Learn**, and you can rate them later.
+Tap 5 stars and they pop, with a little burst of confetti. Forgot to rate? No problem. Drinks you skipped wait for you in **Learn**, and you can rate them later.
 
 <br clear="right">
 
 ---
 
-### 5. Learn, earn XP and level up
+### 6. Learn, earn XP and level up
 
 <table>
   <tr>
@@ -152,8 +178,11 @@ Getting better at coffee should feel like a game, not homework.
 
 - **5 topics:** The Drinks, Moka Pot, Beans & Grinding, Milk & Foam, and Safety. Short lessons, then a 3 question quiz.
 - **5 levels:** Beginner, Apprentice, Home Barista, Skilled Barista, Coffee Master.
-- **10 badges** and a **day streak** for coming back.
+- **11 badges** and a **day streak** for coming back. A flame on the drink list shows your streak, and warns you when it's about to end.
+- **Today's Special:** one drink a day, picked from what you can make right now, worth **+25 XP**. Make three for the **Chef's Pick** badge.
+- **Level-ups and new badges get their own moment**: a card with confetti, wherever you earn them.
 - **"Your next move"** always tells you the single best thing to do to level up.
+- **Nothing ever goes backwards.** Badges stay once earned, and XP from old drinks is kept, however long you use the app.
 
 **How you earn XP**
 
@@ -164,12 +193,13 @@ Getting better at coffee should feel like a game, not homework.
 | Rate it | **+10** |
 | Each extra person who rates | **+5** |
 | Anyone gives it 5 stars | **+10** |
+| Make Today's Special | **+25** |
 | Read a lesson | **+5** |
 | Get a quiz answer right | **+15** |
 
 ---
 
-### 6. Pantry: what you have shapes what you make
+### 7. Pantry: what you have shapes what you make
 
 <img src="docs/screenshots/11-pantry.png" alt="Pantry" width="260" align="right">
 
@@ -183,11 +213,11 @@ Your equipment lives here too: moka pot size, grinder type and whether it works,
 
 ---
 
-### 7. 📲 Put it on your phone
+### 8. 📲 Put it on your phone
 
 <img src="docs/screenshots/13-install.png" alt="Install guide" width="260" align="right">
 
-Coffee Ghor installs like a real app, with its own icon, full screen and no browser bars.
+Coffee Ghor installs like a real app, with its own icon, full screen and no browser bars. **It works offline too**: once opened, it still loads in a kitchen with no signal.
 
 The app spots your device and shows the right steps:
 
@@ -197,7 +227,7 @@ The app spots your device and shows the right steps:
 
 You can close the prompt with the **✕** and find it again in Pantry any time.
 
-**Moving to a new phone?** Pantry has **Copy my progress**. Paste the code on the other phone and your level, ratings and settings come with you.
+**Moving to a new phone?** Pantry has **Copy my progress**. Paste the code on the other phone and your level, ratings and settings come with you. Every code is checked before anything in it is used, so a code from someone else can't break your app.
 
 <br clear="right">
 
@@ -215,16 +245,19 @@ You can close the prompt with the **✕** and find it again in Pantry any time.
 
 ## 🛠 Tech stack
 
-Coffee Ghor is deliberately simple. **The whole app is one file.** No framework, no build step, no backend, no tracking.
+Coffee Ghor is deliberately simple. **One page and one script.** No framework, no build step, no backend, no tracking, and no requests to anyone else's servers.
 
 | Layer | What we use | Why |
 |---|---|---|
-| **App** | One `index.html` with HTML, CSS and plain JavaScript | Opens instantly, easy to read, nothing to install or compile |
-| **Data** | The browser's `localStorage` | Your progress stays on your phone. No accounts, no server |
+| **App** | `index.html` (page and styles) and `app.js` (plain JavaScript) | Opens instantly, easy to read, nothing to install or compile |
+| **Data** | The browser's `localStorage`, checked on every load | Your progress stays on your phone. No accounts, no server |
+| **Offline** | A service worker, network first | Always the newest version when online, still opens with no signal |
+| **Security** | Strict Content Security Policy, security headers in `vercel.json`, one gate that cleans all saved and imported data | A pasted progress code can't run code or break the app |
 | **Install** | Web app manifest, Apple touch icon, PNG icons | Adds to the Home Screen and opens full screen like a native app |
 | **Screen** | Screen Wake Lock API | Keeps the screen on while you're cooking |
 | **Design** | OKLCH colour tokens with light and dark mode | Warm coffee tones that stay readable in both modes |
-| **Type** | Young Serif for headings, Atkinson Hyperlegible for text | Friendly headings, and body text built for easy reading |
+| **Type** | Young Serif for headings, Atkinson Hyperlegible for text, served from this site (SIL Open Font License) | Friendly headings, body text built for easy reading, and no font requests to Google |
+| **Animation** | Inline SVG scenes and CSS keyframes | 24 kitchen scenes, confetti and reward moments with no images or libraries. Off when you ask for reduced motion |
 | **Sizing** | iOS type scale (17 px body), 44 px touch targets | Feels at home on an iPhone and is easy to tap |
 | **Icons** | Hand drawn inline SVG set | Sharp at any size, no icon library to load |
 | **Hosting** | Vercel, linked to this GitHub repo | Every push to `main` goes live in seconds |
@@ -232,23 +265,25 @@ Coffee Ghor is deliberately simple. **The whole app is one file.** No framework,
 
 ### How the code is organised
 
-Everything lives in `index.html`, top to bottom:
+The page and its styles are in `index.html`. The code is in `app.js`, top to bottom:
 
 - **Settings:** moka pot table (`MOKA`), pitcher sizes, grinder types, and the default state.
+- **The gate:** `normalize()` rebuilds every saved or imported value from known options and sane numbers.
 - **Recipes:** `RECIPES` holds the 14 drinks and their ratio limits. `plan()` does the maths. `buildSteps()` writes the steps in English and Banglish.
 - **Ratings and advice:** `ISSUES` and `advice()` turn "too bitter" into a fix that fits your grinder and roast.
-- **Learn:** `CATS` holds the lessons and quizzes. `LEVELS`, `BADGES` and `reward()` run the XP system.
+- **Scenes:** `SCENES` and `serveScene()` draw the animated picture for each step's action (`a:` on every step).
+- **Learn:** `CATS` holds the lessons and quizzes. `LEVELS`, `BADGES` and `reward()` run the XP system; `special()` picks Today's Special.
 - **Screens:** small `render*` functions draw each view. One click handler routes every tap using `data-*` attributes.
 
 ---
 
 ## ✅ How we keep the recipes honest
 
-Every change runs through two automatic checks in a real headless browser.
+Every change runs through three automatic checks in a real headless browser.
 
 **Recipe check:** `tests/coffee-eval.js`
 
-Tries **every drink** with every mix of people, strength, roast, sugar, kitchen tools, moka pot size, pitcher size and grinder type. That's **12,096 combinations**, each checked against **30 coffee rules**:
+Tries **every drink** with every mix of people, strength, roast, sugar, kitchen tools, moka pot size, pitcher size and grinder type. That's **12,096 combinations**, each checked against **31 coffee rules**:
 
 - Café ratios for every drink
 - Kettle on before grinding, milk heated right before frothing
@@ -258,6 +293,7 @@ Tries **every drink** with every mix of people, strength, roast, sugar, kitchen 
 - Italian Moka: cold water, low heat, and a cremina only when there is sugar
 - Frappes: coffee chilled before blending, never more than 3 drinks in the blender
 - English and Banglish steps say the same numbers
+- Every step has its animated scene, the same in both languages
 
 Current score: **100%**.
 
@@ -265,10 +301,15 @@ Current score: **100%**.
 
 Opens every screen and pop-up at 375 px and 430 px wide, in light and dark mode, and flags any text that touches or spills past the edge of its box. Current result: **0 problems**.
 
+**Security check:** `tests/security-check.js`
+
+Pastes a hostile progress code, opens the app with corrupt saves (missing data, unknown values, 3 million people), folds 400 old drinks, blocks the page mid-timer and presses Back. Checks that no script runs, nothing crashes, XP never drops and the timer stays right. Current result: **20 of 20**.
+
 ```bash
 npm i -D playwright
 node tests/coffee-eval.js index.html
 node tests/spacing-check.js index.html
+node tests/security-check.js index.html
 ```
 
 ---
@@ -294,7 +335,8 @@ npx serve .        # or just open index.html in a browser
 
 | Version | What shipped |
 |---|---|
-| **1.1.0** | Italian Moka with cremina; Butterscotch, Dark Chocolate and Cookies & Creme Frappes; blender in Pantry |
+| **1.2.0** | Animated scene for every step, finish celebration with XP count-up, level-up and badge moments, Today's Special, streak flame; works offline; security fixes (progress codes are checked, strict CSP, self-hosted fonts); timer, wake lock, Back button and accessibility fixes |
+| 1.1.0 | Italian Moka with cremina; Butterscotch, Dark Chocolate and Cookies & Creme Frappes; blender in Pantry |
 | 1.0.0 | First full release: spacing fixes across the app, version shown in Pantry, new README |
 | 0.8.0 | Equipment setup on first open, recipes that follow your equipment, a rating for every cup, level-up guide |
 | 0.7.0 | Standard iOS text sizes; rate drinks later |

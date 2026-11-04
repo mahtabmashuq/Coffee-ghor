@@ -22,6 +22,7 @@ const { chromium } = require(process.env.PW || "playwright");
       const all = en.map(x => x.t + " " + x.d).join(" | ");
       const txt = all + bn.map(x => x.t + x.d).join(""); check("no broken text", !/undefined|NaN|null/.test(txt) && en.concat(bn).every(x => ((x.t + x.d).match(/\*\*/g) || []).length % 2 === 0), ctx, all.slice(0, 80));
       check("EN/BN same steps and numbers", en.length === bn.length && en.every((x, i) => nums(x.t + x.d) === nums(bn[i].t + bn[i].d)), ctx, en.map((x,i)=>nums(x.t+x.d)===nums(bn[i]?.t+bn[i]?.d)?"":`#${i+1}`).filter(Boolean).join(" "));
+      check("every step has its animated scene", en.every((x, i) => x.a && x.a === bn[i].a && /<svg/.test(scene(x.a, x.o || {}, r))) && en[en.length - 1].a === (r.instant ? "creamtop" : "serve"), ctx, en.map(x => x.a || "?").join(","));
       check("serve/assemble is last", /serve|assemble|together|glass|cream on top|mix and serve/i.test(en[en.length-1].t), ctx, en[en.length-1].t);
       if (RATIO[r.id]){ const q = pl.milkPer / pl.coffeePer, [lo, hi] = RATIO[r.id]; check("milk:coffee ratio in café range", q >= lo - 1e-9 && q <= hi + 1e-9, ctx, `1:${q.toFixed(2)} (want 1:${lo}-${hi})`); }
       if (r.id === "americano"){ const q = pl.waterPer / pl.coffeePer; check("americano water:coffee 1.5-3", q >= 1.5 && q <= 3, ctx, `1:${q.toFixed(2)}`); }
