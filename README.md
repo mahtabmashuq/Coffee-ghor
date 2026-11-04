@@ -1,19 +1,20 @@
 <p align="center">
-  <img src="docs/banner.png" alt="Coffee Ghor: café drinks at home, one calm step at a time" width="100%">
+  <img src="docs/banner.webp" alt="Coffee Ghor: café drinks at home, one calm step at a time" width="100%">
 </p>
 
 <p align="center">
   <a href="https://coffee-ghor.vercel.app"><b>Open the app</b></a> &nbsp;·&nbsp;
   <a href="#-put-it-on-your-phone">Install on your phone</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
-  <b>Version 1.2.0</b>
+  <b>Version 1.3.0</b>
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.2.0-6b3f26">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.3.0-6b3f26">
   <img alt="Works offline" src="https://img.shields.io/badge/works-offline-8a5a3c">
   <img alt="No build step" src="https://img.shields.io/badge/build_step-none-a87b5a">
   <img alt="Recipe checks" src="https://img.shields.io/badge/recipe_checks-12%2C096_passing-2f7d4f">
+  <img alt="Security checks" src="https://img.shields.io/badge/security_checks-20%2F20-2f7d4f">
   <img alt="Deployed on Vercel" src="https://img.shields.io/badge/deployed_on-Vercel-111">
 </p>
 
@@ -34,16 +35,21 @@ No account. No ads. No server. Your progress lives on your phone.
 
 ---
 
+## 🎬 Watch a cappuccino come together
+
+<p align="center">
+  <img src="docs/demo.webp" alt="Making a cappuccino in Coffee Ghor: kettle, grinder, moka pot, frothing, then the finish with XP" width="340">
+</p>
+<p align="center"><sub>Real app, real recipe. Every step is a little scene on the same kitchen counter, and the finish counts up your XP.</sub></p>
+
+---
+
 ## 📱 A quick look
 
-<table>
-  <tr>
-    <td align="center" width="25%"><img src="docs/screenshots/02-drinks.png" alt="Drink list"><br><sub><b>Pick a drink</b></sub></td>
-    <td align="center" width="25%"><img src="docs/screenshots/03-recipe.png" alt="Recipe setup"><br><sub><b>Set it up</b></sub></td>
-    <td align="center" width="25%"><img src="docs/screenshots/04-step-en.png" alt="Step mode"><br><sub><b>Make it, step by step</b></sub></td>
-    <td align="center" width="25%"><img src="docs/screenshots/07-rate-summary.png" alt="Ratings"><br><sub><b>Rate it, fix it</b></sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/screens/strip-quick-look.webp" alt="Pick a drink, set it up, make it step by step, then celebrate the finish" width="100%">
+</p>
+<p align="center"><sub><b>Pick a drink</b> &nbsp;·&nbsp; <b>Set it up</b> &nbsp;·&nbsp; <b>Make it, step by step</b> &nbsp;·&nbsp; <b>Finish and level up</b></sub></p>
 
 ---
 
@@ -51,7 +57,7 @@ No account. No ads. No server. Your progress lives on your phone.
 
 ### 1. Your kitchen, set up in 30 seconds
 
-<img src="docs/screenshots/01-setup.png" alt="Equipment setup" width="260" align="right">
+<img src="docs/screens/01-setup.webp" alt="Equipment setup" width="270" align="right">
 
 The first time you open the app it asks three quick questions: **Let's get your equipment ready.**
 
@@ -86,23 +92,19 @@ Each drink card shows **Ready to make** when your Pantry has everything, and you
 
 <br>
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/screenshots/02-drinks.png" alt="Drinks, light mode" width="300"><br><sub>Light mode</sub></td>
-    <td align="center" width="50%"><img src="docs/screenshots/12-drinks-dark.png" alt="Drinks, dark mode" width="300"><br><sub>Dark mode</sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/screens/strip-light-dark.webp" alt="The drink list in light and dark mode" width="560">
+</p>
+<p align="center"><sub>Light and dark mode follow your phone</sub></p>
 
 ---
 
 ### 3. Step by step, in English or Banglish
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/screenshots/04-step-en.png" alt="Step in English" width="300"><br><sub><b>EN</b></sub></td>
-    <td align="center" width="50%"><img src="docs/screenshots/05-step-bn.png" alt="Same step in Banglish" width="300"><br><sub><b>BN</b></sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/screens/strip-en-bn.webp" alt="The same step in English and in Banglish" width="560">
+</p>
+<p align="center"><sub>One tap on <b>EN | BN</b>: the same step, in English or Banglish</sub></p>
 
 This is the heart of the app. Instead of one long recipe, you get **one step per screen**:
 
@@ -120,32 +122,34 @@ The order follows how a real barista works: kettle on first, grind while the wat
 
 ### 4. Every step comes alive
 
-<table>
-  <tr>
-    <td align="center" width="33%"><img src="docs/screenshots/14-step-scene.png" alt="Brewing scene with a running timer" width="250"><br><sub>The pot bubbles while the timer runs</sub></td>
-    <td align="center" width="33%"><img src="docs/screenshots/15-finish.png" alt="Finish screen with XP" width="250"><br><sub>Your drink fills up, the XP counts up</sub></td>
-    <td align="center" width="33%"><img src="docs/screenshots/16-special.png" alt="Today's special and streak" width="250"><br><sub>Today's Special and your streak</sub></td>
-  </tr>
-</table>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/scenes-dark.webp">
+  <img src="docs/scenes-light.webp" alt="Twelve of the step scenes: kettle, grinder, filling the moka base, levelling the basket, brewing, cooling, heating milk, frothing, cremina, ice bath, blending and latte art" width="100%">
+</picture>
 
-Each step shows a small animated picture of exactly what your hands are doing:
+Every step is a small animated scene on **the same kitchen counter**, so moving through a recipe feels like staying in one kitchen. Nothing floats: the pot sits on the burner, the tap comes out of the wall, the kettle pours in from the edge of the frame.
 
-- The **kettle** steams, the **grinder** buzzes with beans bouncing inside, a **manual grinder's crank** turns.
-- Water **rises to the valve line**, grounds fall and get **levelled** (with a reminder not to press).
-- The **moka pot** sits on the flame with its lid open and coffee bubbling up inside. On **low heat** the flames shrink.
-- The **cold tap** hits the base, the **cremina** turns from dark to golden as you whisk, **milk** steams in the pan with a thermometer, the **frother** spins while the foam rises.
-- Frappes get an **ice bath** and a **blender vortex**. Iced drinks get ice cubes dropping into the glass.
-- **When a timer runs, the scene speeds up and glows**, and a bar in the timer box drains as time runs out.
+- The **kettle** heats while a thermometer climbs. The **grinder** buzzes with beans tumbling inside, and a pile of grounds grows beside it. A **manual grinder's crank** turns.
+- Water **rises to the valve line** and a tick appears when it gets there. Grounds fall into the basket and get **levelled**.
+- The burner **knob turns to your heat setting** and the flames light. The **moka pot** shows coffee rising inside its top chamber, with your cup waiting next to it. On **low heat** the flames are smaller.
+- The **cold tap** hits the base while a thermometer drops. **Milk** steams in the pan with the thermometer heading for 65°C. The **frother** spins as foam climbs to the mark on your pitcher.
+- The **cremina** turns from dark to golden as you whisk. Frappes get an **ice bath** and a **blender vortex**. Iced drinks get ice cubes dropping into each glass, one glass per person.
 
-When you finish, **your actual drink fills up layer by layer**, in that recipe's real proportions, with confetti. Then an XP card **counts up** and shows exactly what you earned (+20 made it, +30 first time, +25 Today's Special), plus any level-up or new badge.
+**When a timer runs, the scene follows it.** Start the 5 minute brew and the coffee in the pot rises with the clock. Start the froth and the foam climbs as the seconds go. Start the ice bath and the thermometer falls. You can glance at the picture from across the kitchen and know how far along it is.
 
-The pictures follow the step, never the language, so they're the same in English and Banglish. And if your phone is set to **Reduce motion**, everything stays still.
+<p align="center">
+  <img src="docs/screens/strip-alive.webp" alt="A frappe blending with its timer running, and the finish screen with XP" width="560">
+</p>
+
+When you finish, **your drink is poured and fills up layer by layer**, in that recipe's real proportions. Milk drinks get **latte art on the foam**, black coffee gets crema, iced drinks get ice and a straw, frappes get the whipped top. Then confetti, and an XP card **counts up** with exactly what you earned (+20 made it, +30 first time, +25 Today's Special), plus any level-up or new badge.
+
+The pictures follow the step, never the language, so they're the same in English and Banglish. If your phone is set to **Reduce motion**, nothing moves, but the scenes still show where you are: the coffee level still follows the timer.
 
 ---
 
 ### 5. Everyone at the table rates their own cup
 
-<img src="docs/screenshots/06-rate-person.png" alt="Rating per person" width="260" align="right">
+<img src="docs/screens/06-rate-person.webp" alt="Rating per person" width="270" align="right">
 
 Made coffee for three? Pass the phone around. **Person 1, Person 2, Person 3**, each gives their own stars and can say what was off:
 
@@ -166,13 +170,10 @@ Tap 5 stars and they pop, with a little burst of confetti. Forgot to rate? No pr
 
 ### 6. Learn, earn XP and level up
 
-<table>
-  <tr>
-    <td align="center" width="33%"><img src="docs/screenshots/08-learn.png" alt="Learn tab" width="250"><br><sub>Your level and next move</sub></td>
-    <td align="center" width="33%"><img src="docs/screenshots/09-level-up.png" alt="How to level up" width="250"><br><sub>How XP works</sub></td>
-    <td align="center" width="33%"><img src="docs/screenshots/10-quiz.png" alt="Quiz" width="250"><br><sub>Quick quizzes</sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/screens/strip-learn.webp" alt="Your level and next move, how XP works, a quiz, and a level-up" width="100%">
+</p>
+<p align="center"><sub><b>Your level and next move</b> &nbsp;·&nbsp; <b>How XP works</b> &nbsp;·&nbsp; <b>Quick quizzes</b> &nbsp;·&nbsp; <b>Level up</b></sub></p>
 
 Getting better at coffee should feel like a game, not homework.
 
@@ -201,7 +202,7 @@ Getting better at coffee should feel like a game, not homework.
 
 ### 7. Pantry: what you have shapes what you make
 
-<img src="docs/screenshots/11-pantry.png" alt="Pantry" width="260" align="right">
+<img src="docs/screens/11-pantry.webp" alt="Pantry" width="270" align="right">
 
 Tick off what's in your kitchen: beans or ground coffee, milk, sugar, cocoa, ice, condensed milk, a kettle, a scale, a thermometer, a flask, a blender, butterscotch sauce, chocolate cookies, whipped cream, cinnamon and vanilla.
 
@@ -215,7 +216,7 @@ Your equipment lives here too: moka pot size, grinder type and whether it works,
 
 ### 8. 📲 Put it on your phone
 
-<img src="docs/screenshots/13-install.png" alt="Install guide" width="260" align="right">
+<img src="docs/screens/13-install.webp" alt="Install guide" width="270" align="right">
 
 Coffee Ghor installs like a real app, with its own icon, full screen and no browser bars. **It works offline too**: once opened, it still loads in a kitchen with no signal.
 
@@ -257,7 +258,7 @@ Coffee Ghor is deliberately simple. **One page and one script.** No framework, n
 | **Screen** | Screen Wake Lock API | Keeps the screen on while you're cooking |
 | **Design** | OKLCH colour tokens with light and dark mode | Warm coffee tones that stay readable in both modes |
 | **Type** | Young Serif for headings, Atkinson Hyperlegible for text, served from this site (SIL Open Font License) | Friendly headings, body text built for easy reading, and no font requests to Google |
-| **Animation** | Inline SVG scenes and CSS keyframes | 24 kitchen scenes, confetti and reward moments with no images or libraries. Off when you ask for reduced motion |
+| **Animation** | Inline SVG scenes on one shared kitchen counter, CSS keyframes, a timer-driven `--t` variable | 20-plus scenes that follow the timer, plus confetti and reward moments, with no images or libraries. Still, but informative, under reduced motion |
 | **Sizing** | iOS type scale (17 px body), 44 px touch targets | Feels at home on an iPhone and is easy to tap |
 | **Icons** | Hand drawn inline SVG set | Sharp at any size, no icon library to load |
 | **Hosting** | Vercel, linked to this GitHub repo | Every push to `main` goes live in seconds |
@@ -271,7 +272,7 @@ The page and its styles are in `index.html`. The code is in `app.js`, top to bot
 - **The gate:** `normalize()` rebuilds every saved or imported value from known options and sane numbers.
 - **Recipes:** `RECIPES` holds the 14 drinks and their ratio limits. `plan()` does the maths. `buildSteps()` writes the steps in English and Banglish.
 - **Ratings and advice:** `ISSUES` and `advice()` turn "too bitter" into a fix that fits your grinder and roast.
-- **Scenes:** `SCENES` and `serveScene()` draw the animated picture for each step's action (`a:` on every step).
+- **Scenes:** `S2` and `serveScene()` draw the scene for each step's action (`a:` on every step) from shared parts (`burner()`, `thermo()`, `P.moka()` and friends) placed on the counter with `put()`.
 - **Learn:** `CATS` holds the lessons and quizzes. `LEVELS`, `BADGES` and `reward()` run the XP system; `special()` picks Today's Special.
 - **Screens:** small `render*` functions draw each view. One click handler routes every tap using `data-*` attributes.
 
@@ -335,7 +336,8 @@ npx serve .        # or just open index.html in a browser
 
 | Version | What shipped |
 |---|---|
-| **1.2.0** | Animated scene for every step, finish celebration with XP count-up, level-up and badge moments, Today's Special, streak flame; works offline; security fixes (progress codes are checked, strict CSP, self-hosted fonts); timer, wake lock, Back button and accessibility fixes |
+| **1.3.0** | Scenes redrawn on one kitchen counter, bigger and anchored; scenes follow the running timer; finish pours the drink and draws latte art; new README visuals and animated demo |
+| 1.2.0 | Animated scene for every step, finish celebration with XP count-up, level-up and badge moments, Today's Special, streak flame; works offline; security fixes (progress codes are checked, strict CSP, self-hosted fonts); timer, wake lock, Back button and accessibility fixes |
 | 1.1.0 | Italian Moka with cremina; Butterscotch, Dark Chocolate and Cookies & Creme Frappes; blender in Pantry |
 | 1.0.0 | First full release: spacing fixes across the app, version shown in Pantry, new README |
 | 0.8.0 | Equipment setup on first open, recipes that follow your equipment, a rating for every cup, level-up guide |

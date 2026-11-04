@@ -83,7 +83,7 @@ const DEFAULTS = {
   badges: [],                     // badges earned, kept for good
   seenBadges: null                // badges already shown in Learn, so new ones can glow
 };
-const APP_VERSION = "1.2.0"; // keep in step with README.md and CHANGELOG.md
+const APP_VERSION = "1.3.0"; // keep in step with README.md and CHANGELOG.md
 const KEY = "coffee-ghor-v1";
 // Standard stovetop moka pots: cups -> [water to just below the valve (ml), coffee in a level basket (g)]
 const MOKA = { 1:[60,7], 2:[100,12], 3:[150,16], 4:[200,20], 6:[300,28], 9:[450,40], 12:[600,55] };
@@ -231,126 +231,170 @@ const TOOLS = {
   blender:["blender","Blender","Needed for Frappes"]
 };
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const aAn = w => `${/^[AEIOU]/i.test(w) ? "an" : "a"} ${w}`; // "an Apprentice", "a Latte"
 
-/* ---------- Step scenes: a small animated picture of what your hands are doing ---------- */
-// 240 x 132 stage, counter top at y=120. Built from a few parts so every scene shares one look.
+/* ---------- Step scenes: one kitchen counter, the thing your hands are doing, big and centred ---------- */
+// 320 x 140 stage. The counter top is at y=112 and runs edge to edge, so nothing floats: pots sit on the
+// burner, the tap comes out of the wall, the kettle pours in from off-frame. Objects are drawn in their own
+// coordinates (origin at the bottom centre) and placed with put(). When a step's timer runs, the scene
+// follows it: coffee rises, foam climbs, the thermometer drops (CSS var --t, 0 to 1).
 let scId = 0;
-const BY = 120;
-const steamP = (x, y, n = 3, gap = 8) => Array.from({ length:n }, (_, i) => `<path class="st a-steam d${i * 2}" d="M${x + (i - (n - 1) / 2) * gap} ${y}c-4-4 4-7 0-11c-4-4 4-7 0-11"/>`).join("");
-const flames = (cx, small) => `<rect class="mt2" x="${cx - 28}" y="${BY - 4}" width="56" height="5" rx="2.5"/>` + [-12, 0, 12].map((d, i) => {
-  const x = cx + d, h = small ? 8 : 13;
-  return `<g class="a-flick d${i}"><path class="fl" d="M${x} ${BY - 4}c-${h * .34}-${h * .2}-${h * .34}-${h * .66} 0-${h}c${h * .34} ${h * .36} ${h * .34} ${h * .8} 0 ${h}z"/><path class="fl2" d="M${x} ${BY - 4}c-${h * .15}-${h * .1}-${h * .15}-${h * .35} 0-${h * .5}c${h * .15} ${h * .18} ${h * .15} ${h * .4} 0 ${h * .5}z"/></g>`;
-}).join("");
-const sparkle = (x, y, cls = "") => `<path class="ln thin a-twinkle ${cls}" style="stroke:var(--gold)" d="M${x} ${y - 5}v10M${x - 5} ${y}h10"/>`;
-// Moka pot. o.by: bottom, o.cut: see-through top chamber, o.open: lid up, o.base: lower chamber only, o.fill: coffee rising inside
-function mokaPot(cx, o = {}){
-  const by = o.by ?? BY - 5, id = "mk" + (++scId);
-  const top = `M${cx - 15} ${by - 30}L${cx + 15} ${by - 30}L${cx + 18} ${by - 60}L${cx - 18} ${by - 60}Z`;
-  const lid = `<g transform="rotate(${o.open ? 38 : 0} ${cx + 19} ${by - 60})"><path class="mt" d="M${cx - 19} ${by - 60}L${cx + 19} ${by - 60}L${cx + 16} ${by - 66}L${cx - 16} ${by - 66}Z"/><circle class="mt2" cx="${cx}" cy="${by - 69}" r="3"/></g>`;
-  const base = `<path class="${o.water ? "gl" : "mt"}" d="M${cx - 19} ${by}L${cx + 19} ${by}L${cx + 15} ${by - 26}L${cx - 15} ${by - 26}Z"/>`;
-  if (o.base) return base;
-  return `${base}<circle class="mt2" cx="${cx + 8}" cy="${by - 16}" r="2.4"/><rect class="mt2" x="${cx - 16}" y="${by - 30}" width="32" height="4" rx="1"/>
-    <path class="hd" d="M${cx + 17} ${by - 56}h11l-2 21h-9"/><path class="mt" d="M${cx - 17} ${by - 57}L${cx - 28} ${by - 64}L${cx - 18} ${by - 61}Z"/>
-    <path class="${o.cut ? "gl" : "mt"}" d="${top}"/>
-    ${o.cut ? `<clipPath id="${id}"><path d="${top}"/></clipPath><g clip-path="url(#${id})"><rect class="cof a-fill" x="${cx - 20}" y="${by - 50}" width="40" height="22"/></g>
-      <rect class="mt2" x="${cx - 2}" y="${by - 52}" width="4" height="23"/>${[0, 1, 2].map(i => `<circle class="cof a-rise d${i * 2}" cx="${cx + (i - 1) * 2}" cy="${by - 53}" r="2.4"/>`).join("")}` : ""}
-    ${lid}`;
+const CT = 112;
+const uid = p => p + (++scId);
+const put = (x, y, k, inner, cls = "") => `<g transform="translate(${x} ${y}) scale(${k})">${cls ? `<g class="${cls}">${inner}</g>` : inner}</g>`;
+const shadow = (x, rx) => `<ellipse class="sh" cx="${x}" cy="${CT + 1}" rx="${rx}" ry="3"/>`;
+const steam = (x, y, n = 3, gap = 9) => Array.from({ length:n }, (_, i) => `<path class="st a-steam d${i * 2}" d="M${x + (i - (n - 1) / 2) * gap} ${y}c-5-5 5-8 0-13c-5-5 5-8 0-13"/>`).join("");
+// A gas burner on the counter, its flames, and the knob on the counter front showing the heat
+function burner(x, level = "med"){
+  const h = { low:6, med:10, high:13 }[level], ang = { low:-55, med:-10, high:40 }[level];
+  return `<rect class="hob" x="${x - 46}" y="${CT - 5}" width="92" height="5" rx="2"/>
+    <g class="flames">${[-18, -6, 6, 18].map((d, i) => { const fx = x + d; return `<g class="a-flick d${i}"><path class="fl" d="M${fx} ${CT - 5}c-${h * .38}-${h * .22}-${h * .38}-${h * .7} 0-${h}c${h * .38} ${h * .36} ${h * .38} ${h * .82} 0 ${h}z"/><path class="fl2" d="M${fx} ${CT - 5}c-${h * .16}-${h * .1}-${h * .16}-${h * .34} 0-${h * .5}c${h * .16} ${h * .17} ${h * .16} ${h * .4} 0 ${h * .5}z"/></g>`; }).join("")}</g>
+    <rect class="hob" x="${x - 38}" y="${CT - 18}" width="4" height="14" rx="1"/><rect class="hob" x="${x + 34}" y="${CT - 18}" width="4" height="14" rx="1"/>
+    <g class="a-knob" style="--ang:${ang}deg"><circle class="mt2" cx="${x + 62}" cy="${CT + 14}" r="7"/><path class="ln" d="M${x + 62} ${CT + 14}v-6"/></g>`;
 }
-const glassP = (cx, w, h, by = BY - 1) => `M${cx - w / 2} ${by - h}L${cx + w / 2} ${by - h}L${cx + w / 2 - 4} ${by}L${cx - w / 2 + 4} ${by}Z`;
-const mug = (cx, by = BY - 1) => `M${cx - 24} ${by - 50}h48l-4 44a6 6 0 0 1-6 6h-28a6 6 0 0 1-6-6z`;
-const SCENES = {
-  kettle: () => `<path class="br" d="M96 ${BY}L144 ${BY}L140 ${BY - 24}Q120 ${BY - 46} 100 ${BY - 24}Z"/>
-    <path class="br" d="M100 ${BY - 14}L84 ${BY - 32}L88 ${BY - 35}L102 ${BY - 23}Z"/><path class="hd" d="M107 ${BY - 38}Q120 ${BY - 58} 133 ${BY - 38}"/>
-    <circle class="mt2" cx="120" cy="${BY - 37}" r="3"/>${steamP(86, BY - 38, 3, 7)}${flames(120)}`,
-  grind: () => `<g class="a-buzz"><rect class="br" x="103" y="${BY - 36}" width="34" height="36" rx="5"/><rect class="mt2" x="137" y="${BY - 25}" width="5" height="9" rx="1.5"/>
-    <path class="gl" d="M103 ${BY - 36}Q103 ${BY - 64} 120 ${BY - 64}Q137 ${BY - 64} 137 ${BY - 36}Z"/>
-    ${[[112, -44], [122, -48], [128, -41], [116, -52], [125, -55]].map(([x, y], i) => `<ellipse class="bn a-bob d${i}" cx="${x}" cy="${BY + y}" rx="3.4" ry="2.3"/>`).join("")}</g>
-    ${[0, 1, 2].map(i => `<path class="ln thin a-twinkle d${i * 2}" d="M${92 - i * 3} ${BY - 50 + i * 12}h-8M${148 + i * 3} ${BY - 50 + i * 12}h8"/>`).join("")}`,
-  crank: () => `<rect class="br" x="105" y="${BY - 34}" width="30" height="34" rx="3"/><circle class="mt2" cx="120" cy="${BY - 13}" r="2.4"/>
-    <path class="mt" d="M107 ${BY - 34}L101 ${BY - 54}L139 ${BY - 54}L133 ${BY - 34}Z"/>${[[112, -47], [121, -50], [128, -46]].map(([x, y], i) => `<ellipse class="bn a-bob d${i}" cx="${x}" cy="${BY + y}" rx="3.2" ry="2.2"/>`).join("")}
-    <rect class="mt2" x="117" y="${BY - 62}" width="6" height="8"/><g class="a-crank" style="transform-box:view-box;transform-origin:120px ${BY - 62}px"><path class="hd" style="stroke-width:3.5" d="M120 ${BY - 62}h24"/><circle class="br" cx="146" cy="${BY - 62}" r="4.5"/></g>`,
-  measure: () => `<path class="br" d="M62 ${BY}h34v-38l-6-6h-22l-6 6z"/><rect class="mt2" x="66" y="${BY - 30}" width="26" height="12" rx="2"/>
-    <path class="gl" d="M136 ${BY - 28}h44l-5 28h-34z"/><rect class="gr a-fill" x="140" y="${BY - 14}" width="36" height="13"/>
-    <g class="a-tip" style="transform-origin:0% 50%"><ellipse class="mt" cx="148" cy="${BY - 50}" rx="9" ry="5"/><path class="hd" style="stroke-width:3.5" d="M139 ${BY - 51}h-26"/></g>
-    ${[0, 1, 2, 3].map(i => `<circle class="gr a-fall d${i}" cx="${150 + (i % 2) * 6}" cy="${BY - 42}" r="1.8"/>`).join("")}`,
-  water: o => `${o.cold ? `<path class="mt" d="M96 22h40v10h-14v8h-10v-8H96z"/><rect class="wt a-stream" style="transform-origin:50% 0" x="113" y="40" width="5" height="46"/>`
-      : `<g transform="translate(70 34) rotate(25)"><path class="br" d="M-22 24L22 24L18 0Q0-20-18 0Z"/><path class="br" d="M18 12L34-4L30-7L16 2Z"/><path class="hd" d="M-12-6Q0-24 12-6"/></g>
-         <path class="wt a-stream" style="transform-origin:50% 0" d="M102 44q9 12 11 42h5q-3-30-12-42z"/>`}
-    ${(() => { const id = "w" + (++scId), p = `M96 ${BY - 1}L140 ${BY - 1}L136 ${BY - 35}L100 ${BY - 35}Z`;
-      return `<path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><rect class="wt a-fill" x="92" y="${BY - 25}" width="52" height="25"/></g>
-      <path class="dash" d="M88 ${BY - 25}h60"/><circle class="mt2" cx="128" cy="${BY - 21}" r="3"/>`; })()}`,
-  basket: () => { const id = "b" + (++scId), p = `M98 ${BY - 46}L142 ${BY - 46}L136 ${BY - 26}L104 ${BY - 26}Z`;
-    return `<path class="gl" d="${p}"/><rect class="gl" x="116" y="${BY - 26}" width="8" height="26"/><clipPath id="${id}"><path d="${p}"/></clipPath>
-    <g clip-path="url(#${id})"><rect class="gr a-fill" x="96" y="${BY - 46}" width="48" height="20"/></g>
-    ${[0, 1, 2, 3, 4].map(i => `<circle class="gr a-fall d${i}" cx="${108 + i * 6}" cy="${BY - 70}" r="1.8"/>`).join("")}
-    <rect class="mt2 a-swipe" x="104" y="${BY - 50}" width="34" height="4" rx="2"/>
-    <g transform="translate(186 ${BY - 62})"><path class="ln" d="M0 0v18M-5 13l5 5 5-5"/><path class="no" d="M-9 2l18 18M9 2l-18 18"/></g>`; },
-  sugar: () => `${[0, 1, 2].map(i => `<rect class="sg a-drop d${i * 2}" x="${112 + (i - 1) * 9}" y="${BY - 40}" width="9" height="9" rx="1.6"/>`).join("")}
-    <path class="mt" d="M94 ${BY - 34}h52l-5 28a6 6 0 0 1-6 6h-30a6 6 0 0 1-6-6z"/><path class="hd" d="M145 ${BY - 28}q12 0 10 10t-12 6"/>`,
-  heat: o => `${flames(120, o.low)}${mokaPot(120, { open:true, by:BY - 15 })}`,
-  brew: o => `${flames(120, o.low)}${mokaPot(120, { open:true, cut:true, by:BY - 15 })}${steamP(118, BY - 82, 2, 10)}`,
-  cool: () => `<path class="mt" d="M70 18h52v10h-18v8h-12v-8H70z"/><rect class="wt a-stream" style="transform-origin:50% 0" x="94" y="36" width="8" height="${BY - 64}"/>
-    <g class="a-cool">${mokaPot(98, { base:true, by:BY - 1 })}</g>
-    ${[0, 1, 2, 3].map(i => `<circle class="wt a-gush d${i}" cx="${80 + i * 12}" cy="${BY - 30}" r="2.2"/>`).join("")}${steamP(140, BY - 22, 2, 8)}`,
-  cremina: () => `<path class="mt" d="M94 ${BY - 40}h52l-5 32a6 6 0 0 1-6 6h-30a6 6 0 0 1-6-6z"/><ellipse class="cof a-tint" cx="120" cy="${BY - 38}" rx="24" ry="4.5"/>
-    <g class="a-orbit"><path class="hd" style="stroke-width:3.5" d="M124 ${BY - 40}l12-34"/></g>${sparkle(84, BY - 56)}${sparkle(158, BY - 66, "d3")}`,
-  again: () => `${mokaPot(104)}<g class="a-spin" style="animation-duration:2.4s"><path class="ln" style="stroke:var(--brand);stroke-width:3" d="M164 ${BY - 70}a18 18 0 1 1-17 12"/><path class="ln" style="stroke:var(--brand);stroke-width:3" d="M141 ${BY - 62}l6 4 3-7"/></g>`,
-  milk: () => { const id = "p" + (++scId), p = `M88 ${BY - 34}h64v26a6 6 0 0 1-6 6H94a6 6 0 0 1-6-6z`;
-    return `<path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><rect class="mk" x="86" y="${BY - 26}" width="68" height="26"/>
-    ${[0, 1, 2, 3].map(i => `<circle class="fm a-rise d${i}" cx="${[93, 147, 97, 143][i]}" cy="${BY - 26}" r="2.4" style="stroke:var(--line)"/>`).join("")}</g>
-    <path class="hd" d="M152 ${BY - 28}h34"/><g transform="rotate(18 112 ${BY - 50})"><rect class="sg" x="109" y="${BY - 66}" width="6" height="40" rx="3"/><circle class="fl" cx="112" cy="${BY - 27}" r="4"/></g>
-    ${steamP(130, BY - 40, 3, 9)}${flames(120)}`; },
-  froth: o => { const id = "f" + (++scId), p = `M100 ${BY - 62}h40l-4 61h-32z`;
-    return `<path class="gl" d="${p}"/><path class="mt" d="M100 ${BY - 62}l-8-4 6-2z"/><path class="hd" d="M139 ${BY - 56}q14 2 10 20t-11 10"/>
-    <clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><rect class="mk" x="98" y="${BY - 30}" width="44" height="30"/>
-    <rect class="fm a-fill" style="stroke:var(--line)" x="98" y="${BY - (o.thick ? 52 : 40)}" width="44" height="${o.thick ? 22 : 10}"/>
-    ${[0, 1, 2].map(i => `<circle class="fm a-rise d${i * 2}" cx="${110 + i * 10}" cy="${BY - 28}" r="2" style="stroke:var(--line)"/>`).join("")}</g>
-    <rect class="br" x="116" y="${BY - 104}" width="8" height="30" rx="3"/><path class="ln" d="M120 ${BY - 74}v44"/><ellipse class="mt2 a-whisk" cx="120" cy="${BY - 28}" rx="6" ry="2.6"/>`; },
-  chill: () => `<path class="gl" d="M68 ${BY - 34}h104q-4 34-52 34t-52-34z"/><path class="wt" style="opacity:.6" d="M72 ${BY - 26}h96q-6 24-48 24t-48-24z"/>
-    <rect class="gl" x="106" y="${BY - 72}" width="28" height="56" rx="4"/><rect class="cof" x="109" y="${BY - 52}" width="22" height="33" rx="2"/>
-    ${[[80, -30], [92, -22], [150, -30], [160, -24]].map(([x, y], i) => `<rect class="ic3 a-bob d${i}" x="${x}" y="${BY + y}" width="10" height="10" rx="2"/>`).join("")}
-    ${sparkle(86, BY - 62)}${sparkle(156, BY - 74, "d2")}${sparkle(176, BY - 50, "d4")}`,
-  blend: () => { const id = "bl" + (++scId), p = `M99 ${BY - 86}h42l-5 64h-32z`;
-    return `<g class="a-buzz" style="animation-duration:.9s"><rect class="br" x="96" y="${BY - 22}" width="48" height="22" rx="4"/><circle class="mt2" cx="112" cy="${BY - 11}" r="3"/><circle class="mt2" cx="128" cy="${BY - 11}" r="3"/>
-    <path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><rect class="cof2" x="96" y="${BY - 66}" width="50" height="46"/>
-    <g class="a-spinf" style="transform-box:view-box;transform-origin:120px ${BY - 44}px">${[[0, -14], [12, 8], [-12, 8]].map(([x, y]) => `<rect class="ic3" x="${116 + x}" y="${BY - 48 + y}" width="8" height="8" rx="1.6"/>`).join("")}</g>
-    <path class="ln thin a-spinf" style="stroke:var(--c-foam)" d="M108 ${BY - 44}q12-10 24 0q-12 10-24 0"/></g>
-    <rect class="mt2" x="97" y="${BY - 92}" width="46" height="7" rx="2"/></g>`; },
-  whip: () => `<path class="mt" d="M84 ${BY - 34}h72q-4 34-36 34t-36-34z"/><path class="wh a-fill" style="transform-origin:50% 100%" d="M90 ${BY - 34}q6-12 14-8q4-12 16-8q10-10 18 2q8-2 12 14z"/>
-    <g class="a-orbit"><rect class="br" x="128" y="${BY - 96}" width="8" height="28" rx="3"/><path class="ln" d="M132 ${BY - 68}v26"/></g>${sparkle(80, BY - 60)}${sparkle(164, BY - 52, "d3")}`,
-  spoons: () => `<path class="mt" d="M84 ${BY - 34}h72q-4 34-36 34t-36-34z"/>
-    ${[0, 1, 2, 3].map(i => `<circle class="cof a-drop d${i}" cx="${104 + i * 3}" cy="${BY - 46}" r="2.2"/>`).join("")}
-    <rect class="sg a-drop d3" x="116" y="${BY - 48}" width="9" height="9" rx="1.6"/><path class="wt a-drop d5" d="M136 ${BY - 50}c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z"/>`,
-  glass: o => { const id = "g" + (++scId), p = glassP(120, 46, 82);
-    return `<path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})">
-    <rect class="mk a-fill" x="94" y="${BY - 56}" width="52" height="56"/>${o.coffee ? `<rect class="cof2 a-fill d2" x="94" y="${BY - 74}" width="52" height="20"/>` : ""}
-    ${[0, 1, 2].map(i => `<rect class="ic3 a-drop d${i * 2}" x="${106 + i * 10}" y="${BY - 30 - i * 14}" width="12" height="12" rx="2.4"/>`).join("")}</g>
-    ${o.coffee ? `<rect class="cof a-stream" style="transform-origin:50% 0" x="128" y="8" width="4" height="${BY - 84}"/>` : ""}`; },
-  creamtop: () => { const id = "c" + (++scId), p = glassP(120, 46, 82);
-    return `<path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><rect class="mk" x="94" y="${BY - 60}" width="52" height="60"/>
-    ${[0, 1].map(i => `<rect class="ic3" x="${106 + i * 14}" y="${BY - 50 + i * 16}" width="12" height="12" rx="2.4"/>`).join("")}</g>
-    <path class="wh a-drop" d="M104 ${BY - 82}q4-14 16-12q12-2 16 12z"/>`; }
+const thermo = (x, by, k, cls, target) => put(x, by, k, `<rect class="sg" x="-5" y="-62" width="10" height="58" rx="5"/><circle class="sg" cx="0" cy="-4" r="8"/>
+  <g class="${cls}"><rect class="fl" x="-2" y="-54" width="4" height="50" rx="2"/></g><circle class="fl" cx="0" cy="-4" r="5"/>
+  ${[-50, -40, -30, -20].map(y => `<path class="ln thin" d="M6 ${y}h4"/>`).join("")}${target !== undefined ? `<path class="ln tgt" d="M5 ${target}h8"/>` : ""}`);
+// ---- parts, origin at the bottom centre
+const P = {
+  moka(o = {}){
+    const id = uid("mk"), top = "M-17 -35L17 -35L21 -70L-21 -70Z";
+    return `<path class="${o.water ? "gl" : "mt"}" d="M-22 0L22 0L17 -30L-17 -30Z"/><path class="ln thin fc" d="M-8 -1L-6 -29M8 -1L6 -29"/>
+      <circle class="mt2" cx="10" cy="-16" r="2.6"/><rect class="mt2" x="-19" y="-35" width="38" height="5" rx="1.5"/>
+      <path class="hd" d="M20 -64h12l-2 25h-11"/><path class="mt" d="M-20 -66L-33 -75L-21 -70Z"/>
+      <path class="${o.cut ? "gl" : "mt"}" d="${top}"/>${o.cut ? "" : `<path class="ln thin fc" d="M-7 -36L-8 -69M7 -36L8 -69"/>`}
+      ${o.cut ? `<clipPath id="${id}"><path d="${top}"/></clipPath><g clip-path="url(#${id})"><g class="tp a-fill"><rect class="cof" x="-24" y="-60" width="48" height="26"/></g></g>
+        <rect class="mt2" x="-2.5" y="-62" width="5" height="27"/>${[0, 1, 2].map(i => `<circle class="cof a-rise d${i * 2}" cx="${(i - 1) * 2.5}" cy="-63" r="2.8"/>`).join("")}` : ""}
+      <g transform="rotate(${o.open ? 42 : 0} 22 -70)"><path class="mt" d="M-22 -70L22 -70L19 -77L-19 -77Z"/><circle class="mt2" cx="0" cy="-81" r="3.4"/></g>`;
+  },
+  mokaBase(water){ const id = uid("mb"), p = "M-22 0L22 0L17 -34L-17 -34Z";
+    return water ? `<path class="gl" d="${p}"/><clipPath id="${id}"><path d="${p}"/></clipPath><g clip-path="url(#${id})"><g class="a-level" style="--lv:24px">${wave(-26, 52, -24, 26, "wt")}</g></g>
+      <path class="dash" d="M-30 -24h60"/><circle class="mt2" cx="10" cy="-20" r="2.8"/>` : `<path class="mt" d="${p}"/><path class="ln thin fc" d="M-8 -1L-6 -33M8 -1L6 -33"/><circle class="mt2" cx="10" cy="-20" r="2.8"/>`; },
+  kettle: () => `<path class="br" d="M-30 0L30 0L25 -30Q0 -58 -25 -30Z"/><path class="br" d="M-25 -16L-47 -39L-42 -43L-22 -28Z"/>
+    <path class="hd" d="M-16 -46Q0 -70 16 -46"/><ellipse class="mt2" cx="0" cy="-45" rx="9" ry="2.5"/><circle class="mt2" cx="0" cy="-48" r="3.2"/>`,
+  grinder: () => `<rect class="br" x="-24" y="-50" width="48" height="50" rx="7"/><rect class="mt2" x="24" y="-34" width="6" height="13" rx="2"/>
+    <path class="gl" d="M-24 -50Q-24 -86 0 -86Q24 -86 24 -50Z"/>`,
+  crank: () => `<rect class="br" x="-21" y="-48" width="42" height="48" rx="4"/><rect class="mt2" x="-9" y="-22" width="18" height="10" rx="2"/>
+    <path class="mt" d="M-18 -48L-25 -72L25 -72L18 -48Z"/><rect class="mt2" x="-4" y="-82" width="8" height="10"/>`,
+  cup: () => `<ellipse class="mt2" cx="0" cy="1" rx="36" ry="4"/><path class="cer" d="M-24 -32h48l-5 26a7 7 0 0 1-7 6h-24a7 7 0 0 1-7-6z"/><path class="hd" d="M23 -26q14 0 12 12t-14 7"/>`,
+  glassTall: () => `M-25 -98h50l-5 98h-40z`,
+  pitcher: () => `M-24 -78h48l-5 78h-38z`,
+  bowl: () => `M-50 -38h100q-6 38-50 38t-50-38z`,
+  pan: () => `M-38 -34h76v28a6 6 0 0 1-6 6h-64a6 6 0 0 1-6-6z`,
+  blenderJug: () => `M-27 -114h54l-6 86h-42z`,
+  bag: () => `<path class="br" d="M-24 0h48l-3-58l-6-6h-30l-6 6z"/><path class="ln thin" style="stroke:var(--brand-ink)" d="M-15 -58h30"/>
+    <ellipse class="bnl" cx="0" cy="-30" rx="8" ry="11" transform="rotate(25 0 -30)"/><path class="ln thin" style="stroke:var(--brand)" d="M-4 -22c4-5 2-12 8-17"/>`,
+  spoon: (fill = "") => `<path class="hd" style="stroke-width:3.4" d="M-12 -2L-48 -10"/><ellipse class="mt" cx="0" cy="0" rx="11" ry="6"/>${fill}`,
+  faucet: x => `<path class="mt" d="M-4 12H${x - 2}a10 10 0 0 1 10 10V40H${x - 8}V26H-4Z"/><rect class="mt2" x="${x - 52}" y="2" width="14" height="10" rx="2"/>`,
+  ice: (x, y, k = 1, cls = "") => `<g transform="translate(${x} ${y}) scale(${k})"><g${cls ? ` class="${cls}"` : ""}><rect class="ic3" x="-7" y="-7" width="14" height="14" rx="3.5"/><path class="ln thin ich" d="M-3 -4h4"/></g></g>`,
+  bean: (x, y, r = 0, cls = "") => `<g transform="translate(${x} ${y}) rotate(${r})"><g${cls ? ` class="${cls}"` : ""}><ellipse class="bn" cx="0" cy="0" rx="5" ry="3.6"/><path class="ln thin bnl2" d="M-4 .6c2-1.4 6-1.4 8 0"/></g></g>`
 };
-// The finished drink, filled layer by layer to this recipe's real proportions.
+// A body of liquid with a gently moving surface, clipped to its container
+function wave(x, w, y, h, cls){
+  const L = 16, n = Math.ceil(w / L) + 2; let d = `M${x - L} ${y}`;
+  for (let i = 0; i < n; i++) d += `q${L / 4} -2.4 ${L / 2} 0t${L / 2} 0`;
+  return `<path class="${cls} a-wave" d="${d}V${y + h}H${x - L}Z"/>`;
+}
+const clip = (shape, inner) => { const id = uid("c"); return `<clipPath id="${id}"><path d="${shape}"/></clipPath><g clip-path="url(#${id})">${inner}</g>`; };
+const pile = (x, k = 1, cls = "") => put(x, CT, k, `<path class="gr pl" d="M-28 0Q-14 -20 0 -21Q14 -20 28 0Z"/><path class="ln thin grl" d="M-12 -10l3 2M4 -14l3 1M10 -6l2 2"/>`, cls);
+const S2 = {
+  kettle: () => `${burner(150, "high")}${shadow(150, 40)}${put(150, CT - 18, 1.18, P.kettle())}${steam(96, 26, 3, 8)}
+    ${thermo(258, CT - 2, 1, "a-heat", -50)}`,
+  grind: () => `${[[54, -4, 20], [68, -3, -30], [82, -4, 60], [61, -10, 80], [75, -10, 0]].map(([x, y, r]) => P.bean(x, CT + y, r)).join("")}
+    ${shadow(160, 34)}${put(160, CT, 1.25, `<g class="a-buzz">${P.grinder()}${clip("M-24 -50Q-24 -86 0 -86Q24 -86 24 -50Z", `<g class="a-tumble">${[[-10, -62, 20], [6, -68, -40], [-2, -58, 70], [10, -60, 10], [-8, -72, -60], [3, -76, 30]].map(([x, y, r]) => P.bean(x, y, r)).join("")}</g>`)}<path class="rim" d="M-24 -50Q-24 -86 0 -86Q24 -86 24 -50"/></g>`)}
+    ${pile(258, 1, "a-grow")}`,
+  crank: () => `${[[50, -4, 20], [64, -3, -30], [78, -4, 60], [57, -10, 80]].map(([x, y, r]) => P.bean(x, CT + y, r)).join("")}
+    ${shadow(160, 30)}${put(160, CT, 1.25, `${P.crank()}${[[-9, -55, 20], [4, -60, -40], [10, -54, 70]].map(([x, y, r]) => P.bean(x, y, r, "a-bob")).join("")}
+      <g class="a-crank" style="transform-origin:0% 50%"><path class="hd" style="stroke-width:4" d="M0 -82h30"/><circle class="br" cx="33" cy="-82" r="5.5"/></g>`)}
+    ${pile(258, 1, "a-grow")}`,
+  measure: () => `${shadow(92, 30)}${put(92, CT, 1.3, P.bag())}${shadow(222, 44)}
+    ${put(222, CT, 1, `<path class="gl" d="M-44 -40h88l-7 40h-74z"/>${clip("M-44 -40h88l-7 40h-74z", `<g class="a-fill">${wave(-46, 92, -16, 18, "gr")}</g>`)}`)}
+    <g class="a-scoop">${put(0, 0, 1, P.spoon(`<ellipse class="gr" cx="0" cy="-2" rx="8" ry="3"/>`))}</g>
+    ${[0, 1, 2, 3, 4].map(i => `<circle class="gr a-fall d${i}" cx="${214 + (i % 3) * 7}" cy="${CT - 62}" r="2"/>`).join("")}`,
+  water: o => `${shadow(186, 38)}${put(186, CT, 1.55, P.mokaBase(true))}
+    ${o.cold ? `${P.faucet(186)}<path class="strm" d="M186 42V${CT - 50}"/>`
+             : `<g transform="translate(112 30) rotate(34) scale(-1.05 1.05)">${P.kettle()}</g><path class="strm" d="M165 46Q181 56 184 ${CT - 50}"/>`}
+    <g class="a-done"><circle class="okc" cx="250" cy="${CT - 37}" r="10"/><path class="ok" d="M245 ${CT - 37}l3.4 3.4 6.4-6.6"/></g>`,
+  basket: () => `${shadow(170, 32)}${put(170, CT, 1.6, `<path class="gl" d="M-24 -46h48l-7 20h-34z"/><rect class="gl" x="-5" y="-26" width="10" height="26"/>
+      ${clip("M-24 -46h48l-7 20h-34z", `<g class="a-fill"><path class="gr" d="M-30 -26V-44Q0 -58 30 -44V-26Z"/></g>`)}<rect class="mt2 a-swipe" x="-24" y="-50" width="40" height="4" rx="2"/>`)}
+    <g class="a-tip" style="transform-box:view-box;transform-origin:70px 30px">${put(110, 34, 1, P.spoon(`<ellipse class="gr" cx="0" cy="-2" rx="8" ry="3"/>`))}</g>
+    ${[0, 1, 2, 3, 4].map(i => `<circle class="gr a-fall d${i}" cx="${158 + i * 6}" cy="${CT - 92}" r="2.2"/>`).join("")}`,
+  sugar: () => `${shadow(165, 40)}${put(165, CT, 1.5, P.cup())}
+    <g class="a-tip" style="transform-box:view-box;transform-origin:262px 30px">${put(212, 34, 1, `<g transform="scale(-1 1)">${P.spoon(`<rect class="sg" x="-6" y="-7" width="7" height="7" rx="1.4"/><rect class="sg" x="1" y="-8" width="7" height="7" rx="1.4"/>`)}</g>`)}</g>
+    ${[0, 1, 2].map(i => `<rect class="sg a-drop d${i * 2}" x="${158 + i * 6}" y="${CT - 66}" width="8" height="8" rx="1.6"/>`).join("")}`,
+  heat: o => `${burner(150, o.low ? "low" : "med")}${shadow(150, 36)}${put(150, CT - 18, .88, P.moka({ open:true }))}`,
+  brew: o => `${burner(150, o.low ? "low" : "med")}${shadow(150, 36)}${put(150, CT - 18, .88, P.moka({ open:true, cut:true }))}${steam(144, 26, 2, 10)}
+    ${shadow(262, 26)}${put(262, CT, 1, P.cup())}`,
+  cool: () => `${P.faucet(92)}<path class="strm" style="stroke-width:7" d="M92 42V${CT - 52}"/>
+    ${shadow(92, 38)}${put(92, CT, 1.5, P.mokaBase(false))}
+    ${[0, 1, 2, 3, 4].map(i => `<circle class="wt a-gush d${i}" cx="${68 + i * 12}" cy="${CT - 52}" r="2.4"/>`).join("")}${steam(150, CT - 38, 3, 10)}
+    ${thermo(250, CT - 2, 1, "a-cooldown")}`,
+  cremina: () => `${shadow(160, 52)}${put(160, CT, 1.75, `${P.cup()}<ellipse class="cof tt a-tint" cx="0" cy="-30" rx="22" ry="4"/>`)}
+    <g class="a-orbit"><path class="hd" style="stroke-width:4" d="M170 ${CT - 58}l26-50"/><ellipse class="mt" cx="168" cy="${CT - 56}" rx="7" ry="3.5"/></g>
+    ${[0, 1, 2].map(i => `<circle class="fm a-rise d${i * 2}" cx="${150 + i * 10}" cy="${CT - 58}" r="2" style="stroke:var(--line)"/>`).join("")}`,
+  again: o => `${shadow(130, 34)}${put(130, CT, .95, P.moka())}
+    <g class="a-spin" style="animation-duration:4s"><path class="arc" d="M210.6 40.8A27 27 0 0 1 259.4 36.5"/><path class="arc" d="M259.7 27.1L259.4 36.5L251.1 35.4"/><path class="arc" d="M261.4 59.2A27 27 0 0 1 212.6 63.5"/><path class="arc" d="M212.3 72.9L212.6 63.5L220.9 64.6"/></g>
+    <g class="a-pop"><circle class="br" cx="236" cy="${CT - 62}" r="19"/><text class="cnt" x="236" y="${CT - 56}" text-anchor="middle">×${o.n || 1}</text></g>`,
+  milk: () => `${burner(150, "med")}${shadow(150, 44)}${put(150, CT - 18, 1.15, `<path class="gl" d="${P.pan()}"/>${clip(P.pan(), `${wave(-42, 84, -24, 26, "mk")}${[0, 1, 2, 3].map(i => `<circle class="fm a-rise d${i}" cx="${[-31, 31, -27, 27][i]}" cy="-24" r="2.6" style="stroke:var(--line)"/>`).join("")}`)}
+      <path class="hd" style="stroke-width:6" d="M38 -26h46"/>`)}
+    <g transform="translate(124 ${CT - 24}) rotate(16)">${thermo(0, 0, .9, "a-heat", -42)}</g>${steam(160, 34, 3, 10)}`,
+  froth: o => { const mk = o.thick ? -36 : -52;
+    return `${shadow(160, 34)}${put(160, CT, 1.2, `<path class="gl" d="${P.pitcher()}"/><path class="mt" d="M-24 -78l-10-5 8-1z"/><path class="hd" d="M23 -70q18 2 13 26t-15 13"/>
+      ${clip(P.pitcher(), `${wave(-28, 56, -30, 32, "mk")}<g class="tp a-fill">${wave(-28, 56, mk, -30 - mk + 2, "fm foam")}</g>${[0, 1, 2].map(i => `<circle class="fm a-rise d${i * 2}" cx="${-10 + i * 10}" cy="-30" r="2.2" style="stroke:var(--line)"/>`).join("")}`)}
+      <path class="ln tgt" d="M-30 ${mk}h7"/><path class="ln thin" d="M-29 -30h5"/>`)}
+    <rect class="br" x="154" y="-6" width="12" height="34" rx="4"/><path class="ln" d="M160 28V${CT - 28}"/><ellipse class="mt2 a-whisk" cx="160" cy="${CT - 30}" rx="7" ry="3"/>`; },
+  chill: () => `${shadow(160, 56)}${put(160, CT, 1.15, `<path class="gl" d="${P.bowl()}"/>${clip(P.bowl(), wave(-52, 104, -28, 30, "wt"))}`)}
+    ${put(160, CT - 10, 1, `<rect class="gl" x="-17" y="-70" width="34" height="70" rx="5"/><rect class="cof" x="-13" y="-46" width="26" height="42" rx="3"/><path class="hd" d="M17 -60q12 0 10 16t-10 10"/>`)}
+    ${[[112, -30], [128, -22], [196, -30], [210, -24]].map(([x, y], i) => P.ice(x, CT + y, 1, `a-bob d${i}`)).join("")}
+    ${thermo(266, CT - 2, 1, "tpd a-chill", -26)}`,
+  blend: () => `${shadow(150, 38)}${put(150, CT, .92, `<g class="a-buzz" style="animation-duration:.9s"><rect class="br" x="-32" y="-28" width="64" height="28" rx="6"/><circle class="mt2" cx="-12" cy="-14" r="4"/><circle class="mt2" cx="12" cy="-14" r="4"/>
+      <path class="gl" d="${P.blenderJug()}"/>${clip(P.blenderJug(), `<rect class="cof2" x="-30" y="-84" width="60" height="58"/>
+        <g class="a-spinf">${[[0, -18], [15, 9], [-15, 9]].map(([x, y]) => P.ice(x, -56 + y, .8)).join("")}</g>
+        <path class="ln a-spinf" style="stroke:var(--c-foam)" d="M-14 -56q14-12 28 0q-14 12-28 0"/>`)}<rect class="mt2" x="-29" y="-123" width="58" height="10" rx="3"/></g>`)}
+    ${shadow(262, 22)}${put(262, CT, .8, `<path class="gl" d="${P.glassTall()}"/>`)}`,
+  whip: () => `${shadow(160, 58)}${put(160, CT, 1.15, `<g class="tp a-fill"><path class="wh" d="M-44 -30q8-14 18-9q6-15 20-10q11-12 22 2q11-5 20 17z"/></g><path class="cer" d="${P.bowl()}"/>`)}
+    <g class="a-orbit"><rect class="br" x="166" y="-6" width="12" height="34" rx="4"/><path class="ln" d="M172 28v40"/><ellipse class="mt2 a-whisk" cx="172" cy="70" rx="7" ry="3"/></g>`,
+  spoons: () => `${shadow(160, 58)}${put(160, CT, 1.15, `<path class="cer" d="${P.bowl()}"/>`)}
+    ${[["cof", 112], ["sg", 160], ["wt", 208]].map(([c, x], i) => `<g class="a-drop d${i * 2}">${c === "sg" ? `<rect class="sg" x="${x - 5}" y="${CT - 72}" width="10" height="10" rx="2"/>` : c === "wt" ? `<path class="wt" d="M${x} ${CT - 76}c4 5 5 8 5 10a5 5 0 0 1-10 0c0-2 1-5 5-10z"/>` : [0, 1, 2].map(k => `<circle class="cof" cx="${x - 4 + k * 4}" cy="${CT - 68 + (k % 2) * 3}" r="2.6"/>`).join("")}</g>`).join("")}`,
+  glass: o => { const n = Math.min(3, Math.max(1, o.n || 2)), xs = { 1:[160], 2:[128, 196], 3:[96, 160, 224] }[n];
+    return xs.map((x, j) => `${shadow(x, 26)}${put(x, CT, .95, `<path class="gl" d="${P.glassTall()}"/>${clip(P.glassTall(), `<g class="a-fill" style="animation-delay:${j * .3}s">${wave(-28, 56, -52, 54, "mk")}</g>${o.coffee ? `<g class="a-fill d2">${wave(-28, 56, -72, 22, "cof2")}</g>` : ""}${[0, 1].map(i => P.ice(-8 + i * 14, -34 - i * 16, 1, `a-drop d${i * 2 + j}`)).join("")}`)}`)}`).join(""); },
+  creamtop: o => { const n = Math.min(3, Math.max(1, o.n || 2)), xs = { 1:[160], 2:[128, 196], 3:[96, 160, 224] }[n];
+    return xs.map((x, j) => `${shadow(x, 26)}${put(x, CT, .95, `<path class="gl" d="${P.glassTall()}"/>${clip(P.glassTall(), `<rect class="mk" x="-28" y="-64" width="56" height="66"/>${[0, 1].map(i => P.ice(-8 + i * 14, -40 + i * 16)).join("")}`)}
+      <g class="a-drop d${j * 2}"><path class="wh" d="M-18 -64q2-14 18-13q16-1 18 13z"/></g>`)}`).join(""); }
+};
+// The finished drink, poured and filled to this recipe's real proportions, then finished on top
 function serveScene(r){
-  const cold = r.milkMode === "cold", small = r.id === "moka" || r.id === "italian", L = [];
+  const cold = r.milkMode === "cold", small = r.id === "moka" || r.id === "italian", black = !r.milk, L = [];
   if (r.coffee) L.push([r.water ? "cof2" : "cof", r.coffee + r.water]);
   if (r.milk){ const foam = r.froth === "thick" ? .4 : r.froth === "light" ? .15 : 0; L.push([cold && r.frappe ? "cof2" : "mk", r.milk * (1 - foam)]); if (foam) L.push(["fm", r.milk * foam]); }
   if (!L.length) L.push(["cof", 50]);
-  const id = "s" + (++scId), shape = small ? `M100 ${BY - 40}h40l-4 30a6 6 0 0 1-6 6h-20a6 6 0 0 1-6-6z` : cold ? glassP(120, 46, 86) : mug(120);
-  const top = small ? BY - 38 : cold ? BY - 82 : BY - 47, bot = small ? BY - 4 : BY - 1, total = L.reduce((a, [, v]) => a + v, 0), H = (bot - top) * (small ? .85 : Math.min(1, total / 260) * .85 + .1);
-  let y = bot, rects = "";
-  L.forEach(([c, v], i) => { const h = H * v / total; y -= h; rects += `<rect class="${c} a-fill1" style="animation-delay:${.2 + i * .7}s" x="90" y="${y.toFixed(1)}" width="60" height="${(h + .6).toFixed(1)}"/>`; });
-  const extra = cold
-    ? (r.frappe ? `<path class="fm a-pop" style="animation-delay:2.4s;stroke:var(--line)" d="M98 ${y + 2}q2-14 12-10q4-10 12-4q8-8 12 4q8 0 8 10z"/><path class="ln a-pop" style="animation-delay:2.9s;stroke:var(--c-whip);stroke-width:2.4" d="M102 ${y - 4}q8 6 16-2t16 2"/><path class="hd a-pop" style="animation-delay:3.2s;stroke:var(--bad);stroke-width:3.4" d="M130 ${y - 2}l10-24"/>`
-             : [0, 1].map(i => `<rect class="ic3 a-drop1" style="animation-delay:${.3 + i * .4}s" x="${108 + i * 14}" y="${y + 6 + i * 8}" width="11" height="11" rx="2.2"/>`).join(""))
-    : steamP(120, top - 6, 3, 10) + (r.italian ? `<ellipse class="wh a-pop" style="animation-delay:1.4s" cx="120" cy="${y}" rx="13" ry="4"/>` : "");
-  return `<path class="gl" d="${shape}"/>${small ? `<ellipse class="mt2" cx="118" cy="${BY}" rx="34" ry="3"/>` : !cold ? `<path class="hd" d="M144 ${BY - 42}q16 0 14 14t-16 10"/>` : ""}
-    <clipPath id="${id}"><path d="${shape}"/></clipPath><g clip-path="url(#${id})">${rects}</g>${extra}${sparkle(76, BY - 76, "d4")}${sparkle(166, BY - 60, "d6")}`;
+  const total = L.reduce((a, [, v]) => a + v, 0);
+  const layers = (x0, w, bot, H) => { let y = bot, h = ""; L.forEach(([c, v], i) => { const t = H * v / total; y -= t; h += `<rect class="${c} a-fill1" style="animation-delay:${(.5 + i * .55).toFixed(2)}s" x="${x0}" y="${y.toFixed(1)}" width="${w}" height="${(t + .8).toFixed(1)}"/>`; }); return [h, y]; };
+  const sp = `${[0, 1].map(i => `<path class="ln thin a-twinkle d${i * 3 + 2}" style="stroke:var(--gold)" d="M${i ? 252 : 72} ${i ? 38 : 30}v10M${i ? 247 : 67} ${i ? 43 : 35}h10"/>`).join("")}`;
+  if (cold){ // tall glass: layers through the glass, ice, then the topping
+    const g = P.glassTall(), [h, y] = layers(-28, 56, 0, cold && r.frappe ? 86 : 80);
+    const top = r.frappe ? `<path class="fm a-pop" style="animation-delay:2.2s;stroke:var(--line)" d="M-25 ${y + 2}q2-16 14-12q5-12 13-5q9-9 13 5q10 0 10 12z"/><path class="ln a-pop" style="animation-delay:2.6s;stroke:var(--c-whip);stroke-width:2.6" d="M-18 ${y - 6}q9 7 18-2t18 2"/>` : "";
+    return `${shadow(160, 34)}${put(160, CT, 1.05, `<path class="gl" d="${g}"/>${clip(g, `${h}${r.frappe ? "" : [0, 1, 2].map(i => P.ice(-10 + i * 10, y + 12 + i * 12, 1, "a-drop1")).join("")}`)}${top}
+      <path class="hd a-pop" style="animation-delay:${r.frappe ? 2.9 : 2}s;stroke:var(--bad);stroke-width:4" d="M10 ${y + 10}l12-${Math.round(-y + 20)}"/>`)}${sp}`;
+  }
+  if (small || black){ // ceramic cup seen from just above: the surface rises, then crema (or the cremina dollop)
+    const k = small ? 1.6 : 1.9, rim = -32, id = uid("cup");
+    const surf = r.italian ? `<ellipse class="wh a-pop" style="animation-delay:1.8s" cx="0" cy="-27" rx="11" ry="2.6"/>` : `<ellipse class="crema a-pop" style="animation-delay:1.6s" cx="0" cy="-28" rx="18" ry="2.6"/>`;
+    return `${shadow(160, 36 * k / 1.6)}${put(160, CT, k, `${P.cup()}<clipPath id="${id}"><ellipse cx="0" cy="${rim}" rx="24" ry="5"/></clipPath><ellipse class="cof2" cx="0" cy="${rim}" rx="24" ry="5"/>
+      <g clip-path="url(#${id})"><g class="a-surface"><ellipse class="${r.water ? "cof2" : "cof"}" cx="0" cy="${rim + 1}" rx="24" ry="5"/>${surf}</g></g><ellipse class="rim" cx="0" cy="${rim}" rx="24" ry="5"/>`)}
+      ${steam(160, 34, 3, 12)}${pourFrom(160, CT - 32 * k - 4)}${sp}`;
+  }
+  // milk drinks in a glass: the layers show, and the foam gets latte art
+  const g = "M-28 -76h56l-6 70a6 6 0 0 1-6 6h-32a6 6 0 0 1-6-6z", [h, y] = layers(-30, 60, 0, 70), art = r.froth !== "none" || r.milkMode === "boil";
+  return `${shadow(160, 40)}${put(160, CT, 1.04, `<ellipse class="mt2" cx="0" cy="1" rx="44" ry="4"/><path class="gl" d="${g}"/>${clip(g, h)}<path class="hd" d="M27 -66q18 0 16 18t-18 13"/>
+    <ellipse class="${art ? "fm" : "mk"} a-pop" style="animation-delay:1.8s" cx="0" cy="${y}" rx="${(28 - (y + 76) * 6 / 70).toFixed(1)}" ry="4.5"/>
+    ${art ? `<path class="cof2 art a-art" d="M0 ${y + 2.4}c-6-2-8-5-4-6.4c2-.6 3.4.4 4 1.4c.6-1 2-2 4-1.4c4 1.4 2 4.4-4 6.4z"/>` : ""}`)}${steam(160, 30, 3, 12)}${pourFrom(160, CT - 76 * 1.04 - 4)}${sp}`;
 }
+// The pour falls from above the frame into the cup as the drink fills
+const pourFrom = (x, y) => `<path class="pour a-pour1" d="M${x - 4} -4Q${x - 2} ${y / 2} ${x} ${y}"/>`;
 function scene(a, o = {}, r){
-  const f = a === "serve" ? () => serveScene(r) : SCENES[a];
-  return f ? `<div class="stage" aria-hidden="true"><svg viewBox="0 0 240 132" preserveAspectRatio="xMidYMid meet"><path class="counter" d="M20 ${BY + 1}h200"/>${f(o)}</svg></div>` : "";
+  const f = a === "serve" ? () => serveScene(r) : S2[a];
+  return f ? `<div class="stage" aria-hidden="true"><svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet"><rect class="ctr" x="-4" y="${CT}" width="328" height="32"/><path class="ctrl" d="M-4 ${CT + .5}h328"/>${f(o)}</svg></div>` : "";
 }
 
 /* ---------- Cup illustration: layers drawn to the recipe's real proportions ---------- */
@@ -468,10 +512,10 @@ function buildSteps(r, p, lang){
     s.push({ a:"whip", t:L("Whip it with the frother","Frother diye whip koro"), timer:180,
       d:L(`FAST speed, 2 to 4 minutes. It turns light brown and thick, and won't fall off an upside-down spoon. Take a short break if your hand gets tired.${wb ? " Scoop it into a bowl, then whip the next batch." : ""}`,
           `FAST speed, 2 to 4 min. Rong halka badami hobe, ghono hobe, chamuch ulte dhorle pore jabe na. Hath byatha korle majhe ektu break nao.${wb ? " Ekta bati te tule rakho, tarpor porer batch." : ""}`) });
-    s.push({ a:"glass", t:L("Fill the glasses","Glass ready koro"),
+    s.push({ a:"glass", o:{ n:p.n }, t:L("Fill the glasses","Glass ready koro"),
       d:L(`**${r.ice} ice cubes** and **${p.milkPer} ml cold milk** in each glass. For extra sweetness, stir a little sugar into the milk first.`,
           `Proti glass e **${r.ice} ta borof**, **${p.milkPer} ml thanda dudh**. Mishti beshi chaile dudhe ektu chini aage gholao.`) });
-    s.push({ a:"creamtop", t:L("Spoon the cream on top","Upore cream dao"),
+    s.push({ a:"creamtop", o:{ n:p.n }, t:L("Spoon the cream on top","Upore cream dao"),
       d:L("Spoon the whipped coffee over the milk. Stir it in before drinking.","Chamuch diye coffee cream dudher upor rakho. Serve korar shomoy mix kore khabe.") });
     return s;
   }
@@ -538,7 +582,7 @@ function buildSteps(r, p, lang){
         "Chamuch diye chini ar coffee jore jore ~1 min phetao, jotokkhon na halka rong, ghono ar creamy hoy (naram caramel er moto). Patla hole aro phetao. Beshi ghono hole aro koyek fota coffee dao.") });
   if (p.brews > 1){
     const k = p.brews - 1;
-    s.push({ a:"again", t:L(`Brew ${plural(k, "more time", "more times")}`,`Aro ${k} bar brew koro`),
+    s.push({ a:"again", o:{ n:k }, t:L(`Brew ${plural(k, "more time", "more times")}`,`Aro ${k} bar brew koro`),
       d:L(`Cool the pot, throw out the old grounds and rinse it, then go back to "Pour ${it ? "cold" : "hot"} water into the moka base". Keep the earlier coffee covered in the ${jug}.`,
           `Pot thanda koro, puraton guro fele dhuye nao, abar "Moka bottom e ${it ? "thanda" : "gorom"} pani" step theke. Ager coffee ${jug} e dhaka diye rakho.`) });
   }
@@ -714,7 +758,7 @@ function announce(res){
   if (res.gained > 0) toast("spark", `+${res.gained} XP`);
   if (!res.up && !B.length) return;
   setTimeout(() => res.up
-    ? winCard({ icon:b.li >= 4 ? "trophy" : "medal", kicker:`Level ${b.li + 1} of ${LEVELS.length}`, title:`You're now a ${b.level}!`,
+    ? winCard({ icon:b.li >= 4 ? "trophy" : "medal", kicker:`Level ${b.li + 1} of ${LEVELS.length}`, title:`You're now ${aAn(b.level)}!`,
         text:b.to ? `${b.to - b.xp} XP to ${b.nextName}. Keep brewing.` : "That's the top level. Take a bow.", more:B.map(x => [x[1], x[2]]) })
     : winCard({ icon:B[0][1], kicker:"New badge", title:B[0][2], text:B[0][3] + ".", more:B.slice(1).map(x => [x[1], x[2]]) }), 700);
 }
@@ -901,7 +945,7 @@ function renderSetup(){
   if (miss.length) h += `<div class="note n-bad"><b>Can't make this yet.</b> You need: ${miss.join(", ")}. Update the Pantry tab, or pick another drink.</div>`;
   if (r.coffee && S.grinderType === "electric" && S.grinder !== "ok" && S.inv.beans) h += `<div class="note n-warn"><b>The grinder hasn't been checked.</b> Running it after salt-water exposure risks a short circuit or rust. There's a checklist in Learn → Safety. Use ground coffee until then.</div>`;
   if (p.brews >= 3) h += `<div class="note n-warn"><b>${p.brews} moka brews, about ${p.minutes} minutes.</b> One pot makes at most ${p.yieldPerBrew} ml at a time. To save time, pick "Mild" strength, or give half the group an Americano.</div>`;
-  if (r.coffee){ const ro = roast(); h += `<div class="note n-tip"><b>${ro.lbl} roast in ${/^[AEIOU]/.test(r.name) ? "an" : "a"} ${r.name}</b>${BLACK.includes(r.id) ? ro.black : ro.milk}</div>`; }
+  if (r.coffee){ const ro = roast(); h += `<div class="note n-tip"><b>${ro.lbl} roast in ${aAn(r.name)}</b>${BLACK.includes(r.id) ? ro.black : ro.milk}</div>`; }
   const st = [];
   if (r.instant){
     st.push(["Instant coffee", p.instantTbsp+" tbsp"],["Sugar", p.instantTbsp+" tbsp"],["Hot water", p.instantTbsp+" tbsp"]);
@@ -934,7 +978,7 @@ function renderCook(){
       <div class="lang" role="group" aria-label="Step language"><button data-lang="en" class="${S.lang==="en"?"on":""}" aria-pressed="${S.lang==="en"}">EN</button><button data-lang="bn" class="${S.lang==="bn"?"on":""}" aria-pressed="${S.lang==="bn"}">BN</button></div></div>
     <div class="progrow"><div class="prog" role="progressbar" aria-valuemin="1" aria-valuemax="${steps.length}" aria-valuenow="${i+1}" aria-label="Step ${i+1} of ${steps.length}">${steps.map((_,k) => `<i class="${k<i?"d":k===i?"c":""}${k === i - 1 && segJump ? " j" : ""}"></i>`).join("")}</div><span class="pn">${i+1}/${steps.length}</span></div>
     <div class="stepcard ${animDir}" id="stepcard">
-      ${scene(x.a, x.o || {}, r).replace('class="stage"', `class="stage${live ? " live" : ""}"`)}<h3>${x.t}</h3><p>${md(x.d)}</p>${tb}
+      ${scene(x.a, x.o || {}, r).replace('class="stage"', `class="stage${live ? " live" : ""}" style="--t:${live ? (1 - tLeft / tTotal).toFixed(3) : 0}"`)}<h3>${x.t}</h3><p>${md(x.d)}</p>${tb}
     </div>
     ${i === 0 ? `<p class="swipe-hint">Tap Next or swipe to move between steps</p>` : ""}
     <div class="cook-nav"><button data-nav="-1" ${i===0?"disabled":""}>${ic("back")}Back</button><button class="next${last ? " fin" : ""}" data-nav="1">${last ? ic("check")+"Finish" : "Next"+ic("next")}</button></div>`;
@@ -988,7 +1032,7 @@ function winBlock(w, fresh){
   const { res, lines } = w, b = res.b, pct = v => v.to ? Math.round((v.xp - v.from) / (v.to - v.from) * 100) : 100;
   const from = res.up ? 0 : pct(res.a), to = pct(b), dl = k => `style="animation-delay:${(1.3 + k * .22).toFixed(2)}s"`;
   return `<div class="win ${fresh ? "" : "still"} ${res.up ? "up" : ""}">
-    ${res.up ? `<div class="lvup">${ic(b.li >= 4 ? "trophy" : "medal")}<span>Level up! You're now a ${b.level}</span></div>` : ""}
+    ${res.up ? `<div class="lvup">${ic(b.li >= 4 ? "trophy" : "medal")}<span>Level up! You're now ${aAn(b.level)}</span></div>` : ""}
     <div class="wtop"><span class="gain">+<b id="gain">${fresh ? 0 : res.gained}</b><small>XP</small></span><span class="lv">${b.level}<br>${b.xp} XP</span></div>
     <div class="xpbar"><i style="--from:${from}%;--to:${to}%;width:${to}%"></i></div>
     <div class="xpt"><span>Level ${b.li + 1} of ${LEVELS.length}</span><span>${b.to ? `${b.to - b.xp} XP to ${b.nextName}` : "Top level!"}</span></div>
@@ -1033,7 +1077,7 @@ function go(view){
     const r = recipe(), sp = special(), bonus = !!(sp && !sp.done && sp.r.id === S.drink), isNew = !stats().drinks.has(S.drink);
     const t = Math.max(Date.now(), (S.log.length ? S.log[S.log.length - 1].t : 0) + 1); // one entry per timestamp
     const res = reward(() => S.log.push({ d:S.drink, n:S.people, t, rating:0, issues:[], ...(bonus ? { bonus:SPECIAL_XP } : {}) }), true);
-    win = { res, shown:false, lines:[["cup", `Made ${/^[AEIOU]/.test(r.name) ? "an" : "a"} ${r.name}`, 20], ...(isNew ? [["compass", `Your first ${r.name}`, 30]] : []), ...(bonus ? [["spark", "Today's special", SPECIAL_XP]] : [])] };
+    win = { res, shown:false, lines:[["cup", `Made ${aAn(r.name)}`, 20], ...(isNew ? [["compass", `Your first ${r.name}`, 30]] : []), ...(bonus ? [["spark", "Today's special", SPECIAL_XP]] : [])] };
   }
   if (view !== "done"){ rateDraft = null; win = null; }
   // Leaving the steps for the drink's setup keeps your place, so Exit never throws away progress
@@ -1425,7 +1469,7 @@ function paintTimer(){
     $("#tbv").textContent = tDone ? "Done" : fmt(tLeft);
     box.querySelector("button").innerHTML = tDone ? ic("play")+"Start timer" : ic("stop")+"Stop";
     const bar = box.querySelector(".tbar"); if (bar) bar.style.setProperty("--p", (tDone ? 0 : tLeft / tTotal * 100) + "%");
-    const st = $("#stepcard .stage"); if (st) st.classList.toggle("live", tInt !== null);
+    const st = $("#stepcard .stage"); if (st){ st.classList.toggle("live", tInt !== null); st.style.setProperty("--t", (tDone ? 1 : 1 - tLeft / tTotal).toFixed(3)); }
   }
   updateFloat();
 }

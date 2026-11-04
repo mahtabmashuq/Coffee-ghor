@@ -2,6 +2,19 @@
 
 All notable changes to Coffee Ghor. Versions follow [semantic versioning](https://semver.org). The 0.x releases built the app up to its first full release, 1.0.0. From here on, a major version changes how the app works for existing users, a minor version adds features, and a patch fixes things.
 
+## 1.3.0 · 2026-11-04
+### Changed
+- **Every step scene redrawn** (following the Impeccable design guide). They're now tableaux on one full-width kitchen counter instead of small drawings in an empty box: subjects are bigger and fill the frame, and nothing floats. The pot sits on a burner with pan supports, the tap comes out of the wall, the kettle pours in from the edge of the frame, and soft contact shadows ground every object
+- Scenes tell the step's story with the props it uses: beans waiting and a pile of grounds growing beside the grinder, your cup waiting next to the moka pot, a thermometer that climbs or falls, a tick when the water reaches the valve line, the burner knob turning to your heat setting before the flames light, one glass per person, and the brews left as "×2" inside a turning cycle arrow
+- **Scenes follow a running timer**: the coffee in the pot rises with the brew timer, foam climbs with the froth timer, the thermometer falls with the ice bath, and the cremina turns golden as you whisk
+- **The finish pours your drink**: it falls in from above and fills layer by layer, then milk drinks get latte art on the foam, black coffee gets crema, iced drinks get ice and a straw, frappes get the whipped top
+- Motion uses exponential ease-out with no reflex bounce; line weights stay even at every size; the flashing green "timer running" ring (a zero-offset glow) is gone, and so are the gold glow halos on rewards
+- Reduce motion: nothing moves, but scenes still show the finished state and the timer's progress
+- **README rebuilt**: new banner, an animated demo of a cappuccino being made, every screenshot retaken and shown in a phone frame, a scene gallery that follows GitHub's light or dark theme, and a new social preview card
+### Fixed
+- A step sliding in made the page briefly wider than the screen, which could nudge the layout sideways on phones
+- "You're now a Apprentice": level-ups and drink names now use "an" before a vowel everywhere
+
 ## 1.2.0 · 2026-11-04
 ### Added
 - **An animated scene for every step**, 24 in all: kettle steam, a buzzing grinder with bouncing beans, a turning crank, water rising to the valve line, grounds being levelled, the moka pot on the flame with coffee bubbling up inside (smaller flames on low heat), the cold tap on the base, cremina whisked from dark to golden, milk steaming with a thermometer, the frother spinning as foam rises, an ice bath, a blender vortex and ice dropping into glasses. Scenes follow the step's action, not its text, so they're the same in English and Banglish
